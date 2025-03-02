@@ -14,11 +14,11 @@ import java.lang.reflect.Constructor;
 public class PlayerAnimatorImpl extends PlayerAnimator {
 
     public static PlayerAnimator initialize(JavaPlugin plugin) {
-        if(api == null)
-            api = new PlayerAnimatorImpl();
-
         if(PlayerAnimatorPlugin.plugin == null)
             PlayerAnimatorPlugin.plugin = plugin;
+
+        if(api == null)
+            api = new PlayerAnimatorImpl();
 
         api.getModelManager().activate();
 

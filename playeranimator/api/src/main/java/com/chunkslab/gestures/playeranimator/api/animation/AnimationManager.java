@@ -30,9 +30,9 @@ public class AnimationManager {
 		}
 
 		File root = PlayerAnimatorPlugin.plugin.getDataFolder();
-		packsFolder = new File(root, "packs");
+		packsFolder = new File(root, "gestures");
 		if(!packsFolder.exists() && !packsFolder.mkdirs())
-			PlayerAnimatorPlugin.plugin.getLogger().log(Level.WARNING, "Unable to create packs folder.");
+			PlayerAnimatorPlugin.plugin.getLogger().log(Level.WARNING, "Unable to create gestures folder.");
 	}
 
 	public void clearRegistry() {

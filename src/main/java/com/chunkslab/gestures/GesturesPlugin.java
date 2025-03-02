@@ -83,8 +83,11 @@ public final class GesturesPlugin extends GesturesAPI {
         registerCommands();
         createConfig();
 
+        wardrobesFile.create();
+        gesturesFile.create();
+
         this.getModuleManager().enableModules();
-        database.enable();
+        //database.enable();
     }
 
     @Override

@@ -50,20 +50,7 @@ dependencies {
     implementation project(':folia')
 
     implementation project(':playeranimator')
-
-    implementation project(':nms:v1_21_R3')
-    implementation project(':nms:v1_21_R2')
-    implementation project(':nms:v1_21_R1')
-    implementation project(':nms:v1_20_R4')
-    implementation project(':nms:v1_20_R3')
-    implementation project(':nms:v1_20_R2')
-    implementation project(':nms:v1_20_R1')
-    implementation project(':nms:v1_19_R3')
-    implementation project(':nms:v1_19_R2')
-    implementation project(':nms:v1_19_R1')
-    implementation project(':nms:v1_18_R2')
-    implementation project(':nms:v1_18_R1')
-    implementation project(':nms:v1_17_R1')
+    implementation project(':nms')
 
     implementation("net.kyori:adventure-api:4.17.0")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
@@ -128,11 +115,6 @@ tasks.shadowJar {
         file("${buildDir}/libs/${project.name}-${version}.jar").delete()
     }
 }
-
-tasks.compileJava.dependsOn(
-        ':playeranimator:jar',
-        ':playeranimator:shadowJar'
-)
 
 project(":api") {
     publishing {
