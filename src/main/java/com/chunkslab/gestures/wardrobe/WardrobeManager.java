@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,6 +46,11 @@ public class WardrobeManager implements IWardrobeManager {
     }
 
     @Override
+    public void addWithoutSave(Wardrobe wardrobe) {
+        wardrobeMap.put(wardrobe.getId(), wardrobe);
+    }
+
+    @Override
     public void deleteWardrobe(String id) {
         wardrobeMap.remove(id);
         plugin.getWardrobesFile().set(id, null);
@@ -54,5 +60,10 @@ public class WardrobeManager implements IWardrobeManager {
     @Override
     public Wardrobe getWardrobe(String id) {
         return wardrobeMap.get(id);
+    }
+
+    @Override
+    public Collection<Wardrobe> getWardrobes() {
+        return wardrobeMap.values();
     }
 }

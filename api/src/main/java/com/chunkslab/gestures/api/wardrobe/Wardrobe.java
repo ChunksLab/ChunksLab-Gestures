@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.bukkit.Location;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 public class Wardrobe {
-    private final String id;
-    private final Location npcLocation;
-    private final Location playerLocation;
-    private final Location exitLocation;
+    private String id;
+    private Location npcLocation;
+    private Location playerLocation;
+    private Location exitLocation;
     private boolean status;
 }

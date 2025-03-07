@@ -3,18 +3,30 @@ package com.chunkslab.gestures;
 import com.chunkslab.gestures.api.GesturesAPI;
 import com.chunkslab.gestures.api.config.ConfigFile;
 import com.chunkslab.gestures.api.database.Database;
+import com.chunkslab.gestures.api.gesture.Gesture;
+import com.chunkslab.gestures.api.gesture.IGestureManager;
 import com.chunkslab.gestures.api.listener.IListenerManager;
 import com.chunkslab.gestures.api.module.ModuleManager;
+import com.chunkslab.gestures.api.player.IPlayerManager;
 import com.chunkslab.gestures.api.scheduler.IScheduler;
 import com.chunkslab.gestures.api.server.IServerManager;
+import com.chunkslab.gestures.api.wardrobe.IWardrobeManager;
+import com.chunkslab.gestures.api.wardrobe.Wardrobe;
+import com.chunkslab.gestures.command.WardrobeCommand;
 import com.chunkslab.gestures.config.Config;
 import com.chunkslab.gestures.config.messages.MessagesEN;
+import com.chunkslab.gestures.database.impl.yaml.YamlDatabase;
+import com.chunkslab.gestures.gesture.GestureManager;
 import com.chunkslab.gestures.listener.ListenerManager;
+import com.chunkslab.gestures.nms.GestureNMSImpl;
+import com.chunkslab.gestures.nms.api.GestureNMS;
+import com.chunkslab.gestures.player.PlayerManager;
 import com.chunkslab.gestures.playeranimator.PlayerAnimatorImpl;
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
 import com.chunkslab.gestures.scheduler.Scheduler;
 import com.chunkslab.gestures.server.ServerManager;
 import com.chunkslab.gestures.util.ChatUtils;
+import com.chunkslab.gestures.wardrobe.WardrobeManager;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
 import dev.triumphteam.cmd.core.exceptions.CommandRegistrationException;
@@ -38,6 +50,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -49,6 +62,7 @@ public final class GesturesPlugin extends GesturesAPI {
     private Config pluginConfig;
     private MessagesEN pluginMessages;
     private BukkitCommandManager<CommandSender> commandManager;
+    private GestureNMS gestureNMS;
     private PlayerAnimator playerAnimator;
 
     // config
@@ -61,9 +75,11 @@ public final class GesturesPlugin extends GesturesAPI {
     // managers
     @Setter private IListenerManager listenerManager = new ListenerManager(this);
     @Setter private IServerManager serverManager = new ServerManager();
-    //@Setter private IPlayerManager playerManager = new PlayerManager();
+    @Setter private IPlayerManager playerManager = new PlayerManager();
     @Setter private IScheduler scheduler = new Scheduler(this);
     @Setter private ModuleManager moduleManager = new ModuleManager(this);
+    @Setter private IGestureManager gestureManager = new GestureManager(this);
+    @Setter private IWardrobeManager wardrobeManager = new WardrobeManager(this);
 
     @Override
     public void onLoad() {
@@ -77,8 +93,11 @@ public final class GesturesPlugin extends GesturesAPI {
     @Override
     public void onEnable() {
         adventure = BukkitAudiences.create(this);
+
+        gestureNMS = GestureNMSImpl.initialize(this);
+
         playerAnimator = PlayerAnimatorImpl.initialize(this);
-        this.playerAnimator.getAnimationManager().importPacks();
+        playerAnimator.getAnimationManager().importPacks();
 
         registerCommands();
         createConfig();
@@ -86,8 +105,15 @@ public final class GesturesPlugin extends GesturesAPI {
         wardrobesFile.create();
         gesturesFile.create();
 
+        listenerManager.enable();
+        scheduler.enable();
+        gestureManager.enable();
+        wardrobeManager.enable();
+
+        database = new YamlDatabase(this);
+
         this.getModuleManager().enableModules();
-        //database.enable();
+        database.enable();
     }
 
     @Override
@@ -110,6 +136,7 @@ public final class GesturesPlugin extends GesturesAPI {
 
         getBukkitCommands(getCommandMap()).remove("gesture");
         getBukkitCommands(getCommandMap()).remove("gestures");
+        getBukkitCommands(getCommandMap()).remove("wardrobe");
     }
 
     // copied from triumph-cmd, credit goes to triumph-team
@@ -145,10 +172,17 @@ public final class GesturesPlugin extends GesturesAPI {
         commandManager.registerSuggestion(SuggestionKey.of("players"), (sender, context) ->
                 new ArrayList<>(this.serverManager.getAllOnlinePlayers())
         );
+        commandManager.registerSuggestion(SuggestionKey.of("gestures"), (sender, context) ->
+                this.getGestureManager().getGestures().stream().map(Gesture::getId).toList()
+        );
+        commandManager.registerSuggestion(SuggestionKey.of("wardrobes"), (sender, context) ->
+                this.getWardrobeManager().getWardrobes().stream().map(Wardrobe::getId).toList()
+        );
+        commandManager.registerSuggestion(SuggestionKey.of("wardrobeStatus"), (sender, context) ->
+            List.of("enable", "disable")
+        );
 
-        // Player Commands
-
-        // Admin Commands
+        commandManager.registerCommand(new WardrobeCommand(this));
 
         commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, invalidArgumentContext) ->
                 ChatUtils.sendMessage(sender, ChatUtils.format(pluginMessages.getInvalidArgument())));

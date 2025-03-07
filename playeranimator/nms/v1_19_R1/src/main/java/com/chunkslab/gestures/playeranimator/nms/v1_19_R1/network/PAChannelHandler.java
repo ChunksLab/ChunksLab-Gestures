@@ -2,7 +2,6 @@ package com.chunkslab.gestures.playeranimator.nms.v1_19_R1.network;
 
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
 import com.chunkslab.gestures.playeranimator.api.model.player.PlayerModel;
-import com.chunkslab.gestures.playeranimator.api.utils.FieldUtils;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;

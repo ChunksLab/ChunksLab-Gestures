@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -74,5 +75,10 @@ public class GestureManager implements IGestureManager {
     @Override
     public Gesture getGesture(String id) {
         return gestureMap.get(id);
+    }
+
+    @Override
+    public Collection<Gesture> getGestures() {
+        return gestureMap.values();
     }
 }
