@@ -12,6 +12,7 @@ import com.chunkslab.gestures.api.scheduler.IScheduler;
 import com.chunkslab.gestures.api.server.IServerManager;
 import com.chunkslab.gestures.api.wardrobe.IWardrobeManager;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
+import com.chunkslab.gestures.command.GestureCommand;
 import com.chunkslab.gestures.command.WardrobeCommand;
 import com.chunkslab.gestures.config.Config;
 import com.chunkslab.gestures.config.messages.MessagesEN;
@@ -68,6 +69,7 @@ public final class GesturesPlugin extends GesturesAPI {
     // config
     private final ConfigFile wardrobesFile = new ConfigFile(this, "wardrobes.yml", true);
     private final ConfigFile gesturesFile = new ConfigFile(this, "gestures.yml", true);
+    private final ConfigFile gesturesMenuConfig = new ConfigFile(this, "menus", "gestures-menu.yml");
 
     // database
     @Setter private Database database;
@@ -104,6 +106,7 @@ public final class GesturesPlugin extends GesturesAPI {
 
         wardrobesFile.create();
         gesturesFile.create();
+        gesturesMenuConfig.create();
 
         listenerManager.enable();
         scheduler.enable();
@@ -182,7 +185,7 @@ public final class GesturesPlugin extends GesturesAPI {
             List.of("enable", "disable")
         );
 
-        commandManager.registerCommand(new WardrobeCommand(this));
+        commandManager.registerCommand(new GestureCommand(this), new WardrobeCommand(this));
 
         commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, invalidArgumentContext) ->
                 ChatUtils.sendMessage(sender, ChatUtils.format(pluginMessages.getInvalidArgument())));

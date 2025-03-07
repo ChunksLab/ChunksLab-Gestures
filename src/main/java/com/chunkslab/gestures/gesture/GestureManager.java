@@ -68,7 +68,7 @@ public class GestureManager implements IGestureManager {
                     head = ItemUtils.build(plugin.getGesturesFile(), section.getString("equipment.head"));
             }
             GestureEquip gestureEquip = new GestureEquip(rightHand, leftHand, head);
-            gestureMap.put(id, new Gesture(id, name, permission, font, animationStart, animationIdle, animationEnd, movement, moveSpeed, gestureEquip));
+            for (int i = 0; i < 64; i++) gestureMap.put(id + i, new Gesture(id, name, permission, font, animationStart, animationIdle, animationEnd, movement, moveSpeed, gestureEquip));
         }
     }
 

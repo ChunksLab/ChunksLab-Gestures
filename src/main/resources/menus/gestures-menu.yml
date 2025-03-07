@@ -1,0 +1,43 @@
+structure:
+  - "# # # # # # # # #"
+  - "x x x x x x x x x"
+  - "x x x x x x x x x"
+  - "x x x x x x x x x"
+  - "x x x x x x x x x"
+  - "# < # # # # # > #"
+
+title: "<white>%nexo_shift_-8%%nexo_gestures_gui%%nexo_shift_-169%"
+
+rows:
+  1:
+    enabled: false
+    amount: 9
+    offset: "<font:default>%nexo_shift_-162%"
+  2:
+    enabled: true
+    amount: 9
+    offset: "<font:default>%nexo_shift_-162%"
+  3:
+    enabled: true
+    amount: 9
+    offset: "<font:default>%nexo_shift_-162%"
+  4:
+    enabled: true
+    amount: 9
+    offset: "<font:default>%nexo_shift_-162%"
+  5:
+    enabled: true
+    amount: 9
+    offset: "<font:default>%nexo_shift_-162%"
+
+one-shift: "%nexo_shift_1%"
+
+green-color: "<white>"
+red-color: "<white>"
+
+items:
+  'x':
+    material: "PAPER"
+    name: "<aqua>ᴄʜᴜɴᴋsʟᴀʙ"
+  '#':
+    material: "GRAY_STAINED_GLASS_PANE"

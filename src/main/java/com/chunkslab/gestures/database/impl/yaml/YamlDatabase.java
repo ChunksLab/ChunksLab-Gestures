@@ -24,6 +24,7 @@ public class YamlDatabase implements Database {
         if ((!PLAYERS_FOLDER.exists() && !PLAYERS_FOLDER.mkdirs())) {
             LogUtils.severe("Failed to create the realms/player data folders.");
         }
+        plugin.getServerManager().getAllOnlinePlayers().forEach(this::loadPlayer);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ListenerManager implements IListenerManager {
 
     @Override
     public void enable() {
-
+        register(new PlayerConnectionListener(plugin));
     }
 
     @Override
