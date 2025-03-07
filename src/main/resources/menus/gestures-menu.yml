@@ -1,10 +1,10 @@
 structure:
-  - "# # # # # # # # #"
+  - "c # # # # # # # #"
   - "x x x x x x x x x"
   - "x x x x x x x x x"
   - "x x x x x x x x x"
   - "x x x x x x x x x"
-  - "# < # # # # # > #"
+  - "< < # # # # # > >"
 
 title: "<white>%nexo_shift_-8%%nexo_gestures_gui%%nexo_shift_-169%"
 
@@ -30,7 +30,7 @@ rows:
     amount: 9
     offset: "<font:default>%nexo_shift_-162%"
 
-one-shift: "%nexo_shift_1%"
+gap-shift: "%nexo_shift_1%"
 
 green-color: "<white>"
 red-color: "<white>"
@@ -39,5 +39,17 @@ items:
   'x':
     material: "PAPER"
     name: "<aqua>ᴄʜᴜɴᴋsʟᴀʙ"
-  '#':
-    material: "GRAY_STAINED_GLASS_PANE"
+  '<':
+    material: "ARROW"
+    name: "<yellow>Previous Page"
+    lore:
+      - ""
+      - "<gray>Click to go to the previous page"
+      - ""
+  '>':
+    material: "ARROW"
+    name: "<yellow>Next Page"
+    lore:
+      - ""
+      - "<gray>Click to go to the next page"
+      - ""

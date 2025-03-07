@@ -69,6 +69,7 @@ public final class GesturesPlugin extends GesturesAPI {
     // config
     private final ConfigFile wardrobesFile = new ConfigFile(this, "wardrobes.yml", true);
     private final ConfigFile gesturesFile = new ConfigFile(this, "gestures.yml", true);
+    private final ConfigFile favoritesMenuConfig = new ConfigFile(this, "menus", "favorites-menu.yml");
     private final ConfigFile gesturesMenuConfig = new ConfigFile(this, "menus", "gestures-menu.yml");
 
     // database
@@ -106,6 +107,7 @@ public final class GesturesPlugin extends GesturesAPI {
 
         wardrobesFile.create();
         gesturesFile.create();
+        favoritesMenuConfig.create();
         gesturesMenuConfig.create();
 
         listenerManager.enable();

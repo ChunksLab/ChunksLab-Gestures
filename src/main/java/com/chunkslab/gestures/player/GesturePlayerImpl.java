@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter @Setter
@@ -18,4 +19,9 @@ public class GesturePlayerImpl implements GesturePlayer {
     private Wardrobe wardrobe;
     private Gesture gesture;
     private FavoriteGestures favoriteGestures;
+
+    @Override
+    public List<Gesture> getFavoriteGesturesList() {
+        return List.of(favoriteGestures.getOne(), favoriteGestures.getTwo(), favoriteGestures.getThree(), favoriteGestures.getFour(), favoriteGestures.getFive(), favoriteGestures.getSix());
+    }
 }

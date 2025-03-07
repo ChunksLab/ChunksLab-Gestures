@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface GesturePlayer {
@@ -37,6 +38,8 @@ public interface GesturePlayer {
     FavoriteGestures getFavoriteGestures();
 
     void setFavoriteGestures(FavoriteGestures favoriteGestures);
+
+    List<Gesture> getFavoriteGesturesList();
 
     @Nullable
     default Player getPlayer() {

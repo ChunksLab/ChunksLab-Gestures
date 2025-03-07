@@ -1,0 +1,25 @@
+structure:
+  - "c # # # # # a a a"
+  - "x x x x x x x x x"
+  - "x x x x x x x x x"
+  - "x x x x x x x x x"
+  - "x x x x x x x x x"
+
+title: "<white>%nexo_shift_-8%%nexo_favorites_gui%%nexo_shift_-158%"
+
+rows:
+  1:
+    enabled: true
+    amount: 3
+    offset: "<font:default>%nexo_shift_-159%"
+  2:
+    enabled: true
+    amount: 3
+    offset: "<font:default>%nexo_shift_-159%"
+
+gap-shift: "%nexo_shift_20%"
+
+items:
+  'x':
+    material: "PAPER"
+    name: "<aqua>ᴄʜᴜɴᴋsʟᴀʙ"
