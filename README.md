@@ -30,7 +30,7 @@ ChunksLab-Gestures is a **high-performance Paper plugin** designed to enhance **
    ```sh
    ./gradlew build
    ```
-4. The compiled artifact can be found in the **/target** folder.
+4. The compiled artifact can be found in the **/build/libs** folder.
 
 ### 🛠️ Using an IDE
 
