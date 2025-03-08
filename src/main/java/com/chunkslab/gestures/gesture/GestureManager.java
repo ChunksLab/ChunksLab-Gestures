@@ -27,7 +27,7 @@ public class GestureManager implements IGestureManager {
         gestureMap.clear();
         for (String id : plugin.getGesturesFile().getKeys(false)) {
             ConfigurationSection section = plugin.getGesturesFile().getConfigurationSection(id);
-            Component name = ChatUtils.format("name");
+            Component name = ChatUtils.format(section.getString("name"));
             String permission = section.getString("permission");
             String font = section.getString("font");
             boolean movement = section.getBoolean("movement");
@@ -68,7 +68,7 @@ public class GestureManager implements IGestureManager {
                     head = ItemUtils.build(plugin.getGesturesFile(), section.getString("equipment.head"));
             }
             GestureEquip gestureEquip = new GestureEquip(rightHand, leftHand, head);
-            for (int i = 0; i < 64; i++) gestureMap.put(id + i, new Gesture(id, name, permission, font, animationStart, animationIdle, animationEnd, movement, moveSpeed, gestureEquip));
+            gestureMap.put(id, new Gesture(id, name, permission, font, animationStart, animationIdle, animationEnd, movement, moveSpeed, gestureEquip));
         }
     }
 

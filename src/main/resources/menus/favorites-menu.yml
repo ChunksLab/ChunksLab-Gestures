@@ -21,5 +21,13 @@ gap-shift: "%nexo_shift_20%"
 
 items:
   'x':
-    material: "PAPER"
-    name: "<aqua>ᴄʜᴜɴᴋsʟᴀʙ"
+    material: "FEATHER"
+    custom-model-data: 1000
+  'c':
+    material: "FEATHER"
+    name: "<#DC2625>Quit"
+    custom-model-data: 1000
+  'a':
+    material: "FEATHER"
+    name: "<#A7AEBA>View All"
+    custom-model-data: 1000

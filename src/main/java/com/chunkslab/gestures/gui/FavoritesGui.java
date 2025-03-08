@@ -58,9 +58,7 @@ public class FavoritesGui {
             }
         }
 
-        Item close = new UpdatingItem(20, () -> new ItemBuilder(ItemUtils.build(config, "items.c")), event -> {
-            player.getPlayer().closeInventory();
-        });
+        Item close = new UpdatingItem(20, () -> new ItemBuilder(ItemUtils.build(config, "items.c")), event -> player.getPlayer().closeInventory());
 
         Item allGestures = new UpdatingItem(20, () -> new ItemBuilder(ItemUtils.build(config, "items.a")), event -> {
             player.getPlayer().closeInventory();

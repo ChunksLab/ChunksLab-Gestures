@@ -24,6 +24,7 @@ public class GesturesGui {
 
     public static void open(GesturePlayer player, GesturesPlugin plugin) {
         ConfigFile config = plugin.getGesturesMenuConfig();
+        config.reload();
         StringBuilder title = new StringBuilder(config.getString("title"));
 
         List<Item> gestures = new ArrayList<>();
@@ -35,18 +36,23 @@ public class GesturesGui {
 
                 title.append("<font:gesture_row_").append(i).append(">");
 
+                int row = i;
                 List<Item> rowGestures = plugin.getGestureManager().getGestures()
                         .stream()
                         .skip(index)
                         .limit(amount)
                         .map(gesture -> {
-                            if (player.getPlayer().hasPermission(gesture.getPermission()))
-                                title.append(config.getString("green-color")).append(gesture.getFont());
+                            if (!player.getPlayer().hasPermission(gesture.getPermission()))
+                                title.append(config.getString("green-color")).append(config.getString("slot-background-unicode")).append("<font:default>").append(config.getString("slot-gap"));
                             else
-                                title.append(config.getString("red-color")).append(gesture.getFont());
-                            title.append(config.getString("gap-shift"));
+                                title.append(config.getString("red-color")).append(config.getString("slot-background-unicode")).append("<font:default>").append(config.getString("slot-gap"));
+                            title.append(config.getString("gesture-color")).append("<font:gesture_row_").append(row).append(">").append(gesture.getFont());
 
-                            return new UpdatingItem(20, () -> new ItemBuilder(ItemUtils.build(config, "items.x")), event -> {
+                            ItemBuilder gestureItem = new ItemBuilder(ItemUtils.build(config, "items.x"));
+                            gestureItem.setDisplayName(ChatUtils.formatForGui(ChatUtils.fromLegacy(gesture.getName())));
+
+                            return new UpdatingItem(20, () -> gestureItem, event -> {
+
                             });
                         })
                         .collect(Collectors.toList());
@@ -58,9 +64,7 @@ public class GesturesGui {
             }
         }
 
-        Item close = new UpdatingItem(20, () -> new ItemBuilder(ItemUtils.build(config, "items.c")), event -> {
-            player.getPlayer().closeInventory();
-        });
+        Item close = new UpdatingItem(20, () -> new ItemBuilder(ItemUtils.build(config, "items.c")), event -> player.getPlayer().closeInventory());
 
         Gui gui = PagedGui.items()
                 .setStructure(config.getStringList("structure").toArray(new String[0]))
