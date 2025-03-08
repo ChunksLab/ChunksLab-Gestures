@@ -4,8 +4,11 @@ import com.chunkslab.gestures.GesturesPlugin;
 import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.api.gesture.GestureEquip;
 import com.chunkslab.gestures.api.gesture.IGestureManager;
+import com.chunkslab.gestures.api.player.GesturePlayer;
+import com.chunkslab.gestures.player.gesture.CustomPlayerModel;
 import com.chunkslab.gestures.util.ChatUtils;
 import com.chunkslab.gestures.util.ItemUtils;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class GestureManager implements IGestureManager {
@@ -21,6 +25,7 @@ public class GestureManager implements IGestureManager {
     private final GesturesPlugin plugin;
 
     private final Map<String, Gesture> gestureMap = new ConcurrentHashMap<>();
+    private final Map<GesturePlayer, CustomPlayerModel> ticking = Maps.newConcurrentMap();
 
     @Override
     public void enable() {
@@ -81,4 +86,26 @@ public class GestureManager implements IGestureManager {
     public Collection<Gesture> getGestures() {
         return gestureMap.values();
     }
+
+    @Override
+    public void playGesture(GesturePlayer player, Gesture gesture) {
+        if(ticking.containsKey(player)) {
+            return;
+        }
+        CustomPlayerModel model = new CustomPlayerModel(player.getPlayer(), gesture.isMovement());
+        ticking.put(player, model);
+        model.playAnimation(gesture.getAnimationIdle());
+        //TODO: REMOVE BELOW LINE AND MAKE CHANGEABLE GESTURE METHOD
+        plugin.getScheduler().runTaskAsyncLater(() -> ticking.remove(player), 5, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void stopGesture(GesturePlayer player) {
+        CustomPlayerModel model = ticking.remove(player);
+        if(model == null) {
+            return;
+        }
+        model.despawn();
+    }
+
 }

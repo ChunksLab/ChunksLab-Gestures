@@ -42,7 +42,7 @@ public class GesturesGui {
                         .skip(index)
                         .limit(amount)
                         .map(gesture -> {
-                            if (!player.getPlayer().hasPermission(gesture.getPermission()))
+                            if (player.getPlayer().hasPermission(gesture.getPermission()))
                                 title.append(config.getString("green-color")).append(config.getString("slot-background-unicode")).append("<font:default>").append(config.getString("slot-gap"));
                             else
                                 title.append(config.getString("red-color")).append(config.getString("slot-background-unicode")).append("<font:default>").append(config.getString("slot-gap"));

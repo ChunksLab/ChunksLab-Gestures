@@ -44,7 +44,7 @@ public class FavoritesGui {
                                 repeatedItems.add(new UpdatingItem(20,
                                         () -> new ItemBuilder(ItemUtils.build(config, "items.x")),
                                         event -> {
-
+                                            plugin.getGestureManager().playGesture(player, gesture);
                                         }));
                             }
                             return repeatedItems.stream();

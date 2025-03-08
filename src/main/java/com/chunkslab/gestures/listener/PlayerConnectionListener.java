@@ -18,6 +18,7 @@ public class PlayerConnectionListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        plugin.getPlayerAnimator().injectPlayer(player);
         plugin.getScheduler().runTaskAsync(() -> {
             GesturePlayer gesturePlayer = plugin.getDatabase().loadPlayer(player.getUniqueId());
             gesturePlayer.setName(player.getName());
@@ -29,9 +30,11 @@ public class PlayerConnectionListener implements Listener {
         Player player = event.getPlayer();
         GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player.getUniqueId());
         plugin.getScheduler().runTaskAsync(() -> {
-            if (gesturePlayer != null)
+            if (gesturePlayer != null) {
                 plugin.getDatabase().savePlayer(gesturePlayer);
                 plugin.getPlayerManager().removePlayer(player.getUniqueId());
+                }
         });
+        plugin.getPlayerAnimator().removePlayer(player);
     }
 }
