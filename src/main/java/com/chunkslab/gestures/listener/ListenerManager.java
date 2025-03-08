@@ -20,6 +20,7 @@ public class ListenerManager implements IListenerManager {
 
     @Override
     public void enable() {
+        register(new WardrobeListener(plugin));
         register(new PlayerConnectionListener(plugin));
     }
 

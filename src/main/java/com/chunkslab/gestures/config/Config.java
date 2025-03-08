@@ -43,7 +43,7 @@ public class Config extends OkaeriConfig {
 
     @Getter @Setter
     public static class Settings extends OkaeriConfig {
-
+        private String wardrobeScreen = "%nexo_wardrobe%";
     }
 
     @Getter @Setter

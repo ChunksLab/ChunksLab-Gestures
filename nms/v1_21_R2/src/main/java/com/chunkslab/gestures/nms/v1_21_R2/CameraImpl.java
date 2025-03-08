@@ -99,7 +99,7 @@ public class CameraImpl implements CameraNMS {
         ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
         ArrayList<Packet<ClientGamePacketListener>> packetListeners = new ArrayList<>();
         packetListeners.add(new ClientboundSetTitlesAnimationPacket(15, 7, 15));
-        MutableComponent title = Component.nullToEmpty(text).copy().withStyle(Style.EMPTY.withFont(ResourceLocation.withDefaultNamespace("gestures/gestures")));
+        MutableComponent title = Component.nullToEmpty(text).copy();
         packetListeners.add(new ClientboundSetTitleTextPacket(title));
         for (Packet<ClientGamePacketListener> packet: packetListeners) {
             sendPacketImmediately(serverPlayer, packet);

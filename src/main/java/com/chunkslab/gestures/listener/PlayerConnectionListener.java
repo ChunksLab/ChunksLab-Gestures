@@ -31,7 +31,7 @@ public class PlayerConnectionListener implements Listener {
         plugin.getScheduler().runTaskAsync(() -> {
             if (gesturePlayer != null)
                 plugin.getDatabase().savePlayer(gesturePlayer);
+                plugin.getPlayerManager().removePlayer(player.getUniqueId());
         });
-        plugin.getPlayerManager().removePlayer(player.getUniqueId());
     }
 }

@@ -1,6 +1,7 @@
 package com.chunkslab.gestures.command;
 
 import com.chunkslab.gestures.GesturesPlugin;
+import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
 import com.chunkslab.gestures.nms.api.CameraNMS;
 import com.chunkslab.gestures.nms.api.WardrobeNMS;
@@ -10,6 +11,7 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
 import lombok.RequiredArgsConstructor;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
 @Command(value = "wardrobe")
@@ -74,7 +76,28 @@ public class WardrobeCommand extends BaseCommand {
         WardrobeNMS wardrobeNMS = plugin.getGestureNMS().getWardrobeNMS();
         wardrobeNMS.spawn(player, wardrobe.getNpcLocation());
         CameraNMS cameraNMS = plugin.getGestureNMS().getCameraNMS();
+        cameraNMS.title(player, PlaceholderAPI.setPlaceholders(null, plugin.getPluginConfig().getSettings().getWardrobeScreen()));
         cameraNMS.spawn(player, wardrobe.getPlayerLocation());
+        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
+        gesturePlayer.setWardrobe(wardrobe);
+    }
+
+    @SubCommand("leave")
+    @Permission("chunkslab.gestures.wardrobe.leave")
+    public void leave(Player player) {
+        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
+        if (!gesturePlayer.inWardrobe()) {
+            //TODO: add player not in the wardrobe message
+            return;
+        }
+        Wardrobe wardrobe = gesturePlayer.getWardrobe();
+        WardrobeNMS wardrobeNMS = plugin.getGestureNMS().getWardrobeNMS();
+        wardrobeNMS.destroy(player);
+        CameraNMS cameraNMS = plugin.getGestureNMS().getCameraNMS();
+        cameraNMS.title(player, PlaceholderAPI.setPlaceholders(null, plugin.getPluginConfig().getSettings().getWardrobeScreen()));
+        cameraNMS.destroy(player);
+        player.teleport(wardrobe.getExitLocation());
+        gesturePlayer.setWardrobe(null);
     }
 
 }
