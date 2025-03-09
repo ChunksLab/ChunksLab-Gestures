@@ -17,7 +17,7 @@ allprojects {
     apply plugin: 'io.github.goooler.shadow'
 
     group rootProject.group
-    version rootProject.baseVersion
+    version rootProject.version
 
     repositories {
         mavenCentral()
@@ -118,7 +118,7 @@ shadowJar.shouldRunAfter build
 
 tasks.shadowJar {
     doLast {
-        file("${rootDir}/libs/${project.name}-${baseVersion}.jar").delete()
+        file("${rootDir}/libs/${project.name}-${project.version}.jar").delete()
     }
 }
 

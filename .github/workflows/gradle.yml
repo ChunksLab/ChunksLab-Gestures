@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Gestures
-          path: build/libs/Gestures ${{ env.VERSION_NAME }}.jar
+          path: target/Gestures ${{ env.VERSION_NAME }}.jar
       - name: 'Publish to repo.voxelarc.net 📡'
         run: ./gradlew publish
         env:
