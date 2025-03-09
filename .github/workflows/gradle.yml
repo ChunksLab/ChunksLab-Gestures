@@ -19,10 +19,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: 'Set up JDK 21 📦'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
       - name: 'Set up Gradle ⚙️'
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: '8.5'
+          gradle-version: '8.7'
       - name: 'Initialize Gradle Wrapper 🚀'
         run: gradle wrapper
       - name: 'Change Wrapper Permissions 🔓'
