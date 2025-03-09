@@ -73,7 +73,6 @@ public class WardrobeImpl implements WardrobeNMS {
                 69,
                 npc.gameMode.getGameModeForPlayer(),
                 npc.getTabListDisplayName(),
-                true,
                 -1,
                 Optionull.map(npc.getChatSession(), RemoteChatSession::asData)
         );

@@ -27,7 +27,7 @@ jobs:
       - name: 'Set up Gradle ⚙️'
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.7'
+          gradle-version: '8.13'
       - name: 'Initialize Gradle Wrapper 🚀'
         run: gradle wrapper
       - name: 'Change Wrapper Permissions 🔓'
@@ -38,11 +38,19 @@ jobs:
         run: ./gradlew :playeranimator:build
       - name: 'Build Main Project 🏗️'
         run: ./gradlew build
+      - name: 'Fetch Version Name 📝'
+        id: fetch-version
+        run: |
+          VERSION_NAME=$(./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{print $2}')
+          echo "VERSION_NAME=v$VERSION_NAME" >> $GITHUB_ENV
+      - name: 'Get Version 📝'
+        run:
+          echo "Version: $VERSION_NAME"
       - name: 'Upload Build Artifact 📦'
         uses: actions/upload-artifact@v4
         with:
           name: Gestures
-          path: build/libs/Gestures v**.jar
+          path: build/libs/Gestures ${{ env.VERSION_NAME }}.jar
       - name: 'Publish to repo.voxelarc.net 📡'
         run: ./gradlew publish
         env:
