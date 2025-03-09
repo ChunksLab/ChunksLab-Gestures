@@ -116,6 +116,13 @@ tasks.shadowJar {
     }
 }
 
+tasks.named('build').configure {
+    def allProjects = rootProject.subprojects.findAll {
+        it.path.startsWith(':nms') || it.path.startsWith(':playeranimator')
+    }
+    dependsOn allProjects.collect { it.path + ':build' }
+}
+
 project(":api") {
     publishing {
         publications {
