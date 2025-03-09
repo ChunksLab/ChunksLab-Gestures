@@ -1,9 +1,6 @@
 package com.chunkslab.gestures.nms;
 
-import com.chunkslab.gestures.nms.api.CameraNMS;
-import com.chunkslab.gestures.nms.api.GestureNMS;
-import com.chunkslab.gestures.nms.api.MountNMS;
-import com.chunkslab.gestures.nms.api.WardrobeNMS;
+import com.chunkslab.gestures.nms.api.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -58,6 +55,11 @@ public class GestureNMSImpl extends GestureNMS {
             mountConstructor.setAccessible(true);
             setMountNMS((MountNMS) mountConstructor.newInstance());
              */
+            // Skin NMS
+            Class<?> skinClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".SkinImpl");
+            Constructor<?> skinConstructor = skinClazz.getDeclaredConstructor();
+            skinConstructor.setAccessible(true);
+            setSkinNMS((SkinNMS) skinConstructor.newInstance());
             // Wardrobe NMS
             Class<?> wardrobeClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".WardrobeImpl");
             Constructor<?> wardrobeConstructor = wardrobeClazz.getDeclaredConstructor();

@@ -2,6 +2,7 @@ package com.chunkslab.gestures.api.player;
 
 import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
+import com.chunkslab.gestures.playeranimator.api.texture.TextureWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface GesturePlayer {
@@ -40,6 +42,10 @@ public interface GesturePlayer {
     void setFavoriteGestures(FavoriteGestures favoriteGestures);
 
     List<Gesture> getFavoriteGesturesList();
+
+    Map<String, TextureWrapper> getTextures();
+
+    void setTextures(Map<String, TextureWrapper> textures);
 
     @Nullable
     default Player getPlayer() {
