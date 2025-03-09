@@ -44,7 +44,7 @@ jobs:
           VERSION_NAME=$(./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{print $2}')
           echo "VERSION_NAME=v$VERSION_NAME" >> $GITHUB_ENV
       - name: 'Get Version 📝'
-        run:
+        run:  |
           echo "Version: $VERSION_NAME"
       - name: 'Upload Build Artifact 📦'
         uses: actions/upload-artifact@v4
