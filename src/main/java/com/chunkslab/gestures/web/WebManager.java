@@ -21,6 +21,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @AllArgsConstructor
 public class WebManager {
@@ -33,16 +34,22 @@ public class WebManager {
     @SneakyThrows
     public void uploadTextures(GesturePlayer gesturePlayer) {
         Map<String, String> data = Maps.newConcurrentMap();
-        data.put("uuid", gesturePlayer.getUniqueId().toString());
+        data.put("uniqueId", gesturePlayer.getUniqueId().toString());
         data.put("name", gesturePlayer.getName());
-        for (Map.Entry<String, TextureWrapper> texture : gesturePlayer.getTextures().entrySet())
-            data.put(texture.getKey(), texture.getValue().getUrl());
+        data.put("slim", String.valueOf(plugin.getGestureNMS().getSkinNMS().getSkinType(gesturePlayer.getPlayer())));
+        data.put("secret", plugin.getPluginConfig().getSettings().getWebSecret());
+        Map<String, String> textures = new HashMap<>();
+        for (Map.Entry<String, TextureWrapper> texture : gesturePlayer.getTextures().entrySet()) {
+            textures.put(texture.getKey(), texture.getValue().getUrl());
+        }
+        data.put("textures", gson.toJson(textures));
 
         URL endpoint = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) endpoint.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("X-API-Secret", plugin.getPluginConfig().getSettings().getWebSecret());
         connection.setDoOutput(true);
 
         String jsonData = gson.toJson(data);
@@ -74,15 +81,16 @@ public class WebManager {
     }
 
     @SneakyThrows
-    public Map<String, TextureWrapper> getTextures(String name) {
+    public Map<String, TextureWrapper> getTextures(UUID uniqueId) {
         JsonObject data = new JsonObject();
-        data.addProperty("name", name);
+        data.addProperty("uniqueId", uniqueId.toString());
 
         URL endpoint = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) endpoint.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("X-API-Secret", plugin.getPluginConfig().getSettings().getWebSecret());
         connection.setDoOutput(true);
 
         String jsonData = gson.toJson(data);
@@ -102,13 +110,13 @@ public class WebManager {
 
                 JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
 
-                boolean isSlim = jsonResponse.has("isSlim") && jsonResponse.get("isSlim").getAsBoolean();
+                boolean isSlim = jsonResponse.get("slim").getAsBoolean();
 
                 HashMap<String, TextureWrapper> textures = new HashMap<>();
-                for (Map.Entry<String, JsonElement> entry : jsonResponse.entrySet()) {
-                    if (entry.getKey().equalsIgnoreCase("uuid") || entry.getKey().equalsIgnoreCase("name") || entry.getKey().equalsIgnoreCase("isSlim"))
-                        continue;
+                JsonElement texturesElement = jsonResponse.get("textures");
 
+                JsonObject texturesObject = texturesElement.getAsJsonObject();
+                for (Map.Entry<String, JsonElement> entry : texturesObject.entrySet()) {
                     String url = entry.getValue().getAsString();
                     String limbType = DefaultSkinPosition.valueOf(entry.getKey()).getLimbType().name();
 
