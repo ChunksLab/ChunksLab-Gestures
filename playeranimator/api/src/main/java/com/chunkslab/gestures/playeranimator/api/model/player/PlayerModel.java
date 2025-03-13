@@ -6,6 +6,8 @@ import com.chunkslab.gestures.playeranimator.api.animation.pack.Bone;
 import com.chunkslab.gestures.playeranimator.api.animation.time.AnimationProperty;
 import com.chunkslab.gestures.playeranimator.api.exceptions.MissingAnimationsException;
 import com.chunkslab.gestures.playeranimator.api.exceptions.UnknownAnimationException;
+import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
+import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerItemBone;
 import com.chunkslab.gestures.playeranimator.api.nms.IRangeManager;
 import com.chunkslab.gestures.playeranimator.api.nms.IRenderer;
 import com.chunkslab.gestures.playeranimator.api.texture.TextureWrapper;
@@ -28,37 +30,58 @@ public class PlayerModel {
 	private final Map<String, PlayerBone> children = new HashMap<>();
 
 	@Getter @Setter private Entity base;
-	@Getter @Setter private TextureWrapper texture;
+	@Getter @Setter private Map<String, TextureWrapper> texture;
 	@Getter private AnimationProperty animationProperty;
 	@Getter private IRangeManager rangeManager;
+	protected RotateOptions rotateOptions;
 	private Location locationBuffer;
 
 	public PlayerModel(Player player) {
+		texture = new HashMap<>();
 		base = player;
 		String raw = PlayerAnimator.api.getNms().getTexture(player);
-		texture = TextureWrapper.fromBase64(raw);
+		texture.put("HEAD", TextureWrapper.fromBase64(raw));
 		rangeManager = PlayerAnimator.api.getNms().createRangeManager(base);
+		rotateOptions = new RotateOptions(false);
+		initialize();
+	}
+
+	public PlayerModel(Player player, Map<String, TextureWrapper> texture) {
+		base = player;
+		this.texture = texture;
+		if (!this.texture.containsKey("HEAD")) {
+			String raw = PlayerAnimator.api.getNms().getTexture(player);
+			this.texture.put("HEAD", TextureWrapper.fromBase64(raw));
+		}
+		rangeManager = PlayerAnimator.api.getNms().createRangeManager(base);
+		rotateOptions = new RotateOptions(false);
 		initialize();
 	}
 
 	public PlayerModel(Entity base, String url, boolean isSlim) {
+		texture = new HashMap<>();
 		this.base = base;
-		this.texture = new TextureWrapper(url, isSlim);
+		texture.put("HEAD", new TextureWrapper(url, isSlim));
 		rangeManager = PlayerAnimator.api.getNms().createRangeManager(base);
+		rotateOptions = new RotateOptions(false);
 		initialize();
 	}
 
-	public PlayerModel(Entity base, TextureWrapper tex) {
+	public PlayerModel(Entity base, Map<String, TextureWrapper> texture) {
 		this.base = base;
-		this.texture = tex;
+		this.texture = texture;
 		rangeManager = PlayerAnimator.api.getNms().createRangeManager(base);
+		rotateOptions = new RotateOptions(false);
 		initialize();
 	}
 
-	public PlayerModel(Entity base, Player player) {
+	public PlayerModel(Entity base, Player player, Map<String, TextureWrapper> texture) {
 		this.base = base;
-		String raw = PlayerAnimator.api.getNms().getTexture(player);
-		texture = TextureWrapper.fromBase64(raw);
+		this.texture = texture;
+		if (!this.texture.containsKey("HEAD")) {
+			String raw = PlayerAnimator.api.getNms().getTexture(player);
+			this.texture.put("HEAD", TextureWrapper.fromBase64(raw));
+		}
 		rangeManager = PlayerAnimator.api.getNms().createRangeManager(base);
 		initialize();
 	}
@@ -150,6 +173,13 @@ public class PlayerModel {
 		if(updateTime && !getAnimationProperty().updateTime())
 			animationProperty = null;
 		return animationProperty != null && !base.isDead();
+	}
+
+	protected boolean finishAnimation() {
+		if (getAnimationProperty() == null) {
+			return true;
+		}
+		return getAnimationProperty().isFinish();
 	}
 
 	public Set<Player> getSeenBy() {

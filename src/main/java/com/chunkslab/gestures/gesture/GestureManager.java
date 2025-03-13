@@ -5,6 +5,7 @@ import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.api.gesture.GestureEquip;
 import com.chunkslab.gestures.api.gesture.IGestureManager;
 import com.chunkslab.gestures.api.player.GesturePlayer;
+import com.chunkslab.gestures.api.util.LogUtils;
 import com.chunkslab.gestures.player.gesture.CustomPlayerModel;
 import com.chunkslab.gestures.util.ChatUtils;
 import com.chunkslab.gestures.util.ItemUtils;
@@ -17,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class GestureManager implements IGestureManager {
@@ -46,21 +46,21 @@ public class GestureManager implements IGestureManager {
             if (animationStart != null) {
                 String[] keys = animationStart.split("\\.", 3);
                 if (!plugin.getPlayerAnimator().getAnimationManager().getRegistry().containsKey(keys[0] + ":" + keys[1])) {
-                    plugin.getLogger().warning("The gesture('" + id + "') has an start animation that does not exist in your registered animations.");
+                    LogUtils.warn("The gesture('" + id + "') has an start animation that does not exist in your registered animations.");
                     continue;
                 }
             }
             if (animationIdle != null) {
                 String[] keys = animationIdle.split("\\.", 3);
                 if (!this.plugin.getPlayerAnimator().getAnimationManager().getRegistry().containsKey(keys[0] + ":" + keys[1])) {
-                    this.plugin.getLogger().warning("The gesture('" + id + "') has an idle animation that does not exist in your registered animations.");
+                    LogUtils.warn("The gesture('" + id + "') has an idle animation that does not exist in your registered animations.");
                     continue;
                 }
             }
             if (animationEnd != null) {
                 String[] keys = animationStart.split("\\.", 3);
                 if (!plugin.getPlayerAnimator().getAnimationManager().getRegistry().containsKey(keys[0] + ":" + keys[1])) {
-                    plugin.getLogger().warning("The gesture('" + id + "') has an start animation that does not exist in your registered animations.");
+                    LogUtils.warn("The gesture('" + id + "') has an start animation that does not exist in your registered animations.");
                     continue;
                 }
             }
@@ -89,22 +89,20 @@ public class GestureManager implements IGestureManager {
 
     @Override
     public void playGesture(GesturePlayer player, Gesture gesture) {
-        if(ticking.containsKey(player)) {
+        if(!ticking.containsKey(player)) {
+            CustomPlayerModel model = new CustomPlayerModel(player, gesture, 1);
+            model.playAnimation();
+            ticking.put(player, model);
             return;
         }
-        CustomPlayerModel model = new CustomPlayerModel(player.getPlayer(), gesture.isMovement());
-        ticking.put(player, model);
-        model.playAnimation(gesture.getAnimationIdle());
-        //TODO: REMOVE BELOW LINE AND MAKE CHANGEABLE GESTURE METHOD
-        plugin.getScheduler().runTaskAsyncLater(() -> ticking.remove(player), 5, TimeUnit.SECONDS);
+        CustomPlayerModel model = ticking.get(player);
+        model.changeGestureAnimation(gesture);
     }
 
     @Override
     public void stopGesture(GesturePlayer player) {
         CustomPlayerModel model = ticking.remove(player);
-        if(model == null) {
-            return;
-        }
+        if(model == null) return;
         model.despawn();
     }
 

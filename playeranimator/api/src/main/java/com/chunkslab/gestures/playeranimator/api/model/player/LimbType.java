@@ -22,7 +22,8 @@ public enum LimbType {
 	LEFT_LEG(9, 9, false),
 	LEFT_FORELEG(9, 9, false),
 	RIGHT_ITEM(-1, -1, true),
-	LEFT_ITEM(-1, -1, true);
+	LEFT_ITEM(-1, -1, true),
+	INVISIBLE_HEAD(29, 29, false);
 
 	public static final Vector base = new Vector(0.313, -1.85204000149011612, 0);
 

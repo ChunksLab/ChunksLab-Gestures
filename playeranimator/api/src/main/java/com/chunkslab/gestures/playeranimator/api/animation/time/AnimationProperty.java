@@ -11,6 +11,7 @@ public class AnimationProperty {
 	@Getter private final Animation animation;
 	@Getter private double time = 0;
 	@Getter @Setter private double speed;
+	@Getter private boolean finish;
 
 	public AnimationProperty(Animation animation) {
 		this(animation, 1);
@@ -22,6 +23,7 @@ public class AnimationProperty {
 	}
 
 	public boolean updateTime() {
+		finish = false;
 		switch (animation.getLoopMode()) {
 			case ONCE -> {
 				if(time < animation.getLength()) {
@@ -34,10 +36,16 @@ public class AnimationProperty {
 				return true;
 			}
 			case LOOP -> {
-				time = (time + (speed / 20)) % animation.getLength();
+				double oldTime = time;
+				time = (time + speed / 20.0) % animation.getLength();
+				double difference = oldTime - time;
+				if (difference > 0.1) {
+					finish = true;
+				}
 				return true;
 			}
 		}
+		finish = true;
 		return false;
 	}
 

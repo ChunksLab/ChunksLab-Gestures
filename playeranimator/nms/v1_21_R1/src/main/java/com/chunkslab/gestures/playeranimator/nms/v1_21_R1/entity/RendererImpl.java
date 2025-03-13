@@ -2,8 +2,9 @@ package com.chunkslab.gestures.playeranimator.nms.v1_21_R1.entity;
 
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
 import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
-import com.chunkslab.gestures.playeranimator.api.model.player.PlayerBone;
+import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
 import com.chunkslab.gestures.playeranimator.api.nms.IRenderer;
+import com.chunkslab.gestures.playeranimator.api.texture.TextureWrapper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Rotations;
 import net.minecraft.network.protocol.Packet;
@@ -64,9 +65,13 @@ public class RendererImpl implements IRenderer {
                 equipments.add(Pair.of(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(item)));
             }
         }else {
-            org.bukkit.inventory.ItemStack playerHead = PlayerAnimator.api.getNms().setSkullTexture(null, limb.getModel().getTexture());
+            TextureWrapper textureWrapper = limb.getModel().getTexture().get(limb.getType().name());
+            if (textureWrapper == null) {
+                textureWrapper = limb.getModel().getTexture().get("HEAD");
+            }
+            org.bukkit.inventory.ItemStack playerHead = PlayerAnimator.api.getNms().setSkullTexture(null, textureWrapper);
             ItemMeta meta = playerHead.getItemMeta();
-            meta.setCustomModelData(limb.getModel().getTexture().isSlim() ? limb.getType().getSlimId() : limb.getType().getModelId());
+            meta.setCustomModelData(LimbType.INVISIBLE_HEAD.getModelId());
             playerHead.setItemMeta(meta);
             equipments.add(Pair.of(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(playerHead)));
         }

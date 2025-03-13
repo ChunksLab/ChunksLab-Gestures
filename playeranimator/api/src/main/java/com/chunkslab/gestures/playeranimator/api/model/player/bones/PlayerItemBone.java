@@ -1,6 +1,8 @@
-package com.chunkslab.gestures.playeranimator.api.model.player;
+package com.chunkslab.gestures.playeranimator.api.model.player.bones;
 
 import com.chunkslab.gestures.playeranimator.api.animation.pack.Bone;
+import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
+import com.chunkslab.gestures.playeranimator.api.model.player.PlayerModel;
 import com.chunkslab.gestures.playeranimator.api.utils.math.Offset;
 import com.chunkslab.gestures.playeranimator.api.utils.math.TMath;
 import org.bukkit.util.EulerAngle;

@@ -1,6 +1,6 @@
 package com.chunkslab.gestures.playeranimator.api.nms;
 
-import com.chunkslab.gestures.playeranimator.api.model.player.PlayerBone;
+import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
 import org.bukkit.entity.Player;
 
 public interface IRenderer {
