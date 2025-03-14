@@ -3,6 +3,7 @@ package com.chunkslab.gestures.command;
 import com.chunkslab.gestures.GesturesPlugin;
 import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.gui.FavoritesGui;
+import com.chunkslab.gestures.util.ChatUtils;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
@@ -24,10 +25,10 @@ public class GestureCommand extends BaseCommand {
         else {
             Gesture gesture = plugin.getGestureManager().getGesture(gestureId);
             if (gesture == null) {
-                //TODO: add gesture not found message
+                ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getGestureNotExists()));
                 return;
             }
-            //TODO: play gesture method
+            plugin.getGestureManager().playGesture(plugin.getPlayerManager().getPlayer(player), gesture);
         }
     }
 

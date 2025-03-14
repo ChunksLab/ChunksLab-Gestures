@@ -6,6 +6,7 @@ import com.chunkslab.gestures.api.player.IPlayerManager;
 import com.chunkslab.gestures.api.scheduler.IScheduler;
 import com.chunkslab.gestures.api.server.IServerManager;
 import com.chunkslab.gestures.api.wardrobe.IWardrobeManager;
+import com.chunkslab.gestures.api.web.IWebManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,6 +41,8 @@ public abstract class GesturesAPI extends JavaPlugin {
 
     public abstract IWardrobeManager getWardrobeManager();
 
+    public abstract IWebManager getWebManager();
+
     public abstract ModuleManager getModuleManager();
 
     public abstract void setScheduler(IScheduler scheduler);
@@ -51,6 +54,8 @@ public abstract class GesturesAPI extends JavaPlugin {
     public abstract void setGestureManager(IGestureManager gestureManager);
 
     public abstract void setWardrobeManager(IWardrobeManager wardrobeManager);
+
+    public abstract void setWebManager(IWebManager webManager);
 
     public abstract void setModuleManager(ModuleManager manager);
 

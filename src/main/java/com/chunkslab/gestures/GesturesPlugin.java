@@ -12,6 +12,7 @@ import com.chunkslab.gestures.api.scheduler.IScheduler;
 import com.chunkslab.gestures.api.server.IServerManager;
 import com.chunkslab.gestures.api.wardrobe.IWardrobeManager;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
+import com.chunkslab.gestures.api.web.IWebManager;
 import com.chunkslab.gestures.command.GestureCommand;
 import com.chunkslab.gestures.command.WardrobeCommand;
 import com.chunkslab.gestures.config.Config;
@@ -21,13 +22,17 @@ import com.chunkslab.gestures.gesture.GestureManager;
 import com.chunkslab.gestures.listener.ListenerManager;
 import com.chunkslab.gestures.nms.GestureNMSImpl;
 import com.chunkslab.gestures.nms.api.GestureNMS;
+import com.chunkslab.gestures.player.GesturePlayerSkin;
 import com.chunkslab.gestures.player.PlayerManager;
 import com.chunkslab.gestures.playeranimator.PlayerAnimatorImpl;
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
 import com.chunkslab.gestures.scheduler.Scheduler;
 import com.chunkslab.gestures.server.ServerManager;
+import com.chunkslab.gestures.skin.SkinManager;
+import com.chunkslab.gestures.task.SkinTask;
 import com.chunkslab.gestures.util.ChatUtils;
 import com.chunkslab.gestures.wardrobe.WardrobeManager;
+import com.chunkslab.gestures.web.WebManager;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
 import dev.triumphteam.cmd.core.exceptions.CommandRegistrationException;
@@ -46,6 +51,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.jetbrains.annotations.NotNull;
+import org.mineskin.MineskinClient;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -65,6 +71,10 @@ public final class GesturesPlugin extends GesturesAPI {
     private BukkitCommandManager<CommandSender> commandManager;
     private GestureNMS gestureNMS;
     private PlayerAnimator playerAnimator;
+    private MineskinClient mineSkinClient;
+
+    // tasks
+    private final SkinTask skinTask = new SkinTask(this);
 
     // config
     private final ConfigFile wardrobesFile = new ConfigFile(this, "wardrobes.yml", true);
@@ -83,6 +93,9 @@ public final class GesturesPlugin extends GesturesAPI {
     @Setter private ModuleManager moduleManager = new ModuleManager(this);
     @Setter private IGestureManager gestureManager = new GestureManager(this);
     @Setter private IWardrobeManager wardrobeManager = new WardrobeManager(this);
+    @Setter private IWebManager webManager = new WebManager(this, pluginConfig.getSettings().getWebUrl());
+    @Setter private SkinManager skinManager = new SkinManager(this);
+    @Setter private GesturePlayerSkin gesturePlayerSkin = new GesturePlayerSkin(this);
 
     @Override
     public void onLoad() {
@@ -102,6 +115,8 @@ public final class GesturesPlugin extends GesturesAPI {
         playerAnimator = PlayerAnimatorImpl.initialize(this);
         playerAnimator.getAnimationManager().importPacks();
 
+        mineSkinClient = new MineskinClient("ChunksLab-Gestures", "1");
+
         registerCommands();
         createConfig();
 
@@ -115,6 +130,8 @@ public final class GesturesPlugin extends GesturesAPI {
         gestureManager.enable();
         wardrobeManager.enable();
 
+        skinTask.runTaskTimerAsynchronously(this, 0L, 20L);
+
         database = new YamlDatabase(this);
 
         this.getModuleManager().enableModules();
@@ -126,6 +143,7 @@ public final class GesturesPlugin extends GesturesAPI {
         this.getModuleManager().disableModules();
 
         listenerManager.disable();
+        skinTask.cancel();
         if (adventure != null) {
             adventure.close();
             adventure = null;

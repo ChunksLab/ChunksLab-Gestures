@@ -17,7 +17,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GesturePlayerImpl implements GesturePlayer {
     private final UUID uniqueId;
-    private String name;
+    private String name, skinName;
+    private boolean skinStatus;
     private Wardrobe wardrobe;
     private Gesture gesture;
     private FavoriteGestures favoriteGestures;

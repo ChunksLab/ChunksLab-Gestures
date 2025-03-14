@@ -22,6 +22,7 @@ public class PlayerConnectionListener implements Listener {
         plugin.getScheduler().runTaskAsync(() -> {
             GesturePlayer gesturePlayer = plugin.getDatabase().loadPlayer(player.getUniqueId());
             gesturePlayer.setName(player.getName());
+            plugin.getSkinTask().getSkinQueue().offer(gesturePlayer);
         });
     }
 
@@ -33,7 +34,7 @@ public class PlayerConnectionListener implements Listener {
             if (gesturePlayer != null) {
                 plugin.getDatabase().savePlayer(gesturePlayer);
                 plugin.getPlayerManager().removePlayer(player.getUniqueId());
-                }
+            }
         });
         plugin.getPlayerAnimator().removePlayer(player);
     }

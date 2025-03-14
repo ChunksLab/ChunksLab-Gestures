@@ -22,9 +22,15 @@ public class MessagesEN extends OkaeriConfig {
 
     private String prefix = "<#D0EFB1>Gestures <dark_gray>•";
 
+    private String skinUploaded = "<prefix> <green>Skin successfully uploaded!";
+    private String skinUploading = "<prefix> <yellow>Skin started uploading!";
+
     private String invalidArgument = "<prefix> <red>Invalid argument.";
     private String tooManyArguments = "<prefix> <red>Too many arguments.";
     private String notEnoughArguments = "<prefix> <red>Not enough arguments.";
     private String unknownCommand = "<prefix> <red>Unknown command.";
     private String notEnoughPermission = "<prefix> <red>You don't have enough permission to do this.";
+    private String gestureNotExists = "<prefix> <red>Gesture not exists!";
+    private String wardrobeNotExists = "<prefix> <red>Wardrobe not exists!";
+    private String notInWardrobe = "<prefix> <red>You're not in the wardrobe!";
 }

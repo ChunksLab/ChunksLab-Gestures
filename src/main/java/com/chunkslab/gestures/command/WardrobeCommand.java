@@ -5,6 +5,7 @@ import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
 import com.chunkslab.gestures.nms.api.CameraNMS;
 import com.chunkslab.gestures.nms.api.WardrobeNMS;
+import com.chunkslab.gestures.util.ChatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -70,7 +71,7 @@ public class WardrobeCommand extends BaseCommand {
     public void join(Player player, @Suggestion("wardrobes") String wardrobeId) {
         Wardrobe wardrobe = plugin.getWardrobeManager().getWardrobe(wardrobeId);
         if (wardrobe == null) {
-            //TODO: add wardrobe is non exist message
+            ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getWardrobeNotExists()));
             return;
         }
         WardrobeNMS wardrobeNMS = plugin.getGestureNMS().getWardrobeNMS();
@@ -87,7 +88,7 @@ public class WardrobeCommand extends BaseCommand {
     public void leave(Player player) {
         GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
         if (!gesturePlayer.inWardrobe()) {
-            //TODO: add player not in the wardrobe message
+            ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getNotInWardrobe()));
             return;
         }
         Wardrobe wardrobe = gesturePlayer.getWardrobe();

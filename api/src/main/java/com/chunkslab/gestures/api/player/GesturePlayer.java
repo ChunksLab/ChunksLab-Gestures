@@ -21,6 +21,14 @@ public interface GesturePlayer {
 
     void setName(String name);
 
+    String getSkinName();
+
+    void setSkinName(String skinName);
+
+    boolean isSkinStatus();
+
+    void setSkinStatus(boolean skinStatus);
+
     default boolean inWardrobe() {
         return getWardrobe() != null;
     }

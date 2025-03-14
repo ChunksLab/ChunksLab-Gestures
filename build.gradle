@@ -47,6 +47,7 @@ repositories {
     maven { url "https://storehouse.okaeri.eu/repository/maven-public/" }
     maven { url 'https://repo.xenondevs.xyz/releases' }
     maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url 'https://repo.inventivetalent.org/repository/public/' }
 }
 
 dependencies {
@@ -65,6 +66,7 @@ dependencies {
     implementation 'dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT'  exclude group: 'com.google.code.gson'
     implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.5'
     implementation 'xyz.xenondevs.invui:invui:1.43'
+    implementation 'org.mineskin:java-client:1.2.4-SNAPSHOT'
     implementation 'org.bstats:bstats-bukkit:3.1.0'
 
     compileOnly 'me.clip:placeholderapi:2.11.6'
