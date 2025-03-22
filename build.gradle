@@ -6,7 +6,7 @@ plugins {
 
 ext {
     baseVersion = '1.0.0'
-    channel = 'SNAPSHOT'
+    channel = 'DEVELOPMENT'
 }
 
 group = 'com.chunkslab.gestures'
@@ -100,8 +100,18 @@ processResources {
     }
 }
 
+tasks.register("cleanTarget") {
+    doFirst {
+        def targetDir = file("$rootDir/target")
+        if (targetDir.exists()) {
+            targetDir.deleteDir()
+        }
+    }
+}
+
 shadowJar {
     dependsOn(jar)
+    dependsOn(cleanTarget)
 
     archiveFileName = "Gestures v${archiveVersion.get()}.jar"
     destinationDirectory.set(file("$rootDir/target"))
@@ -111,6 +121,7 @@ shadowJar {
     relocate 'xyz.xenondevs.invui', 'com.chunkslab.gestures.libs.invui'
     relocate 'eu.okaeri', 'com.chunkslab.gestures.libs.okaeri'
     relocate 'org.bstats', 'com.chunkslab.gestures.libs.bstats'
+    relocate 'org.mineskin', 'com.chunkslab.gestures.libs.mineskin'
 
     from sourceSets.getByName("main").output
     configurations = [project.configurations.getByName("runtimeClasspath")]
@@ -171,7 +182,7 @@ def getVersion() {
         finalVersion += "-${channel}"
     }
     def includeHash = System.getenv("INCLUDE_GIT_HASH")
-    if (includeHash == null || includeHash.toBoolean()) {
+    if ((includeHash == null || includeHash.toBoolean()) && channel != "DEVELOPMENT") {
         finalVersion += getGitCommitHash()
     }
     return finalVersion

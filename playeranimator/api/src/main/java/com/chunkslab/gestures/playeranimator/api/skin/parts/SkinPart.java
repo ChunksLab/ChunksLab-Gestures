@@ -1,6 +1,6 @@
-package com.chunkslab.gestures.skin.parts;
+package com.chunkslab.gestures.playeranimator.api.skin.parts;
 
-import com.chunkslab.gestures.skin.images.ImageArea;
+import com.chunkslab.gestures.playeranimator.api.skin.images.ImageArea;
 import lombok.Getter;
 
 @Getter

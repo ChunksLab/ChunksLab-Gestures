@@ -93,6 +93,7 @@ public class GestureManager implements IGestureManager {
             CustomPlayerModel model = new CustomPlayerModel(player, gesture, 1);
             model.playAnimation();
             ticking.put(player, model);
+            plugin.getScheduler().runTaskSyncLater(() -> ticking.remove(player), null, 80);
             return;
         }
         CustomPlayerModel model = ticking.get(player);

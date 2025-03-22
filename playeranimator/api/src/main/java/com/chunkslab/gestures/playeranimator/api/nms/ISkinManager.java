@@ -1,8 +1,8 @@
-package com.chunkslab.gestures.nms.api;
+package com.chunkslab.gestures.playeranimator.api.nms;
 
 import org.bukkit.entity.Player;
 
-public interface SkinNMS {
+public interface ISkinManager {
 
     Object getSkinTexture(Player var1);
 

@@ -1,4 +1,4 @@
-package com.chunkslab.gestures.skin.parts.positions;
+package com.chunkslab.gestures.playeranimator.api.skin.parts.positions;
 
 import java.util.List;
 

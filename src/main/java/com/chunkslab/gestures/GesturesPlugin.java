@@ -26,9 +26,9 @@ import com.chunkslab.gestures.player.GesturePlayerSkin;
 import com.chunkslab.gestures.player.PlayerManager;
 import com.chunkslab.gestures.playeranimator.PlayerAnimatorImpl;
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
+import com.chunkslab.gestures.playeranimator.api.skin.SkinManager;
 import com.chunkslab.gestures.scheduler.Scheduler;
 import com.chunkslab.gestures.server.ServerManager;
-import com.chunkslab.gestures.skin.SkinManager;
 import com.chunkslab.gestures.task.SkinTask;
 import com.chunkslab.gestures.util.ChatUtils;
 import com.chunkslab.gestures.wardrobe.WardrobeManager;
@@ -93,8 +93,8 @@ public final class GesturesPlugin extends GesturesAPI {
     @Setter private ModuleManager moduleManager = new ModuleManager(this);
     @Setter private IGestureManager gestureManager = new GestureManager(this);
     @Setter private IWardrobeManager wardrobeManager = new WardrobeManager(this);
-    @Setter private IWebManager webManager = new WebManager(this, pluginConfig.getSettings().getWebUrl());
-    @Setter private SkinManager skinManager = new SkinManager(this);
+    @Setter private IWebManager webManager;
+    @Setter private SkinManager skinManager = new SkinManager();
     @Setter private GesturePlayerSkin gesturePlayerSkin = new GesturePlayerSkin(this);
 
     @Override
@@ -115,10 +115,12 @@ public final class GesturesPlugin extends GesturesAPI {
         playerAnimator = PlayerAnimatorImpl.initialize(this);
         playerAnimator.getAnimationManager().importPacks();
 
-        mineSkinClient = new MineskinClient("ChunksLab-Gestures", "1");
 
         registerCommands();
         createConfig();
+
+        mineSkinClient = new MineskinClient("ChunksLab-Gestures", pluginConfig.getSettings().getMineSkinSecret());
+        webManager = new WebManager(this, pluginConfig.getSettings().getWebUrl());
 
         wardrobesFile.create();
         gesturesFile.create();
@@ -129,6 +131,7 @@ public final class GesturesPlugin extends GesturesAPI {
         scheduler.enable();
         gestureManager.enable();
         wardrobeManager.enable();
+
 
         skinTask.runTaskTimerAsynchronously(this, 0L, 20L);
 

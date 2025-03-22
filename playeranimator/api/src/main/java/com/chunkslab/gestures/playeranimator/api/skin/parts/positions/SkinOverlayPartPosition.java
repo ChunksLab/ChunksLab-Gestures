@@ -1,7 +1,7 @@
-package com.chunkslab.gestures.skin.parts.positions;
+package com.chunkslab.gestures.playeranimator.api.skin.parts.positions;
 
-import com.chunkslab.gestures.skin.parts.SkinPart;
-import com.chunkslab.gestures.skin.parts.SkinPartOverlay;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.SkinPart;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.SkinPartOverlay;
 import lombok.Getter;
 
 @Getter

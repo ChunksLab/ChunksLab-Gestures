@@ -1,14 +1,14 @@
-package com.chunkslab.gestures.skin;
+package com.chunkslab.gestures.playeranimator.api.skin;
 
-import com.chunkslab.gestures.GesturesPlugin;
-import com.chunkslab.gestures.skin.images.ImageArea;
-import com.chunkslab.gestures.skin.images.SkinImage;
-import com.chunkslab.gestures.skin.images.SkinTexture;
-import com.chunkslab.gestures.skin.parts.DefaultSkinPosition;
-import com.chunkslab.gestures.skin.parts.SkinPart;
-import com.chunkslab.gestures.skin.parts.positions.PartPosition;
-import com.chunkslab.gestures.skin.parts.positions.SkinOverlayPartPosition;
-import com.chunkslab.gestures.skin.parts.positions.SkinPosition;
+import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
+import com.chunkslab.gestures.playeranimator.api.skin.images.ImageArea;
+import com.chunkslab.gestures.playeranimator.api.skin.images.SkinImage;
+import com.chunkslab.gestures.playeranimator.api.skin.images.SkinTexture;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.SkinPart;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.DefaultSkinPosition;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.positions.PartPosition;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.positions.SkinOverlayPartPosition;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.positions.SkinPosition;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -21,11 +21,9 @@ import java.awt.image.RasterFormatException;
 @RequiredArgsConstructor
 public class SkinManager {
 
-    private final GesturesPlugin plugin;
-
     public SkinImage getPlayerSkinPosition(Player player, SkinPosition skinPosition, int resize, boolean withoutOverlay) {
         validateSize(resize);
-        SkinTexture skin = (SkinTexture) plugin.getGestureNMS().getSkinNMS().getSkinTexture(player);
+        SkinTexture skin = (SkinTexture) PlayerAnimator.api.getSkinManager().getSkinTexture(player);
         if (skin == null) return null;
         if (skinPosition == DefaultSkinPosition.BASE) return new SkinImage(skin.getImage(), skin.isSlim());
         BufferedImage positionImage = new BufferedImage(64, 64, 2);

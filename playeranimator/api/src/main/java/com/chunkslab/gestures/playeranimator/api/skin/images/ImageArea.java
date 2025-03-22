@@ -1,4 +1,4 @@
-package com.chunkslab.gestures.skin.images;
+package com.chunkslab.gestures.playeranimator.api.skin.images;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,6 +5,7 @@ import com.chunkslab.gestures.playeranimator.api.PlayerAnimatorPlugin;
 import com.chunkslab.gestures.playeranimator.api.animation.AnimationManager;
 import com.chunkslab.gestures.playeranimator.api.model.ModelManager;
 import com.chunkslab.gestures.playeranimator.api.nms.INMSHandler;
+import com.chunkslab.gestures.playeranimator.api.nms.ISkinManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,6 +72,11 @@ public class PlayerAnimatorImpl extends PlayerAnimator {
             Constructor<?> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
             setNms((INMSHandler) constructor.newInstance());
+
+            Class<?> skinClazz = Class.forName("com.chunkslab.gestures.playeranimator.nms." + packageName + ".entity.SkinManager");
+            Constructor<?> skinConstructor = skinClazz.getDeclaredConstructor();
+            skinConstructor.setAccessible(true);
+            setSkinManager((ISkinManager) skinConstructor.newInstance());
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to initialize playeranimator", e);
         }

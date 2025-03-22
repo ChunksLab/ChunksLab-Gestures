@@ -52,7 +52,7 @@ public class GesturesGui {
                             gestureItem.setDisplayName(ChatUtils.formatForGui(ChatUtils.fromLegacy(gesture.getName())));
 
                             return new UpdatingItem(20, () -> gestureItem, event -> {
-
+                                plugin.getGestureManager().playGesture(player, gesture);
                             });
                         })
                         .collect(Collectors.toList());

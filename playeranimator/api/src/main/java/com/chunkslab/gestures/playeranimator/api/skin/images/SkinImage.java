@@ -1,6 +1,5 @@
-package com.chunkslab.gestures.skin.images;
+package com.chunkslab.gestures.playeranimator.api.skin.images;
 
-import com.chunkslab.gestures.api.util.LogUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -33,8 +32,7 @@ public class SkinImage {
                     throwable.addSuppressed(throwable2);
                 }
                 throw throwable;
-            } catch (IOException e) {
-                LogUtils.warn("An unexpected error occured while writing skin image data to byte array", e);
+            } catch (IOException ignored) {
                 return new byte[0];
             }
         }

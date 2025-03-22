@@ -74,6 +74,7 @@ public class WardrobeCommand extends BaseCommand {
             ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getWardrobeNotExists()));
             return;
         }
+        player.teleport(wardrobe.getNpcLocation());
         WardrobeNMS wardrobeNMS = plugin.getGestureNMS().getWardrobeNMS();
         wardrobeNMS.spawn(player, wardrobe.getNpcLocation());
         CameraNMS cameraNMS = plugin.getGestureNMS().getCameraNMS();

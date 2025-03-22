@@ -7,9 +7,11 @@ import com.chunkslab.gestures.api.player.FavoriteGestures;
 import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.util.LogUtils;
 import com.chunkslab.gestures.player.GesturePlayerImpl;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -44,6 +46,9 @@ public class YamlDatabase implements Database {
         data.create();
 
         player = new GesturePlayerImpl(playerUUID);
+
+        player.setTextures(Maps.newConcurrentMap());
+
         String one = data.getString("favorite-gestures.one");
         String two = data.getString("favorite-gestures.two");
         String three = data.getString("favorite-gestures.three");
@@ -94,6 +99,9 @@ public class YamlDatabase implements Database {
 
             if (!name.equals(data.getString("name"))) continue;
             player = new GesturePlayerImpl(UUID.fromString(file.getName().replace(".yml", "")));
+
+            player.setTextures(Maps.newConcurrentMap());
+
             String one = data.getString("favorite-gestures.one");
             String two = data.getString("favorite-gestures.two");
             String three = data.getString("favorite-gestures.three");

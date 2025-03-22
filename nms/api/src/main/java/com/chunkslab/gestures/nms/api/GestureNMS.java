@@ -13,8 +13,6 @@ public abstract class GestureNMS {
     @Getter @Setter
     protected MountNMS mountNMS;
     @Getter @Setter
-    protected SkinNMS skinNMS;
-    @Getter @Setter
     protected WardrobeNMS wardrobeNMS;
 
 }

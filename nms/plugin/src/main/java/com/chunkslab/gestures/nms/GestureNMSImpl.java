@@ -55,11 +55,6 @@ public class GestureNMSImpl extends GestureNMS {
             mountConstructor.setAccessible(true);
             setMountNMS((MountNMS) mountConstructor.newInstance());
              */
-            // Skin NMS
-            Class<?> skinClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".SkinImpl");
-            Constructor<?> skinConstructor = skinClazz.getDeclaredConstructor();
-            skinConstructor.setAccessible(true);
-            setSkinNMS((SkinNMS) skinConstructor.newInstance());
             // Wardrobe NMS
             Class<?> wardrobeClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".WardrobeImpl");
             Constructor<?> wardrobeConstructor = wardrobeClazz.getDeclaredConstructor();

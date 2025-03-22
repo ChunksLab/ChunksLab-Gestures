@@ -1,6 +1,6 @@
-package com.chunkslab.gestures.skin.parts.positions;
+package com.chunkslab.gestures.playeranimator.api.skin.parts.positions;
 
-import com.chunkslab.gestures.skin.parts.SkinPart;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.SkinPart;
 
 public class SkinPartPosition extends PartPosition {
     public SkinPartPosition(SkinPart part, int offsetX, int offsetY) {

@@ -1,10 +1,10 @@
-package com.chunkslab.gestures.skin.parts;
+package com.chunkslab.gestures.playeranimator.api.skin.parts;
 
 import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
-import com.chunkslab.gestures.skin.parts.positions.PartPosition;
-import com.chunkslab.gestures.skin.parts.positions.SkinOverlayPartPosition;
-import com.chunkslab.gestures.skin.parts.positions.SkinPartPosition;
-import com.chunkslab.gestures.skin.parts.positions.SkinPosition;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.positions.SkinPartPosition;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.positions.SkinPosition;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.positions.PartPosition;
+import com.chunkslab.gestures.playeranimator.api.skin.parts.positions.SkinOverlayPartPosition;
 import lombok.Getter;
 
 import java.util.Arrays;

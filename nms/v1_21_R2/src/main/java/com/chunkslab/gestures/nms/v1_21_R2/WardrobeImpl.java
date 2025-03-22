@@ -6,14 +6,13 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.Optionull;
 import net.minecraft.network.chat.RemoteChatSession;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundSetCameraPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,6 +28,7 @@ import java.util.UUID;
 public class WardrobeImpl implements WardrobeNMS {
 
     private ServerPlayer npc;
+    private Slime slime;
     private int entityID;
 
     @Override
@@ -60,12 +60,31 @@ public class WardrobeImpl implements WardrobeNMS {
                 0
         );
         serverPlayer.connection.send(addEntityPacket);
+        Slime slime = new Slime(EntityType.SLIME, serverLevel);
+        slime.setInvisible(true);
+        slime.setOnGround(true);
+        this.slime = slime;
+        ClientboundAddEntityPacket slimeAddEntityPacket = new ClientboundAddEntityPacket(
+                slime.getId(),
+                slime.getUUID(),
+                location.getX(),
+                location.getY(),
+                location.getZ(),
+                location.getPitch(),
+                location.getYaw(),
+                slime.getType(),
+                0,
+                Vec3.ZERO,
+                0
+        );
+        serverPlayer.connection.send(slimeAddEntityPacket);
+        serverPlayer.connection.send(new ClientboundSetPassengersPacket(slime));
     }
 
     @Override
     public void destroy(Player player) {
         ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
-        ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(entityID);
+        ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(entityID, slime.getId());
         serverPlayer.connection.send(packet);
     }
 
