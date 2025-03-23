@@ -25,6 +25,7 @@ public class PlayerBone {
 
 	// Properties
 	protected Vector position = new Vector();
+	protected Vector scale = new Vector();
 	@Getter protected EulerAngle rotation = EulerAngle.ZERO;
 
 	public PlayerBone(PlayerModel model, Bone bone) {
@@ -40,6 +41,7 @@ public class PlayerBone {
 	public void update() {
 		Vector fPosition = model.getAnimationProperty().getPositionFrame(bone.getName());
 		EulerAngle fRotation = model.getAnimationProperty().getRotationFrame(bone.getName());
+		Vector fScale = this.model.getAnimationProperty().getScaleFrame(bone.getName());
 
 		Vector pPosition = parent == null ? getModel().getBaseVector() : parent.getPosition();
 		EulerAngle pRotation = parent == null ? EulerAngle.ZERO : parent.getRotation();
@@ -55,6 +57,7 @@ public class PlayerBone {
 
 		position = pPosition.add(fPosition);
 		rotation = TMath.localRotate(pRotation, fRotation);
+		scale = fScale;
 
 		for(PlayerBone bone : children.values())
 			bone.update();
@@ -68,6 +71,10 @@ public class PlayerBone {
 
 	public Vector getPosition() {
 		return position.clone();
+	}
+
+	public boolean isInvisible() {
+		return this.scale != null && this.scale.getX() < 1.0;
 	}
 
 }

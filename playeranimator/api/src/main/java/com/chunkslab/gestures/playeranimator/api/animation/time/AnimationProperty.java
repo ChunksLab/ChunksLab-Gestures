@@ -53,6 +53,10 @@ public class AnimationProperty {
 		return animation.getPosition(bone, time);
 	}
 
+	public Vector getScaleFrame(String bone) {
+		return animation.getScale(bone, this.time);
+	}
+
 	public EulerAngle getRotationFrame(String bone) {
 		return animation.getRotation(bone, time);
 	}

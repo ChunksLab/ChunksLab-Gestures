@@ -4,6 +4,7 @@ import com.chunkslab.gestures.GesturesPlugin;
 import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.util.LogUtils;
 import com.chunkslab.gestures.api.web.IWebManager;
+import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
 import com.chunkslab.gestures.playeranimator.api.skin.parts.DefaultSkinPosition;
 import com.chunkslab.gestures.playeranimator.api.texture.TextureWrapper;
 import com.google.common.collect.Maps;
@@ -117,7 +118,7 @@ public class WebManager implements IWebManager {
                         JsonObject texturesObject = texturesElement.getAsJsonObject();
                         for (Map.Entry<String, JsonElement> entry : texturesObject.entrySet()) {
                             String url = entry.getValue().getAsString();
-                            String limbType = DefaultSkinPosition.valueOf(entry.getKey()).getLimbType().name();
+                            String limbType = LimbType.get(entry.getKey()).name();
 
                             if (url == null || url.isEmpty()) {
                                 gesturePlayer.getTextures().remove(limbType);

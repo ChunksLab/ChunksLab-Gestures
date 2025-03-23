@@ -35,6 +35,13 @@ public class Animation {
 		return timelines.get(bone).getPositionFrame(time);
 	}
 
+	public Vector getScale(String bone, double time) {
+		if (!timelines.containsKey(bone)) {
+			return null;
+		}
+		return timelines.get(bone).getScaleFrame(time);
+	}
+
 	public EulerAngle getRotation(String bone, double time) {
 		if(!timelines.containsKey(bone))
 			return EulerAngle.ZERO;
