@@ -26,6 +26,10 @@ public class GestureChangeAnimationEvent  extends Event implements Cancellable {
         this.newGesture = newGesture;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+    }
+
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLER_LIST;

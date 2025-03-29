@@ -3,7 +3,7 @@ package com.chunkslab.gestures.listener;
 import com.chunkslab.gestures.GesturesPlugin;
 import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
-import com.chunkslab.gestures.gui.GesturesGui;
+import com.chunkslab.gestures.gui.WardrobeGesturesGui;
 import com.chunkslab.gestures.nms.api.CameraNMS;
 import com.chunkslab.gestures.nms.api.WardrobeNMS;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class WardrobeListener implements Listener {
         GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
         if (!gesturePlayer.inWardrobe()) return;
         event.setCancelled(true);
-        GesturesGui.open(gesturePlayer, plugin);
+        WardrobeGesturesGui.open(gesturePlayer, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

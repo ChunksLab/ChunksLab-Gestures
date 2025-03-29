@@ -48,13 +48,16 @@ public class GestureNMSImpl extends GestureNMS {
             Constructor<?> cameraConstructor = cameraClazz.getDeclaredConstructor();
             cameraConstructor.setAccessible(true);
             setCameraNMS((CameraNMS) cameraConstructor.newInstance());
-            /*
             // Mount NMS
             Class<?> mountClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".MountImpl");
             Constructor<?> mountConstructor = mountClazz.getDeclaredConstructor();
             mountConstructor.setAccessible(true);
             setMountNMS((MountNMS) mountConstructor.newInstance());
-             */
+            // ThirdPerson NMS
+            Class<?> thirdPersonClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".ThirdPersonImpl");
+            Constructor<?> thirdPersonConstructor = thirdPersonClazz.getDeclaredConstructor();
+            thirdPersonConstructor.setAccessible(true);
+            setThirdPersonNMS((ThirdPersonNMS) thirdPersonConstructor.newInstance());
             // Wardrobe NMS
             Class<?> wardrobeClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".WardrobeImpl");
             Constructor<?> wardrobeConstructor = wardrobeClazz.getDeclaredConstructor();

@@ -24,6 +24,10 @@ public class GesturePlayAnimationEvent extends Event implements Cancellable {
         this.gesture = gesture;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+    }
+
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLER_LIST;

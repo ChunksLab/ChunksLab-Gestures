@@ -39,20 +39,18 @@ public class GesturesGui {
                 int row = i;
                 List<Item> rowGestures = plugin.getGestureManager().getGestures()
                         .stream()
+                        .filter(gesture -> player.getPlayer().hasPermission(gesture.getPermission()))
                         .skip(index)
                         .limit(amount)
                         .map(gesture -> {
-                            if (player.getPlayer().hasPermission(gesture.getPermission()))
-                                title.append(config.getString("green-color")).append(config.getString("slot-background-unicode")).append("<font:default>").append(config.getString("slot-gap"));
-                            else
-                                title.append(config.getString("red-color")).append(config.getString("slot-background-unicode")).append("<font:default>").append(config.getString("slot-gap"));
-                            title.append(config.getString("gesture-color")).append("<font:gesture_row_").append(row).append(">").append(gesture.getFont());
+                            title.append(config.getString("green-color")).append(config.getString("slot-background-unicode")).append("<font:default>").append(config.getString("slot-gap")).append(config.getString("gesture-color")).append("<font:gesture_row_").append(row).append(">").append(gesture.getFont());
 
                             ItemBuilder gestureItem = new ItemBuilder(ItemUtils.build(config, "items.x"));
                             gestureItem.setDisplayName(ChatUtils.formatForGui(ChatUtils.fromLegacy(gesture.getName())));
 
                             return new UpdatingItem(20, () -> gestureItem, event -> {
                                 plugin.getGestureManager().playGesture(player, gesture);
+                                player.getPlayer().closeInventory();
                             });
                         })
                         .collect(Collectors.toList());

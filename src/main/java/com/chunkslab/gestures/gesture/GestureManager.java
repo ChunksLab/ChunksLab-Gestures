@@ -90,10 +90,9 @@ public class GestureManager implements IGestureManager {
     @Override
     public void playGesture(GesturePlayer player, Gesture gesture) {
         if(!ticking.containsKey(player)) {
-            CustomPlayerModel model = new CustomPlayerModel(player, gesture, 1);
+            CustomPlayerModel model = new CustomPlayerModel(player, gesture, 1, plugin.getGestureNMS().getThirdPersonNMS());
             model.playAnimation();
             ticking.put(player, model);
-            plugin.getScheduler().runTaskSyncLater(() -> ticking.remove(player), null, 80);
             return;
         }
         CustomPlayerModel model = ticking.get(player);
@@ -104,7 +103,7 @@ public class GestureManager implements IGestureManager {
     public void stopGesture(GesturePlayer player) {
         CustomPlayerModel model = ticking.remove(player);
         if(model == null) return;
-        model.despawn();
+        plugin.getGestureNMS().getMountNMS().destroy(player.getPlayer());
     }
 
 }

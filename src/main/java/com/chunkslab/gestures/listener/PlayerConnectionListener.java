@@ -2,6 +2,7 @@ package com.chunkslab.gestures.listener;
 
 import com.chunkslab.gestures.GesturesPlugin;
 import com.chunkslab.gestures.api.player.GesturePlayer;
+import com.chunkslab.gestures.nms.api.MountNMS;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,6 +37,8 @@ public class PlayerConnectionListener implements Listener {
                 plugin.getPlayerManager().removePlayer(player.getUniqueId());
             }
         });
+        MountNMS mountNMS = plugin.getGestureNMS().getMountNMS();
+        mountNMS.destroy(player);
         plugin.getPlayerAnimator().removePlayer(player);
     }
 }
