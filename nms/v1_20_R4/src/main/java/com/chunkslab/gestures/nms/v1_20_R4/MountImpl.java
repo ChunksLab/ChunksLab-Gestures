@@ -1,4 +1,4 @@
-package com.chunkslab.gestures.nms.v1_21_R2;
+package com.chunkslab.gestures.nms.v1_20_R4;
 
 import com.chunkslab.gestures.nms.api.MountNMS;
 import com.chunkslab.gestures.nms.api.util.UnsafeFunction;
@@ -6,21 +6,13 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
-import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
-import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -28,13 +20,11 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class MountImpl implements MountNMS {
 
@@ -50,7 +40,7 @@ public class MountImpl implements MountNMS {
         horse.setInvisible(true);
         horse.setInvulnerable(true);
         horse.setTamed(true);
-        horse.getAttribute(CraftAttribute.bukkitToMinecraftHolder(Attribute.MAX_HEALTH)).setBaseValue(0);
+        horse.getAttribute(CraftAttribute.bukkitToMinecraftHolder(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(0);
         horse.setPos(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ());
 
         ClientboundAddEntityPacket addEntityPacket = new ClientboundAddEntityPacket(
@@ -133,18 +123,18 @@ public class MountImpl implements MountNMS {
             lastLocation = centerLocation.clone().subtract(playerDirection.clone().multiply(i));
         }
         Location teleportLocation = lastLocation.subtract(new Vector(0, player.getEyeHeight(), 0));
-        ClientboundTeleportEntityPacket teleportEntityPacket = new ClientboundTeleportEntityPacket(
-                horse.getId(),
-                PositionMoveRotation.of(new TeleportTransition(
-                        serverPlayer.serverLevel(),
-                        new Vec3(teleportLocation.getX(), teleportLocation.getY(), teleportLocation.getZ()),
-                        Vec3.ZERO,
-                        teleportLocation.getYaw(), teleportLocation.getPitch(),
-                        false, false, Set.of(), (entity -> {}), PlayerTeleportEvent.TeleportCause.PLUGIN
-                )),
-                Set.of(),
-                false
-        );
+        float ROTATION_FACTOR = 256.0F / 360.0F;
+        float yaw = teleportLocation.getYaw() * ROTATION_FACTOR;
+        float pitch = teleportLocation.getPitch() * ROTATION_FACTOR;
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        buf.writeVarInt(horse.getId());
+        buf.writeDouble(teleportLocation.getX());
+        buf.writeDouble(teleportLocation.getY());
+        buf.writeDouble(teleportLocation.getZ());
+        buf.writeByte((byte) yaw);
+        buf.writeByte((byte) pitch);
+        buf.writeBoolean(false);
+        ClientboundTeleportEntityPacket teleportEntityPacket = ClientboundTeleportEntityPacket.STREAM_CODEC.decode(buf);
         serverPlayer.connection.send(teleportEntityPacket);
     }
 

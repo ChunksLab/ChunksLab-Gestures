@@ -15,4 +15,6 @@ public interface IGestureManager {
     void playGesture(GesturePlayer player, Gesture gesture);
 
     void stopGesture(GesturePlayer player);
+
+    void stopGesture(GesturePlayer player, boolean wardrobe);
 }

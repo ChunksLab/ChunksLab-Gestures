@@ -108,4 +108,12 @@ public class GestureManager implements IGestureManager {
         mountNMS.destroy(player.getPlayer());
     }
 
+    @Override
+    public void stopGesture(GesturePlayer player, boolean wardrobe) {
+        CustomPlayerModel model = ticking.remove(player);
+        if(model == null) return;
+        model.destroy();
+        model.despawn();
+        model.update();
+    }
 }

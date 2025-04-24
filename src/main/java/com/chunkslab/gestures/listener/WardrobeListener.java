@@ -27,6 +27,7 @@ public class WardrobeListener implements Listener {
         GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
         if (!gesturePlayer.inWardrobe()) return;
         event.setCancelled(true);
+        plugin.getGestureManager().stopGesture(gesturePlayer, true);
         Wardrobe wardrobe = gesturePlayer.getWardrobe();
         WardrobeNMS wardrobeNMS = plugin.getGestureNMS().getWardrobeNMS();
         wardrobeNMS.destroy(player);
