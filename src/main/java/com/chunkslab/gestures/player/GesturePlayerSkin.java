@@ -21,7 +21,7 @@ public class GesturePlayerSkin {
         plugin.getScheduler().runTaskAsync(() -> {
             gesturePlayer.setSkinStatus(false);
             String changedSkin = skinName == null ? gesturePlayer.getSkinName() : skinName;
-            plugin.getWebManager().skinExist(gesturePlayer).thenAccept(exist -> {
+            plugin.getWebManager().loadTextures(gesturePlayer).thenAccept(exist -> {
                 if (exist == 200) {
                     gesturePlayer.setSkinStatus(true);
                     ChatUtils.sendMessage(gesturePlayer.getPlayer(), ChatUtils.format(plugin.getPluginMessages().getSkinUploaded()));

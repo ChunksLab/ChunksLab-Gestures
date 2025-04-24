@@ -37,8 +37,7 @@ public class PlayerConnectionListener implements Listener {
                 plugin.getPlayerManager().removePlayer(player.getUniqueId());
             }
         });
-        MountNMS mountNMS = plugin.getGestureNMS().getMountNMS();
-        mountNMS.destroy(player);
+        plugin.getGestureManager().stopGesture(gesturePlayer);
         plugin.getPlayerAnimator().removePlayer(player);
     }
 }

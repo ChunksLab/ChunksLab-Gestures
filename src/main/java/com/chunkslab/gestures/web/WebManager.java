@@ -87,7 +87,7 @@ public class WebManager implements IWebManager {
 
     @Override
     @SneakyThrows
-    public CompletableFuture<Integer> skinExist(GesturePlayer gesturePlayer) {
+    public CompletableFuture<Integer> loadTextures(GesturePlayer gesturePlayer) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 URL endpoint = new URL(url + gesturePlayer.getUniqueId().toString());
@@ -137,50 +137,5 @@ public class WebManager implements IWebManager {
             }
             return 201;
         });
-    }
-
-
-    @Override
-    @SneakyThrows
-    public Map<String, TextureWrapper> getTextures(UUID uniqueId) {
-        URL endpoint = new URL(url + uniqueId.toString());
-        HttpURLConnection connection = (HttpURLConnection) endpoint.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setRequestProperty("X-API-Secret", plugin.getPluginConfig().getSettings().getWebSecret());
-        connection.setDoOutput(true);
-
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-
-                JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
-
-                boolean isSlim = jsonResponse.get("slim").getAsBoolean();
-
-                HashMap<String, TextureWrapper> textures = new HashMap<>();
-                JsonElement texturesElement = jsonResponse.get("textures");
-
-                JsonObject texturesObject = texturesElement.getAsJsonObject();
-                for (Map.Entry<String, JsonElement> entry : texturesObject.entrySet()) {
-                    String url = entry.getValue().getAsString();
-                    String limbType = DefaultSkinPosition.valueOf(entry.getKey()).getLimbType().name();
-
-                    if (url == null || url.isEmpty()) continue;
-
-                    textures.put(limbType, new TextureWrapper(url, isSlim));
-                }
-                return textures;
-            }
-        } else {
-            LogUtils.warn("The web server is down.");
-            return null;
-        }
     }
 }

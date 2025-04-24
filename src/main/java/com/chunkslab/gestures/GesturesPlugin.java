@@ -147,6 +147,7 @@ public final class GesturesPlugin extends GesturesAPI {
 
         listenerManager.disable();
         skinTask.cancel();
+        wardrobeManager.kickAllPlayer();
         if (adventure != null) {
             adventure.close();
             adventure = null;

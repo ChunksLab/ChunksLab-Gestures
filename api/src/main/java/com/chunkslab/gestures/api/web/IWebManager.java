@@ -11,7 +11,5 @@ public interface IWebManager {
 
     void uploadTextures(GesturePlayer gesturePlayer);
 
-    CompletableFuture<Integer> skinExist(GesturePlayer gesturePlayer);
-
-    Map<String, TextureWrapper> getTextures(UUID uniqueId);
+    CompletableFuture<Integer> loadTextures(GesturePlayer gesturePlayer);
 }

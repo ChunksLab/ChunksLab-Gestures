@@ -1,10 +1,14 @@
 package com.chunkslab.gestures.wardrobe;
 
 import com.chunkslab.gestures.GesturesPlugin;
+import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.util.LocationUtils;
 import com.chunkslab.gestures.api.wardrobe.IWardrobeManager;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
+import com.chunkslab.gestures.nms.api.CameraNMS;
+import com.chunkslab.gestures.nms.api.WardrobeNMS;
 import lombok.RequiredArgsConstructor;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -55,6 +59,21 @@ public class WardrobeManager implements IWardrobeManager {
         wardrobeMap.remove(id);
         plugin.getWardrobesFile().set(id, null);
         plugin.getWardrobesFile().save();
+    }
+
+    @Override
+    public void kickAllPlayer() {
+        for (GesturePlayer player : plugin.getPlayerManager().getPlayers()) {
+            if (!player.inWardrobe()) return;
+            Wardrobe wardrobe = player.getWardrobe();
+            WardrobeNMS wardrobeNMS = plugin.getGestureNMS().getWardrobeNMS();
+            wardrobeNMS.destroy(player.getPlayer());
+            CameraNMS cameraNMS = plugin.getGestureNMS().getCameraNMS();
+            cameraNMS.title(player.getPlayer(), PlaceholderAPI.setPlaceholders(null, plugin.getPluginConfig().getSettings().getWardrobeScreen()));
+            cameraNMS.destroy(player.getPlayer());
+            player.getPlayer().teleport(wardrobe.getExitLocation());
+            player.setWardrobe(null);
+        }
     }
 
     @Override

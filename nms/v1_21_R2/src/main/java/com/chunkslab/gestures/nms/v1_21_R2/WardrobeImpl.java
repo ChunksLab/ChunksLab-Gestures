@@ -67,8 +67,6 @@ public class WardrobeImpl implements WardrobeNMS {
         );
         serverPlayer.connection.send(addEntityPacket);
         Slime slime = new Slime(EntityType.SLIME, serverLevel);
-        slime.setInvisible(true);
-        slime.setOnGround(true);
         this.slime = slime;
         ClientboundAddEntityPacket slimeAddEntityPacket = new ClientboundAddEntityPacket(
                 slime.getId(),
@@ -87,6 +85,7 @@ public class WardrobeImpl implements WardrobeNMS {
         ArrayList<SynchedEntityData.DataValue<?>> values = new ArrayList<>();
         values.add(SynchedEntityData.DataValue.create(new EntityDataAccessor<>(0, EntityDataSerializers.BYTE), (byte) (0x20)));
         serverPlayer.connection.send(new ClientboundSetEntityDataPacket(entityID, values));
+        serverPlayer.connection.send(new ClientboundSetEntityDataPacket(slime.getId(), values));
         serverPlayer.connection.send(new ClientboundSetPassengersPacket(slime));
         IntArrayList players = new IntArrayList();
         for (Player p : player.getWorld().getPlayers()) {

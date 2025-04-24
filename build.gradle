@@ -1,7 +1,7 @@
 plugins {
-    id 'java'
-    id 'maven-publish'
-    id("io.github.goooler.shadow") version "8.1.7"
+    id('java')
+    id('maven-publish')
+    id('io.github.goooler.shadow') version '8.1.7'
 }
 
 ext {
@@ -16,13 +16,13 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'io.github.goooler.shadow'
 
-    group rootProject.group
-    version rootProject.version
+    group = rootProject.group
+    version = rootProject.version
 
     repositories {
         mavenCentral()
-        maven { url 'https://repo.papermc.io/repository/maven-public/' }
-        maven { url 'https://oss.sonatype.org/content/groups/public/' }
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://oss.sonatype.org/content/groups/public/' }
     }
 
     dependencies {
@@ -41,13 +41,13 @@ subprojects {
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://repo.rapture.pw/repository/maven-snapshots/' }
-    maven { url 'https://repo.triumphteam.dev/snapshots/' }
-    maven { url "https://storehouse.okaeri.eu/repository/maven-public/" }
-    maven { url 'https://repo.xenondevs.xyz/releases' }
-    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
-    maven { url 'https://repo.inventivetalent.org/repository/public/' }
+    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://repo.rapture.pw/repository/maven-snapshots/' }
+    maven { url = 'https://repo.triumphteam.dev/snapshots/' }
+    maven { url = 'https://storehouse.okaeri.eu/repository/maven-public/' }
+    maven { url = 'https://repo.xenondevs.xyz/releases' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url = 'https://repo.inventivetalent.org/repository/public/' }
 }
 
 dependencies {
@@ -94,7 +94,7 @@ tasks.withType(JavaCompile).configureEach {
 processResources {
     def props = [version: version]
     inputs.properties props
-    filteringCharset 'UTF-8'
+    filteringCharset = 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
     }

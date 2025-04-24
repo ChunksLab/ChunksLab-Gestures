@@ -29,6 +29,7 @@ public class GestureCommand extends BaseCommand {
                 return;
             }
             plugin.getGestureManager().playGesture(plugin.getPlayerManager().getPlayer(player), gesture);
+            plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
         }
     }
 

@@ -12,6 +12,8 @@ public interface IWardrobeManager {
 
     void deleteWardrobe(String id);
 
+    void kickAllPlayer();
+
     Wardrobe getWardrobe(String id);
 
     Collection<Wardrobe> getWardrobes();

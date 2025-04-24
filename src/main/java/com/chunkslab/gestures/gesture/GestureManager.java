@@ -6,6 +6,7 @@ import com.chunkslab.gestures.api.gesture.GestureEquip;
 import com.chunkslab.gestures.api.gesture.IGestureManager;
 import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.util.LogUtils;
+import com.chunkslab.gestures.nms.api.MountNMS;
 import com.chunkslab.gestures.player.gesture.CustomPlayerModel;
 import com.chunkslab.gestures.util.ChatUtils;
 import com.chunkslab.gestures.util.ItemUtils;
@@ -90,7 +91,7 @@ public class GestureManager implements IGestureManager {
     @Override
     public void playGesture(GesturePlayer player, Gesture gesture) {
         if(!ticking.containsKey(player)) {
-            CustomPlayerModel model = new CustomPlayerModel(player, gesture, 1, plugin.getGestureNMS().getThirdPersonNMS());
+            CustomPlayerModel model = new CustomPlayerModel(player, gesture, 0);
             model.playAnimation();
             ticking.put(player, model);
             return;
@@ -103,7 +104,8 @@ public class GestureManager implements IGestureManager {
     public void stopGesture(GesturePlayer player) {
         CustomPlayerModel model = ticking.remove(player);
         if(model == null) return;
-        plugin.getGestureNMS().getMountNMS().destroy(player.getPlayer());
+        MountNMS mountNMS = plugin.getGestureNMS().getMountNMS();
+        mountNMS.destroy(player.getPlayer());
     }
 
 }

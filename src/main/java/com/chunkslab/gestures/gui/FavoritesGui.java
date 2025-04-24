@@ -46,6 +46,7 @@ public class FavoritesGui {
                                         event -> {
                                             plugin.getGestureManager().playGesture(player, gesture);
                                             plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
+                                            player.getPlayer().closeInventory();
                                         }));
                             }
                             return repeatedItems.stream();

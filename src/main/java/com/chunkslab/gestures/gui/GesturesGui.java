@@ -50,6 +50,7 @@ public class GesturesGui {
 
                             return new UpdatingItem(20, () -> gestureItem, event -> {
                                 plugin.getGestureManager().playGesture(player, gesture);
+                                plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
                                 player.getPlayer().closeInventory();
                             });
                         })

@@ -53,11 +53,6 @@ public class GestureNMSImpl extends GestureNMS {
             Constructor<?> mountConstructor = mountClazz.getDeclaredConstructor();
             mountConstructor.setAccessible(true);
             setMountNMS((MountNMS) mountConstructor.newInstance());
-            // ThirdPerson NMS
-            Class<?> thirdPersonClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".ThirdPersonImpl");
-            Constructor<?> thirdPersonConstructor = thirdPersonClazz.getDeclaredConstructor();
-            thirdPersonConstructor.setAccessible(true);
-            setThirdPersonNMS((ThirdPersonNMS) thirdPersonConstructor.newInstance());
             // Wardrobe NMS
             Class<?> wardrobeClazz = Class.forName("com.chunkslab.gestures.nms." + packageName + ".WardrobeImpl");
             Constructor<?> wardrobeConstructor = wardrobeClazz.getDeclaredConstructor();
