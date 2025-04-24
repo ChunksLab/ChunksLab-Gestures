@@ -2,10 +2,13 @@ package com.chunkslab.gestures.nms.v1_20_R2;
 
 import com.chunkslab.gestures.nms.api.CameraNMS;
 import com.chunkslab.gestures.nms.api.util.SelfIncreaseEntityID;
+import com.google.common.collect.Lists;
+import net.minecraft.Optionull;
 import net.minecraft.network.Connection;
 import net.minecraft.network.PacketSendListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
@@ -16,17 +19,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class CameraImpl implements CameraNMS {
-    
+
     private static final Method sendPacketImmediateMethod;
 
     private final int entityID = SelfIncreaseEntityID.getAndIncrease();
@@ -66,13 +71,28 @@ public class CameraImpl implements CameraNMS {
         // Invisible
         values.add(SynchedEntityData.DataValue.create(new EntityDataAccessor<>(0, EntityDataSerializers.BYTE), (byte) (0x20)));
         // Small
-        values.add(SynchedEntityData.DataValue.create(new EntityDataAccessor<>(15, EntityDataSerializers.BYTE), (byte) 0x01));
+        //values.add(SynchedEntityData.DataValue.create(new EntityDataAccessor<>(15, EntityDataSerializers.BYTE), (byte) 0x01));
         serverPlayer.connection.send(new ClientboundSetEntityDataPacket(entityID, values));
         serverPlayer.connection.send(new ClientboundSetCameraPacket(armorStand));
+        player.setGameMode(GameMode.SPECTATOR);
+        ClientboundPlayerInfoUpdatePacket spectatorPacket = new ClientboundPlayerInfoUpdatePacket(Enum.valueOf(ClientboundPlayerInfoUpdatePacket.Action.class, "UPDATE_GAME_MODE"), serverPlayer);
+        try {
+            Field packetField = spectatorPacket.getClass().getDeclaredField("c");
+            packetField.setAccessible(true);
+            ArrayList<ClientboundPlayerInfoUpdatePacket.Entry> list = Lists.newArrayList();
+            list.add(new ClientboundPlayerInfoUpdatePacket.Entry(player.getUniqueId(), serverPlayer.getBukkitEntity().getProfile(), false, 0, GameType.CREATIVE, serverPlayer.listName, Optionull.map(serverPlayer.getChatSession(), RemoteChatSession::asData)));
+            packetField.set(spectatorPacket, list);
+            ClientboundGameEventPacket gameEventPacket = new ClientboundGameEventPacket(ClientboundGameEventPacket.CHANGE_GAME_MODE, 3.0f);
+            serverPlayer.connection.send(spectatorPacket);
+            serverPlayer.connection.send(gameEventPacket);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void destroy(Player player) {
+        player.setGameMode(player.getPreviousGameMode() == null ? GameMode.SURVIVAL : player.getPreviousGameMode());
         ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
         serverPlayer.connection.send(new ClientboundSetCameraPacket(serverPlayer));
         serverPlayer.connection.send(new ClientboundRemoveEntitiesPacket(entityID));
