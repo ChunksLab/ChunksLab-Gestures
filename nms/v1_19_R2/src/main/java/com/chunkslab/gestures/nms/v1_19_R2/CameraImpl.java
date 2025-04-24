@@ -75,7 +75,7 @@ public class CameraImpl implements CameraNMS {
         player.setGameMode(GameMode.SPECTATOR);
         ClientboundPlayerInfoUpdatePacket spectatorPacket = new ClientboundPlayerInfoUpdatePacket(Enum.valueOf(ClientboundPlayerInfoUpdatePacket.Action.class, "UPDATE_GAME_MODE"), serverPlayer);
         try {
-            Field packetField = spectatorPacket.getClass().getDeclaredField("c");
+            Field packetField = spectatorPacket.getClass().getDeclaredField("b");
             packetField.setAccessible(true);
             ArrayList<ClientboundPlayerInfoUpdatePacket.Entry> list = Lists.newArrayList();
             list.add(new ClientboundPlayerInfoUpdatePacket.Entry(player.getUniqueId(), serverPlayer.getBukkitEntity().getProfile(), false, 0, GameType.CREATIVE, serverPlayer.listName, serverPlayer.getChatSession().asData()));
