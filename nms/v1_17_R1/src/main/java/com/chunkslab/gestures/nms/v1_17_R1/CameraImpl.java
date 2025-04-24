@@ -2,19 +2,14 @@ package com.chunkslab.gestures.nms.v1_17_R1;
 
 import com.chunkslab.gestures.nms.api.CameraNMS;
 import com.chunkslab.gestures.nms.api.util.SelfIncreaseEntityID;
+import com.google.common.collect.Lists;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundSetCameraPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,14 +17,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class CameraImpl implements CameraNMS {
     
@@ -51,7 +48,7 @@ public class CameraImpl implements CameraNMS {
     public void spawn(Player player, Location location) {
         ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
         if (armorStand == null) {
-            armorStand = new ArmorStand(EntityType.ARMOR_STAND, serverPlayer.level);
+            armorStand = new ArmorStand(EntityType.ARMOR_STAND, serverPlayer.getLevel());
             armorStand.setId(entityID);
         }
         ClientboundAddEntityPacket entityPacket = new ClientboundAddEntityPacket(
@@ -71,13 +68,28 @@ public class CameraImpl implements CameraNMS {
         // Invisible
         entityData.define(new EntityDataAccessor<>(0, EntityDataSerializers.BYTE), (byte) (0x20));
         // Small
-        entityData.define(new EntityDataAccessor<>(15, EntityDataSerializers.BYTE), (byte) 0x01);
+        //entityData.define(new EntityDataAccessor<>(15, EntityDataSerializers.BYTE), (byte) 0x01);
         serverPlayer.connection.send(new ClientboundSetEntityDataPacket(entityID, entityData, true));
         serverPlayer.connection.send(new ClientboundSetCameraPacket(armorStand));
+        player.setGameMode(GameMode.SPECTATOR);
+        ClientboundPlayerInfoPacket spectatorPacket = new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.UPDATE_GAME_MODE, serverPlayer);
+        try {
+            Field packetField = spectatorPacket.getClass().getDeclaredField("b");
+            packetField.setAccessible(true);
+            ArrayList<ClientboundPlayerInfoPacket.PlayerUpdate> list = Lists.newArrayList();
+            list.add(new ClientboundPlayerInfoPacket.PlayerUpdate(serverPlayer.getBukkitEntity().getProfile(), 0, GameType.CREATIVE, serverPlayer.listName));
+            packetField.set(spectatorPacket, list);
+            ClientboundGameEventPacket gameEventPacket = new ClientboundGameEventPacket(ClientboundGameEventPacket.CHANGE_GAME_MODE, 3.0f);
+            serverPlayer.connection.send(spectatorPacket);
+            serverPlayer.connection.send(gameEventPacket);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void destroy(Player player) {
+        player.setGameMode(GameMode.SURVIVAL);
         ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
         serverPlayer.connection.send(new ClientboundSetCameraPacket(serverPlayer));
         serverPlayer.connection.send(new ClientboundRemoveEntitiesPacket(entityID));
