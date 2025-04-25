@@ -4,6 +4,9 @@
 <a href="https://wiki.chunkslab.com" alt="GitBook">
 <img src="https://img.shields.io/badge/docs-gitbook-brightgreen" alt="Gitbook"/>
 </a>
+<a href="https://github.com/ChunksLab/ChunksLab-Gestures/">
+<img src="https://sloc.xyz/github/ChunksLab/ChunksLab-Gestures/?category=codes" alt="Scc Count Badge"/>
+</a>
 ![Code Size](https://img.shields.io/github/languages/code-size/ChunksLab/ChunksLab-Gestures)
 ![bStats Servers](https://img.shields.io/bstats/servers/25019)
 ![bStats Players](https://img.shields.io/bstats/players/25019)
