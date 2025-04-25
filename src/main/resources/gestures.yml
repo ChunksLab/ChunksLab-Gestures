@@ -1,0 +1,8 @@
+wave:
+  name: Wave
+  permission: chunkslab.gestures.wave
+  font: 
+  movement: false
+  moveSpeed: 0
+  animations:
+    idle: chunkslab.gestures.wave

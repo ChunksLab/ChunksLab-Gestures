@@ -69,6 +69,11 @@ public class WardrobeCommand extends BaseCommand {
     @SubCommand("join")
     @Permission("chunkslab.gestures.wardrobe.join")
     public void join(Player player, @Suggestion("wardrobes") String wardrobeId) {
+        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
+        if (!gesturePlayer.isSkinStatus()) {
+            ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getSkinNotSet()));
+            return;
+        }
         Wardrobe wardrobe = plugin.getWardrobeManager().getWardrobe(wardrobeId);
         if (wardrobe == null) {
             ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getWardrobeNotExists()));
@@ -80,7 +85,6 @@ public class WardrobeCommand extends BaseCommand {
         CameraNMS cameraNMS = plugin.getGestureNMS().getCameraNMS();
         cameraNMS.title(player, PlaceholderAPI.setPlaceholders(null, plugin.getPluginConfig().getSettings().getWardrobeScreen()));
         cameraNMS.spawn(player, wardrobe.getPlayerLocation());
-        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
         gesturePlayer.setWardrobe(wardrobe);
     }
 

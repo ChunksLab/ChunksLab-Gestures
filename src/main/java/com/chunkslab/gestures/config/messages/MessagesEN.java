@@ -23,6 +23,7 @@ public class MessagesEN extends OkaeriConfig {
     private String prefix = "<#D0EFB1>Gestures <dark_gray>•";
 
     private String skinUploaded = "<prefix> <green>Skin successfully uploaded!";
+    private String skinNotSet = "<prefix> <red>Skin not applied!";
     private String skinUploading = "<prefix> <yellow>Skin started uploading!";
 
     private String invalidArgument = "<prefix> <red>Invalid argument.";
