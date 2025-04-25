@@ -61,9 +61,6 @@ public class v1_21_R2 implements INMSHandler {
             trackedEntityField.setAccessible(true);
             Object trackedEntity = trackedEntityField.get(nmsEntity);
 
-            Class<?> rangeManagerClass = Class.forName("com.chunkslab.gestures.playeranimator.nms.v1_21_R2.entity.RangeManager");
-            Class<?> trackedEntityClass = Class.forName("net.minecraft.server.level.ChunkMap$TrackedEntity");
-
             return new RangeManager(trackedEntity);
         } catch (Exception e) {
             e.printStackTrace();

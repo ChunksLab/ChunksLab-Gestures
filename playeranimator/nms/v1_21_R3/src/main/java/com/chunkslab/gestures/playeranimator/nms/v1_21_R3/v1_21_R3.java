@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
 
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
@@ -55,9 +57,18 @@ public class v1_21_R3 implements INMSHandler {
 
     @Override
     public IRangeManager createRangeManager(Entity entity) {
-        ServerLevel level = ((CraftWorld) entity.getWorld()).getHandle();
-        ChunkMap.TrackedEntity trackedEntity = level.getChunkSource().chunkMap.entityMap.get(entity.getEntityId());
-        return new RangeManager(trackedEntity);
+        try {
+            net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
+
+            Field trackedEntityField = net.minecraft.world.entity.Entity.class.getDeclaredField("trackedEntity");
+            trackedEntityField.setAccessible(true);
+            Object trackedEntity = trackedEntityField.get(nmsEntity);
+
+            return new RangeManager(trackedEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
