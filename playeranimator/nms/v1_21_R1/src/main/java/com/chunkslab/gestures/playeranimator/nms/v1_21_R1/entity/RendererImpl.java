@@ -6,7 +6,9 @@ import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
 import com.chunkslab.gestures.playeranimator.api.nms.IRenderer;
 import com.chunkslab.gestures.playeranimator.api.texture.TextureWrapper;
 import com.mojang.datafixers.util.Pair;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.Rotations;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -31,6 +33,7 @@ import java.util.List;
 public class RendererImpl implements IRenderer {
 
     private final List<Pair<EquipmentSlot, ItemStack>> equipments = new ArrayList<>();
+    private final List<Pair<EquipmentSlot, ItemStack>> invisibleEquipments = new ArrayList<>();
     private ArmorStand armorStand;
     private AreaEffectCloud cloud;
 
@@ -71,9 +74,14 @@ public class RendererImpl implements IRenderer {
             }
             org.bukkit.inventory.ItemStack playerHead = PlayerAnimator.api.getNms().setSkullTexture(null, textureWrapper);
             ItemMeta meta = playerHead.getItemMeta();
-            meta.setCustomModelData(LimbType.INVISIBLE_HEAD.getModelId());
+            meta.setCustomModelData(textureWrapper.isSlim() ? limb.getType().getSlimId() : limb.getType().getModelId());
             playerHead.setItemMeta(meta);
             equipments.add(Pair.of(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(playerHead)));
+            org.bukkit.inventory.ItemStack invisiblePlayerHead = PlayerAnimator.api.getNms().setSkullTexture(null, textureWrapper);
+            meta = invisiblePlayerHead.getItemMeta();
+            meta.setCustomModelData(LimbType.INVISIBLE_HEAD.getModelId());
+            invisiblePlayerHead.setItemMeta(meta);
+            invisibleEquipments.add(Pair.of(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(playerHead)));
         }
     }
 
@@ -123,11 +131,11 @@ public class RendererImpl implements IRenderer {
         cloud.setPos(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ());
         Vec3 ridingPosition = this.armorStand.getPassengerRidingPosition(cloud);
         Vec3 vehicleAttachmentPoint = this.cloud.getVehicleAttachmentPoint(armorStand);
-        armorStand.moveTo(finalLocation.getX(), finalLocation.getY() + (ridingPosition.y - vehicleAttachmentPoint.y), finalLocation.getZ(), limb.getModel().getBaseYaw(), 0);
+        armorStand.moveTo(finalLocation.getX(), finalLocation.getY() - 0.2, finalLocation.getZ(), limb.getModel().getBaseYaw(), 0);
 
         ClientboundAddEntityPacket asSpawn = new ClientboundAddEntityPacket(armorStand, 0, armorStand.blockPosition());
         ClientboundSetEntityDataPacket asMeta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
-        ClientboundSetEquipmentPacket asEquip = new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
+        ClientboundSetEquipmentPacket asEquip = limb.isInvisible() && limb.getType().getModelId() != -1 ? new ClientboundSetEquipmentPacket(armorStand.getId(), invisibleEquipments) : new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
         ClientboundAddEntityPacket aecSpawn = new ClientboundAddEntityPacket(cloud, 0, cloud.blockPosition());
         ClientboundSetEntityDataPacket aecMeta = new ClientboundSetEntityDataPacket(cloud.getId(), cloud.getEntityData().getNonDefaultValues());
         ClientboundSetPassengersPacket mount = new ClientboundSetPassengersPacket(cloud);
@@ -150,12 +158,20 @@ public class RendererImpl implements IRenderer {
         else
             armorStand.setRightArmPose(toNMS(finalRotation));
 
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        buf.writeVarInt(cloud.getId());
+        buf.writeDouble(armorStand.getX());
+        buf.writeDouble(armorStand.getY());
+        buf.writeDouble(armorStand.getZ());
+        buf.writeByte((byte) armorStand.getBukkitYaw());
+        buf.writeByte((byte) armorStand.getXRot());
+        buf.writeBoolean(false);
+        ClientboundTeleportEntityPacket teleport = ClientboundTeleportEntityPacket.STREAM_CODEC.decode(buf);
 
-        ClientboundTeleportEntityPacket teleport = new ClientboundTeleportEntityPacket(cloud);
-        ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
+        //ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
         ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
-
-        return Arrays.asList(teleport, rotate, meta);
+        ClientboundSetEquipmentPacket asEquip = limb.isInvisible() && limb.getType().getModelId() != -1 ? new ClientboundSetEquipmentPacket(armorStand.getId(), invisibleEquipments) : new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
+        return Arrays.asList(asEquip, teleport, meta);
     }
 
     private Rotations toNMS(EulerAngle angle) {
