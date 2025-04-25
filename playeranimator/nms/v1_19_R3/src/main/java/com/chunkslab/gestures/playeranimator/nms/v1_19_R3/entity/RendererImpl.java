@@ -29,6 +29,7 @@ import java.util.List;
 public class RendererImpl implements IRenderer {
 
     private final List<Pair<EquipmentSlot, ItemStack>> equipments = new ArrayList<>();
+    private final List<Pair<EquipmentSlot, ItemStack>> invisibleEquipments = new ArrayList<>();
     private ArmorStand armorStand;
     private AreaEffectCloud cloud;
 
@@ -69,9 +70,14 @@ public class RendererImpl implements IRenderer {
             }
             org.bukkit.inventory.ItemStack playerHead = PlayerAnimator.api.getNms().setSkullTexture(null, textureWrapper);
             ItemMeta meta = playerHead.getItemMeta();
-            meta.setCustomModelData(LimbType.INVISIBLE_HEAD.getModelId());
+            meta.setCustomModelData(textureWrapper.isSlim() ? limb.getType().getSlimId() : limb.getType().getModelId());
             playerHead.setItemMeta(meta);
             equipments.add(Pair.of(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(playerHead)));
+            org.bukkit.inventory.ItemStack invisiblePlayerHead = PlayerAnimator.api.getNms().setSkullTexture(null, textureWrapper);
+            meta = invisiblePlayerHead.getItemMeta();
+            meta.setCustomModelData(LimbType.INVISIBLE_HEAD.getModelId());
+            invisiblePlayerHead.setItemMeta(meta);
+            invisibleEquipments.add(Pair.of(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(playerHead)));
         }
     }
 
@@ -122,7 +128,7 @@ public class RendererImpl implements IRenderer {
 
         ClientboundAddEntityPacket asSpawn = new ClientboundAddEntityPacket(armorStand);
         ClientboundSetEntityDataPacket asMeta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
-        ClientboundSetEquipmentPacket asEquip = new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
+        ClientboundSetEquipmentPacket asEquip = limb.isInvisible() && limb.getType().getModelId() != -1 ? new ClientboundSetEquipmentPacket(armorStand.getId(), invisibleEquipments) : new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
         ClientboundAddEntityPacket aecSpawn = new ClientboundAddEntityPacket(cloud);
         ClientboundSetEntityDataPacket aecMeta = new ClientboundSetEntityDataPacket(cloud.getId(), cloud.getEntityData().getNonDefaultValues());
         ClientboundSetPassengersPacket mount = new ClientboundSetPassengersPacket(cloud);
@@ -147,10 +153,10 @@ public class RendererImpl implements IRenderer {
 
 
         ClientboundTeleportEntityPacket teleport = new ClientboundTeleportEntityPacket(cloud);
-        ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
+        //ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
         ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
-
-        return Arrays.asList(teleport, rotate, meta);
+        ClientboundSetEquipmentPacket asEquip = limb.isInvisible() && limb.getType().getModelId() != -1 ? new ClientboundSetEquipmentPacket(armorStand.getId(), invisibleEquipments) : new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
+        return Arrays.asList(asEquip, teleport, meta);
     }
 
     private Rotations toNMS(EulerAngle angle) {
