@@ -1,6 +1,5 @@
 package com.chunkslab.gestures.paper;
 
-import com.chunkslab.gestures.api.config.ConfigFile;
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.PluginLoader;
 import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
@@ -8,22 +7,25 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.yaml.snakeyaml.Yaml;
 
-import java.util.Collections;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 public class PaperGesturesPluginLoader implements PluginLoader {
 
     @Override
     public void classloader(@NotNull PluginClasspathBuilder classpathBuilder) {
-        MavenLibraryResolver resolver = new MavenLibraryResolver();
+        final MavenLibraryResolver resolver = new MavenLibraryResolver();
 
-        for (String library : resolveLibraries(classpathBuilder)) {
-            resolver.addDependency(new Dependency(new DefaultArtifact(library), null));
-        }
+        resolveLibraries(classpathBuilder).stream()
+                .map(DefaultArtifact::new)
+                .forEach(artifact -> resolver.addDependency(new Dependency(artifact, null)));
 
         resolver.addRepository(new RemoteRepository.Builder(
-                "central", "default", "https://repo.maven.apache.org/maven2/"
+                "maven", "default", "https://repo.maven.apache.org/maven2/"
         ).build());
 
         classpathBuilder.addLibrary(resolver);
@@ -31,19 +33,28 @@ public class PaperGesturesPluginLoader implements PluginLoader {
 
     @NotNull
     private static List<String> resolveLibraries(@NotNull PluginClasspathBuilder classpathBuilder) {
-        try {
-            ConfigFile config = new ConfigFile(PaperGesturesPlugin.getInstance(), "paper-libraries.yml", true);
-
-            List<String> libraries = config.getStringList("libraries");
-            if (libraries.isEmpty()) {
-                classpathBuilder.getContext().getLogger().warn("No libraries defined in paper-libraries.yml.");
-                return Collections.emptyList();
+        try (InputStream input = getLibraryListFile()) {
+            if (input == null) {
+                throw new IllegalStateException("Failed to read libraries file");
             }
 
-            return libraries;
-        } catch (Exception e) {
-            classpathBuilder.getContext().getLogger().error("Failed to load libraries from paper-libraries.yml", e);
-            return Collections.emptyList();
+            Yaml yaml = new Yaml();
+            Map<String, Object> data = yaml.load(input);
+
+            Object librariesObj = data.get("libraries");
+            if (librariesObj instanceof List) {
+                @SuppressWarnings("unchecked")
+                List<String> libraries = (List<String>) librariesObj;
+                return libraries;
+            }
+        } catch (Throwable e) {
+            classpathBuilder.getContext().getLogger().error("Failed to resolve libraries", e);
         }
+        return List.of();
+    }
+
+    @Nullable
+    private static InputStream getLibraryListFile() {
+        return PaperGesturesPlugin.class.getClassLoader().getResourceAsStream("paper-libraries.yml");
     }
 }

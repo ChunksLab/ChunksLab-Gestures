@@ -22,13 +22,13 @@ public class ItemHookImpl extends ItemAPI {
     }
 
     protected void getHookName() {
-        if (Bukkit.getPluginManager().isPluginEnabled("Nexo"))
+        if (Bukkit.getPluginManager().getPlugin("Nexo") != null)
             hookName = "Nexo";
-        else if (Bukkit.getPluginManager().isPluginEnabled("Oraxen"))
+        else if (Bukkit.getPluginManager().getPlugin("Oraxen") != null)
             hookName = "Oraxen";
-        else if (Bukkit.getPluginManager().isPluginEnabled("ItemsAdder"))
+        else if (Bukkit.getPluginManager().getPlugin("ItemsAdder") != null)
             hookName = "ItemsAdder";
-        else if (Bukkit.getPluginManager().isPluginEnabled("CraftEngine"))
+        else if (Bukkit.getPluginManager().getPlugin("CraftEngine") != null)
             hookName = "CraftEngine";
         else
             hookName = "Vanilla";

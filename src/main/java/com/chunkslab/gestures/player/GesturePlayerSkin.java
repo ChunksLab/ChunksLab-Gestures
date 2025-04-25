@@ -27,6 +27,9 @@ public class GesturePlayerSkin {
                     ChatUtils.sendMessage(gesturePlayer.getPlayer(), ChatUtils.format(plugin.getPluginMessages().getSkinUploaded()));
                     return;
                 }
+                if (exist == 401 || exist == 403) {
+                    return;
+                }
                 if (!plugin.getPlayerAnimator().getSkinManager().isSkin(gesturePlayer.getPlayer())) {
                     loadOrUploadSkin(gesturePlayer, plugin.getPluginConfig().getSettings().getDefaultSkin());
                     return;

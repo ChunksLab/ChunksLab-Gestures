@@ -126,6 +126,12 @@ public class WebManager implements IWebManager {
                         }
                         return 200;
                     }
+                } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    LogUtils.warn("The web server is down or the secret is incorrect.");
+                    return 401;
+                } else if (responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                    LogUtils.warn("The web server is down or the ip is not allowed.");
+                    return 403;
                 } else {
                     LogUtils.warn("The web server is down.");
                     return 201;
