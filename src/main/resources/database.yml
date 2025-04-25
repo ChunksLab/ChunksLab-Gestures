@@ -1,0 +1,75 @@
+# file:
+#   JSON
+#   YAML
+#
+# sql:
+#   MySQL
+#   MariaDB (preferred over MySQL)
+#   SQLite
+#   H2 (preferred over SQLite)
+#
+# no-sql:
+#   MongoDB
+#   Redis
+data-storage-method: YAML
+
+SQLite:
+  file: 'sqlite'
+  table-prefix: chunkslab-gestures
+
+H2:
+  file: 'h2'
+  table-prefix: chunkslab-gestures
+
+MySQL:
+  host: 'localhost'
+  port: '3306'
+  user: 'root'
+  password: 'password'
+  database: 'gesture'
+  connection-parameters: '?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8'
+  Pool-Settings:
+    max-pool-size: 10
+    min-idle: 10
+    max-lifetime: 180000
+    keep-alive-time: 60000
+    time-out: 20000
+  table-prefix: chunkslab-gestures
+
+MariaDB:
+  host: 'localhost'
+  port: '3306'
+  user: 'root'
+  password: 'password'
+  database: 'gesture'
+  connection-parameters: '?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8'
+  Pool-Settings:
+    max-pool-size: 10
+    min-idle: 10
+    max-lifetime: 180000
+    keep-alive-time: 60000
+    time-out: 20000
+  table-prefix: chunkslab-gestures
+
+MongoDB:
+  host: 'localhost'
+  port: '27017'
+  #user: 'root'
+  #password: 'password'
+  # If this section is not empty, it would override the configs above
+  # https://www.mongodb.com/docs/manual/reference/connection-string/
+  connection-uri: ''
+  database: 'gesture'
+  collection: chunkslab-gestures-players
+
+Redis:
+  enable: false
+  host: localhost
+  password: ""
+  port: 6379
+  use-ssl: false
+  MaxTotal: 10
+  MaxIdle: 10
+  MinIdle: 1
+  MaxWaitMillis: 30000
+  MinEvictableIdleTimeMillis: 1800000

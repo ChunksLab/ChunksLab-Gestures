@@ -3,6 +3,7 @@ package com.chunkslab.gestures;
 import com.chunkslab.gestures.api.GesturesAPI;
 import com.chunkslab.gestures.api.config.ConfigFile;
 import com.chunkslab.gestures.api.database.Database;
+import com.chunkslab.gestures.api.database.DatabaseType;
 import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.api.gesture.IGestureManager;
 import com.chunkslab.gestures.api.listener.IListenerManager;
@@ -17,7 +18,8 @@ import com.chunkslab.gestures.command.GestureCommand;
 import com.chunkslab.gestures.command.WardrobeCommand;
 import com.chunkslab.gestures.config.Config;
 import com.chunkslab.gestures.config.messages.MessagesEN;
-import com.chunkslab.gestures.database.impl.yaml.YamlDatabase;
+import com.chunkslab.gestures.database.DatabaseFactory;
+import com.chunkslab.gestures.database.impl.file.yaml.YamlDatabase;
 import com.chunkslab.gestures.gesture.GestureManager;
 import com.chunkslab.gestures.item.ItemHookImpl;
 import com.chunkslab.gestures.item.api.ItemAPI;
@@ -80,6 +82,7 @@ public final class GesturesPlugin extends GesturesAPI {
     private final SkinTask skinTask = new SkinTask(this);
 
     // config
+    private final ConfigFile databaseFile = new ConfigFile(this, "database.yml", true);
     private final ConfigFile wardrobesFile = new ConfigFile(this, "wardrobes.yml", true);
     private final ConfigFile gesturesFile = new ConfigFile(this, "gestures.yml", true);
     private final ConfigFile favoritesMenuConfig = new ConfigFile(this, "menus", "favorites-menu.yml");
@@ -126,6 +129,7 @@ public final class GesturesPlugin extends GesturesAPI {
         mineSkinClient = new MineskinClient("ChunksLab-Gestures", pluginConfig.getSettings().getMineSkinSecret());
         webManager = new WebManager(this, pluginConfig.getSettings().getWebUrl());
 
+        databaseFile.create();
         wardrobesFile.create();
         gesturesFile.create();
         favoritesMenuConfig.create();
@@ -136,10 +140,9 @@ public final class GesturesPlugin extends GesturesAPI {
         gestureManager.enable();
         wardrobeManager.enable();
 
-
         skinTask.runTaskTimerAsynchronously(this, 0L, 20L);
 
-        database = new YamlDatabase(this);
+        database = DatabaseFactory.createDatabase(this, DatabaseType.get(databaseFile.getString("data-storage-method")), databaseFile.getConfigurationSection(databaseFile.getString("data-storage-method")));
 
         this.getModuleManager().enableModules();
         database.enable();

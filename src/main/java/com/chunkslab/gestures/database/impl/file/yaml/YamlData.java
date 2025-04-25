@@ -1,4 +1,4 @@
-package com.chunkslab.gestures.database.impl.yaml;
+package com.chunkslab.gestures.database.impl.file.yaml;
 
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
