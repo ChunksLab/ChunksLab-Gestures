@@ -1,0 +1,9 @@
+name: Gestures
+description: An Gestures plugin created with love.
+version: '${version}'
+main: com.chunkslab.gestures.paper.PaperGesturesPlugin
+loader: com.chunkslab.gestures.paper.PaperGesturesPluginLoader
+api-version: '1.17'
+authors: [amownyy, ChunksLab]
+website: https://chunkslab.com/
+folia-supported: true

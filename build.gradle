@@ -7,6 +7,15 @@ plugins {
 ext {
     baseVersion = '1.0.0'
     channel = 'DEVELOPMENT'
+
+    gson_version = gson_version.toString();
+    sqlite_driver_version = sqlite_driver_version.toString();
+    h2_driver_version = h2_driver_version.toString();
+    mongodb_driver_version = mongodb_driver_version.toString();
+    hikari_version = hikari_version.toString();
+    mariadb_driver_version = mariadb_driver_version.toString();
+    mysql_driver_version = mysql_driver_version.toString();
+    jedis_version = jedis_version.toString();
 }
 
 group = 'com.chunkslab.gestures'
@@ -51,7 +60,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+
     implementation project(':api')
     implementation project(':folia')
     implementation project(':item')
@@ -59,25 +69,29 @@ dependencies {
     implementation project(':playeranimator')
     implementation project(':nms')
 
-    implementation("net.kyori:adventure-api:4.17.0")
-    implementation("net.kyori:adventure-text-minimessage:4.17.0")
-    implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
-    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
+    implementation('net.kyori:adventure-api:4.17.0')
+    implementation('net.kyori:adventure-text-minimessage:4.17.0')
+    implementation('net.kyori:adventure-text-serializer-legacy:4.17.0')
+    implementation('net.kyori:adventure-platform-bukkit:4.3.4')
 
-    implementation 'dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT'  exclude group: 'com.google.code.gson'
-    implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.5'
-    implementation 'xyz.xenondevs.invui:invui:1.43'
-    implementation 'org.mineskin:java-client:1.2.4-SNAPSHOT'
-    implementation 'org.bstats:bstats-bukkit:3.1.0'
+    implementation('dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT') {
+        exclude group: 'com.google.code.gson'
+    }
+    implementation('eu.okaeri:okaeri-configs-yaml-bukkit:5.0.5')
+    implementation('xyz.xenondevs.invui:invui:1.43')
+    implementation('org.mineskin:java-client:1.2.4-SNAPSHOT')
+    implementation('org.bstats:bstats-bukkit:3.1.0')
 
-    compileOnly 'me.clip:placeholderapi:2.11.6'
+    compileOnly('me.clip:placeholderapi:2.11.6')
 
-    compileOnly("com.google.code.gson:gson:${rootProject.properties["gson_version"]}")
-    compileOnly("org.xerial:sqlite-jdbc:${rootProject.properties["sqlite_driver_version"]}")
-    compileOnly("com.h2database:h2:${rootProject.properties["h2_driver_version"]}")
-    compileOnly("org.mongodb:mongodb-driver-sync:${rootProject.properties["mongodb_driver_version"]}")
-    compileOnly("com.zaxxer:HikariCP:${rootProject.properties["hikari_version"]}")
-    compileOnly("redis.clients:jedis:${rootProject.properties["jedis_version"]}")
+    compileOnly("com.google.code.gson:gson:${rootProject.properties['gson_version']}")
+    compileOnly("org.xerial:sqlite-jdbc:${rootProject.properties['sqlite_driver_version']}")
+    compileOnly("com.h2database:h2:${rootProject.properties['h2_driver_version']}")
+    compileOnly("org.mongodb:mongodb-driver-sync:${rootProject.properties['mongodb_driver_version']}")
+    compileOnly("com.zaxxer:HikariCP:$hikari_version")
+    compileOnly("org.mariadb.jdbc:mariadb-java-client:${rootProject.properties['mariadb_driver_version']}")
+    compileOnly("com.mysql:mysql-connector-j:${rootProject.properties['mysql_driver_version']}")
+    compileOnly("redis.clients:jedis:${rootProject.properties['jedis_version']}")
 }
 
 def targetJavaVersion = 17
@@ -99,10 +113,20 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-    def props = [version: version]
+    def props = [
+            'version': version,
+            'gson_version': project.ext.gson_version,
+            'sqlite_driver_version': project.ext.sqlite_driver_version,
+            'h2_driver_version': project.ext.h2_driver_version,
+            'mongodb_driver_version': project.ext.mongodb_driver_version,
+            'hikari_version': project.ext.hikari_version,
+            'mariadb_driver_version': project.ext.mariadb_driver_version,
+            'mysql_driver_version': project.ext.mysql_driver_version,
+            'jedis_version': project.ext.jedis_version,
+    ]
     inputs.properties props
     filteringCharset = 'UTF-8'
-    filesMatching('plugin.yml') {
+    filesMatching(['**/*.json', '**/*.yml']) {
         expand props
     }
 }

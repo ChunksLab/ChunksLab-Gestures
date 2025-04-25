@@ -19,7 +19,6 @@ import com.chunkslab.gestures.command.WardrobeCommand;
 import com.chunkslab.gestures.config.Config;
 import com.chunkslab.gestures.config.messages.MessagesEN;
 import com.chunkslab.gestures.database.DatabaseFactory;
-import com.chunkslab.gestures.database.impl.file.yaml.YamlDatabase;
 import com.chunkslab.gestures.gesture.GestureManager;
 import com.chunkslab.gestures.item.ItemHookImpl;
 import com.chunkslab.gestures.item.api.ItemAPI;
@@ -65,7 +64,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public final class GesturesPlugin extends GesturesAPI {
+public class GesturesPlugin extends GesturesAPI {
 
     @Getter private static GesturesPlugin instance;
 

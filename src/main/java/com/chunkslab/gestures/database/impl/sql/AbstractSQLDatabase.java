@@ -5,7 +5,6 @@ import com.chunkslab.gestures.api.database.Database;
 import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.api.player.FavoriteGestures;
 import com.chunkslab.gestures.api.player.GesturePlayer;
-import com.chunkslab.gestures.api.util.LogUtils;
 import com.chunkslab.gestures.player.GesturePlayerImpl;
 import com.google.common.collect.Maps;
 

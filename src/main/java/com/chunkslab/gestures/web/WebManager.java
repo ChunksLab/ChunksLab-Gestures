@@ -5,7 +5,6 @@ import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.api.util.LogUtils;
 import com.chunkslab.gestures.api.web.IWebManager;
 import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
-import com.chunkslab.gestures.playeranimator.api.skin.parts.DefaultSkinPosition;
 import com.chunkslab.gestures.playeranimator.api.texture.TextureWrapper;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;

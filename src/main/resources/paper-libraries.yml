@@ -1,17 +1,3 @@
-name: Gestures
-description: An Gestures plugin created with love.
-version: '${version}'
-main: com.chunkslab.gestures.GesturesPlugin
-api-version: '1.17'
-authors: [amownyy, ChunksLab]
-website: https://chunkslab.com/
-folia-supported: true
-softdepend:
-  - PlaceholderAPI
-  - Nexo
-  - Oraxen
-  - ItemsAdder
-  - CraftEngine
 libraries:
   - 'com.google.code.gson:gson:${gson_version}'
   - 'org.xerial:sqlite-jdbc:${sqlite_driver_version}'
