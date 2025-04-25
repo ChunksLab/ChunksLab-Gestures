@@ -1,6 +1,7 @@
 dependencies {
     implementation project(':playeranimator:api')
     implementation project(':playeranimator:plugin')
+    implementation project(':playeranimator:nms:v1_21_R4')
     implementation project(':playeranimator:nms:v1_21_R3')
     implementation project(':playeranimator:nms:v1_21_R2')
     implementation project(':playeranimator:nms:v1_21_R1')

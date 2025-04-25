@@ -1,6 +1,7 @@
 dependencies {
     implementation project(':nms:api')
     implementation project(':nms:plugin')
+    implementation project(':nms:v1_21_R4')
     implementation project(':nms:v1_21_R3')
     implementation project(':nms:v1_21_R2')
     implementation project(':nms:v1_21_R1')

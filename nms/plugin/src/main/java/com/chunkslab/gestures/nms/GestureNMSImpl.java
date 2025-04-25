@@ -40,6 +40,7 @@ public class GestureNMSImpl extends GestureNMS {
             case "1.21", "1.21.1" -> packageName = "v1_21_R1";
             case "1.21.2", "1.21.3" -> packageName = "v1_21_R2";
             case "1.21.4" -> packageName = "v1_21_R3";
+            case "1.21.5" -> packageName = "v1_21_R4";
             default -> throw new IllegalStateException("Version not supported");
         }
         try {
