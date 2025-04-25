@@ -3,6 +3,15 @@ include(':api')
 
 include(':folia')
 
+include(':item')
+include(':item:api')
+include(':item:plugin')
+include(':item:vanilla')
+include(':item:nexo')
+include(':item:oraxen')
+include(':item:itemsadder')
+include('item:craftengine')
+
 include(':playeranimator')
 include(':playeranimator:api')
 include(':playeranimator:plugin')

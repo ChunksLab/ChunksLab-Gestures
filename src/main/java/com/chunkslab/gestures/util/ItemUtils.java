@@ -1,5 +1,6 @@
 package com.chunkslab.gestures.util;
 
+import com.chunkslab.gestures.GesturesPlugin;
 import com.chunkslab.gestures.api.config.ConfigFile;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -17,10 +18,17 @@ import java.util.Locale;
 public class ItemUtils {
     @NotNull
     public static ItemStack build(ConfigFile config, String path, TagResolver... placeholders) {
-        String material = config.getString(path + ".material") == null ? "BARRIER" : config.getString(path + ".material");
+        String material = config.getString(path + ".material");
+        if (material == null) material = "BARRIER";
         ItemStack itemStack;
-        assert material != null;
-        itemStack = new ItemStack(Material.valueOf(material.toUpperCase(Locale.ENGLISH)));
+        if (!material.startsWith("custom:")) {
+            itemStack = new ItemStack(Material.valueOf(material.toUpperCase(Locale.ENGLISH)));
+        } else {
+            itemStack = GesturesPlugin.getInstance().getItemAPI().getItemHook().getById(material);
+            if (itemStack == null) {
+                itemStack = new ItemStack(Material.BARRIER);
+            }
+        }
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (config.contains(path + ".name"))

@@ -19,6 +19,8 @@ import com.chunkslab.gestures.config.Config;
 import com.chunkslab.gestures.config.messages.MessagesEN;
 import com.chunkslab.gestures.database.impl.yaml.YamlDatabase;
 import com.chunkslab.gestures.gesture.GestureManager;
+import com.chunkslab.gestures.item.ItemHookImpl;
+import com.chunkslab.gestures.item.api.ItemAPI;
 import com.chunkslab.gestures.listener.ListenerManager;
 import com.chunkslab.gestures.nms.GestureNMSImpl;
 import com.chunkslab.gestures.nms.api.GestureNMS;
@@ -71,6 +73,7 @@ public final class GesturesPlugin extends GesturesAPI {
     private BukkitCommandManager<CommandSender> commandManager;
     private GestureNMS gestureNMS;
     private PlayerAnimator playerAnimator;
+    private ItemAPI itemAPI;
     private MineskinClient mineSkinClient;
 
     // tasks
@@ -115,6 +118,7 @@ public final class GesturesPlugin extends GesturesAPI {
         playerAnimator = PlayerAnimatorImpl.initialize(this);
         playerAnimator.getAnimationManager().importPacks();
 
+        itemAPI = ItemHookImpl.initialize(this);
 
         registerCommands();
         createConfig();

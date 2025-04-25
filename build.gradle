@@ -54,6 +54,7 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT'
     implementation project(':api')
     implementation project(':folia')
+    implementation project(':item')
 
     implementation project(':playeranimator')
     implementation project(':nms')
@@ -137,7 +138,7 @@ tasks.shadowJar {
 
 tasks.named('build').configure {
     def allProjects = rootProject.subprojects.findAll {
-        it.path.startsWith(':nms') || it.path.startsWith(':playeranimator')
+        it.path.startsWith(':nms') || it.path.startsWith(':playeranimator') || it.path.startsWith(':item')
     }
     dependsOn allProjects.collect { it.path + ':build' }
 }

@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':item:api')
+    implementation project(':item:plugin')
+    implementation project(':item:vanilla')
+    implementation project(':item:nexo')
+    implementation project(':item:oraxen')
+    implementation project(':item:itemsadder')
+    implementation project(':item:craftengine')
+}
