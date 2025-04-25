@@ -43,8 +43,8 @@ public class Config extends OkaeriConfig {
 
     @Getter @Setter
     public static class Settings extends OkaeriConfig {
-        private String webUrl = "gestures.chunkslab.com";
-        private String webSecret = "31";
+        private String webUrl = "https://gestures.chunkslab.com/api/v1/texture/";
+        private String webSecret = "SECRET_HERE";
         private String defaultSkin = "Amownyy";
         private String mineSkinSecret = "9e1992b6f0fb64ab3566f830902d43134c59543a5b2420a2afd9de2f8dfc17b6";
         private String wardrobeScreen = "%nexo_wardrobe%";
