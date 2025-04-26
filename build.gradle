@@ -185,7 +185,6 @@ shadowJar {
     relocate 'dev.triumphteam.cmd', 'com.chunkslab.gestures.libraries.triumphteam'
     relocate 'eu.okaeri', 'com.chunkslab.gestures.libraries.okaeri'
     relocate 'org.mineskin', 'com.chunkslab.gestures.libraries.mineskin'
-    relocate 'org.bstats', 'com.chunkslab.gestures.libraries.bstats'
     relocate 'com.zaxxer', 'com.chunkslab.gestures.libraries.zaxxer'
     relocate 'org.mariadb', 'com.chunkslab.gestures.libraries.mariadb'
     relocate 'com.mysql', 'com.chunkslab.gestures.libraries.mysql'

@@ -340,15 +340,13 @@ public enum Dependency {
             "org{}bstats",
             "bstats-base",
             "maven",
-            "bstats-base",
-            Relocation.of("bstats", "org{}bstats")
+            "bstats-base"
     ),
     BSTATS_BUKKIT(
             "org{}bstats",
             "bstats-bukkit",
             "maven",
-            "bstats-bukkit",
-            Relocation.of("bstats", "org{}bstats")
+            "bstats-bukkit"
     ) {
         @Override
         public String getVersion() {

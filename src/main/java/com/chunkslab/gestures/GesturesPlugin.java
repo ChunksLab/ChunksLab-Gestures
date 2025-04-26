@@ -30,6 +30,7 @@ import com.chunkslab.gestures.api.module.ModuleManager;
 import com.chunkslab.gestures.api.player.IPlayerManager;
 import com.chunkslab.gestures.api.scheduler.IScheduler;
 import com.chunkslab.gestures.api.server.IServerManager;
+import com.chunkslab.gestures.api.util.LogUtils;
 import com.chunkslab.gestures.api.wardrobe.IWardrobeManager;
 import com.chunkslab.gestures.api.wardrobe.Wardrobe;
 import com.chunkslab.gestures.api.web.IWebManager;
@@ -58,6 +59,7 @@ import com.chunkslab.gestures.scheduler.Scheduler;
 import com.chunkslab.gestures.server.ServerManager;
 import com.chunkslab.gestures.task.SkinTask;
 import com.chunkslab.gestures.util.ChatUtils;
+import com.chunkslab.gestures.util.UpdateUtil;
 import com.chunkslab.gestures.wardrobe.WardrobeManager;
 import com.chunkslab.gestures.web.WebManager;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
@@ -71,6 +73,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -107,6 +110,14 @@ public class GesturesPlugin extends GesturesAPI {
     // dependencies
     private ClassPathAppender classPathAppender;
     private DependencyManager dependencyManager;
+
+    // license
+    private final String buildByBit = "%%__BUILTBYBIT__%%";
+    private final String polymart = "%%__POLYMART__%%";
+    private String username = "%%__USERNAME__%%";
+    private String user = "%%__USER__%%";
+    private String time = "%%__TIMESTAMP__%%";
+    private final String nonce = "%%__NONCE__%%";
 
     // config
     private final ConfigFile databaseFile = new ConfigFile(this, "database.yml", true);
@@ -189,6 +200,7 @@ public class GesturesPlugin extends GesturesAPI {
         this.moduleManager.loadModules();
     }
 
+    @SuppressWarnings("ConstantValue")
     @Override
     public void onEnable() {
         adventure = BukkitAudiences.create(this);
@@ -223,6 +235,32 @@ public class GesturesPlugin extends GesturesAPI {
 
         this.getModuleManager().enableModules();
         database.enable();
+
+        boolean downloadFromPolymart = polymart.equals("1");
+        boolean downloadFromBBB = buildByBit.equals("true");
+
+        UpdateUtil.UPDATE_CHECKER.apply(this).thenAccept(result -> {
+            String link;
+            if (downloadFromPolymart) {
+                link = "https://polymart.org/resource/PRODUCT_ID/";
+            } else if (downloadFromBBB) {
+                link = "https://builtbybit.com/resources/PRODUCT_ID/";
+            } else {
+                username = "Github User";
+                user = "0";
+                time = "-1";
+                link = "https://github.com/ChunksLab/ChunksLab-Gestures/";
+            }
+            if (!result) {
+                LogUtils.info("You are using the latest version.");
+            } else {
+                LogUtils.warn("Update is available: " + link);
+            }
+        });
+
+        LogUtils.info("GesturesPlugin | Welcome " + username + " (" + user + ") - " + time);
+
+        new Metrics(this, 25019);
     }
 
     @Override
