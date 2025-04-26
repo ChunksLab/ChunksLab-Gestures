@@ -11,7 +11,7 @@ dependencies:
   server:
     PlaceholderAPI:
       required: true
-      load: AFTER
+      load: BEFORE
       join-classpath: true
     Nexo:
       required: false

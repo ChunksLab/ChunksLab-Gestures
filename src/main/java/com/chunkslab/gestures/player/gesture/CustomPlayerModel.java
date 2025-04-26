@@ -23,6 +23,7 @@ public class CustomPlayerModel extends PlayerModel {
     private boolean changeGesture;
     private boolean onlyPlayer;
     private final Set<Player> onePlayerSet;
+    private boolean instaDestroy;
     private boolean destroy;
 
     public CustomPlayerModel(GesturePlayer gesturePlayer, Gesture gesture, float modelRotation) {
@@ -72,6 +73,9 @@ public class CustomPlayerModel extends PlayerModel {
 
     @Override
     protected boolean update(boolean updateTime) {
+        if (this.instaDestroy) {
+            return false;
+        }
         boolean active = super.update(updateTime);
         if (!active && !idle && gesture.getAnimationIdle() != null) {
             playAnimation(gesture.getAnimationIdle());
@@ -152,6 +156,11 @@ public class CustomPlayerModel extends PlayerModel {
             this.end = true;
             return;
         }
+        this.destroy = true;
+    }
+
+    public void instantDestroy() {
+        this.instaDestroy = true;
         this.destroy = true;
     }
 

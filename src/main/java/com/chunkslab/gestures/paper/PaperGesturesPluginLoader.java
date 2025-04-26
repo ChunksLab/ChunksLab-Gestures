@@ -25,9 +25,6 @@ public class PaperGesturesPluginLoader implements PluginLoader {
                 .forEach(artifact -> resolver.addDependency(new Dependency(artifact, null)));
 
         resolver.addRepository(new RemoteRepository.Builder(
-                "maven", "default", "https://repo.maven.apache.org/maven2/"
-        ).build());
-        resolver.addRepository(new RemoteRepository.Builder(
                 "xenondevs", "default", "https://repo.xenondevs.xyz/releases/"
         ).build());
 

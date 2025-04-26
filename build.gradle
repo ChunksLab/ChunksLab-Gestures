@@ -8,9 +8,14 @@ ext {
     baseVersion = '1.0.0'
     channel = 'DEVELOPMENT'
 
+    asm_version = asm_version.toString()
+    asm_commons_version = asm_commons_version.toString()
+    jar_relocator_version = jar_relocator_version.toString()
+    commons_pool_version = commons_pool_version.toString()
+    invui_version = invui_version.toString();
+    bstats_version = bstats_version.toString();
     adventure_bundle_version = adventure_bundle_version.toString();
     adventure_platform_version = adventure_platform_version.toString();
-    invui_version = invui_version.toString();
     gson_version = gson_version.toString();
     sqlite_driver_version = sqlite_driver_version.toString();
     h2_driver_version = h2_driver_version.toString();
@@ -77,7 +82,6 @@ dependencies {
     }
     implementation("eu.okaeri:okaeri-configs-yaml-bukkit:${rootProject.properties['okaeri_config_version']}")
     implementation("org.mineskin:java-client:${rootProject.properties['mineskin_version']}")
-    implementation("org.bstats:bstats-bukkit:${rootProject.properties['bstats_version']}")
 
     compileOnly("net.kyori:adventure-api:${rootProject.properties['adventure_bundle_version']}")
     compileOnly("net.kyori:adventure-text-minimessage:${rootProject.properties['adventure_bundle_version']}")
@@ -85,6 +89,7 @@ dependencies {
     compileOnly("net.kyori:adventure-platform-bukkit:${rootProject.properties['adventure_platform_version']}")
 
     compileOnly("xyz.xenondevs.invui:invui:${rootProject.properties['invui_version']}")
+    compileOnly("org.bstats:bstats-bukkit:${rootProject.properties['bstats_version']}")
     compileOnly("me.clip:placeholderapi:${rootProject.properties['placeholder_api_version']}")
 
     compileOnly("com.google.code.gson:gson:${rootProject.properties['gson_version']}")
@@ -118,9 +123,14 @@ tasks.withType(JavaCompile).configureEach {
 processResources {
     def props = [
             'version': version,
+            'asm_version': project.ext.asm_version,
+            'asm_commons_version': project.ext.asm_commons_version,
+            'jar_relocator_version': project.ext.jar_relocator_version,
+            'commons_pool_version': project.ext.commons_pool_version,
+            'invui_version': project.ext.invui_version,
+            'bstats_version': project.ext.bstats_version,
             'adventure_bundle_version': project.ext.adventure_bundle_version,
             'adventure_platform_version': project.ext.adventure_platform_version,
-            'invui_version': project.ext.invui_version,
             'gson_version': project.ext.gson_version,
             'sqlite_driver_version': project.ext.sqlite_driver_version,
             'h2_driver_version': project.ext.h2_driver_version,
@@ -132,7 +142,7 @@ processResources {
     ]
     inputs.properties props
     filteringCharset = 'UTF-8'
-    filesMatching(['**/*.json', '**/*.yml']) {
+    filesMatching(['**/*.json', '**/*.yml', '**/*.properties']) {
         expand props
     }
 }
@@ -153,10 +163,14 @@ shadowJar {
     archiveFileName = "Gestures v${archiveVersion.get()}.jar"
     destinationDirectory.set(file("$rootDir/target"))
 
-    relocate 'dev.triumphteam.cmd', 'com.chunkslab.gestures.libs.triumphteam'
-    relocate 'eu.okaeri', 'com.chunkslab.gestures.libs.okaeri'
-    relocate 'org.bstats', 'com.chunkslab.gestures.libs.bstats'
-    relocate 'org.mineskin', 'com.chunkslab.gestures.libs.mineskin'
+    relocate 'dev.triumphteam.cmd', 'com.chunkslab.gestures.libraries.triumphteam'
+    relocate 'eu.okaeri', 'com.chunkslab.gestures.libraries.okaeri'
+    relocate 'org.mineskin', 'com.chunkslab.gestures.libraries.mineskin'
+    relocate 'org.bstats', 'com.chunkslab.gestures.libraries.bstats'
+    relocate 'com.zaxxer', 'com.chunkslab.gestures.libraries.zaxxer'
+    relocate 'org.mariadb', 'com.chunkslab.gestures.libraries.mariadb'
+    relocate 'com.mysql', 'com.chunkslab.gestures.libraries.mysql'
+    relocate 'redis.clients', 'com.chunkslab.gestures.libraries.jedis'
 
     from sourceSets.getByName("main").output
     configurations = [project.configurations.getByName("runtimeClasspath")]

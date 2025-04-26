@@ -112,8 +112,6 @@ public class GestureManager implements IGestureManager {
     public void stopGesture(GesturePlayer player, boolean wardrobe) {
         CustomPlayerModel model = ticking.remove(player);
         if(model == null) return;
-        model.destroy();
-        model.despawn();
-        model.update();
+        model.instantDestroy();
     }
 }
