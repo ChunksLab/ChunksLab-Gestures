@@ -33,14 +33,14 @@ import java.util.Set;
 
 public class CustomPlayerModel extends PlayerModel {
 
-    private GesturePlayer gesturePlayer;
-    private Player player;
+    private final GesturePlayer gesturePlayer;
+    private final Player player;
     private Gesture gesture;
     private boolean idle;
     private boolean end;
     private Gesture nextGesture;
     private boolean changeGesture;
-    private boolean onlyPlayer;
+    private final boolean onlyPlayer;
     private final Set<Player> onePlayerSet;
     private boolean instaDestroy;
     private boolean destroy;

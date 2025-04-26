@@ -57,13 +57,13 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
-        maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+        maven { url = "https://repo.papermc.io/repository/maven-public/" }
+        maven { url = "https://oss.sonatype.org/content/groups/public/" }
     }
 
     dependencies {
-        compileOnly 'org.projectlombok:lombok:1.18.34'
-        annotationProcessor 'org.projectlombok:lombok:1.18.34'
+        compileOnly("org.projectlombok:lombok:1.18.34")
+        annotationProcessor("org.projectlombok:lombok:1.18.34")
     }
 
     build {
@@ -77,24 +77,24 @@ subprojects {
 
 repositories {
     mavenCentral()
-    maven { url = 'https://jitpack.io' }
-    maven { url = 'https://repo.rapture.pw/repository/maven-snapshots/' }
-    maven { url = 'https://repo.triumphteam.dev/snapshots/' }
-    maven { url = 'https://storehouse.okaeri.eu/repository/maven-public/' }
-    maven { url = 'https://repo.xenondevs.xyz/releases' }
-    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
-    maven { url = 'https://repo.inventivetalent.org/repository/public/' }
+    maven { url = "https://jitpack.io" }
+    maven { url = "https://repo.rapture.pw/repository/maven-snapshots/" }
+    maven { url = "https://repo.triumphteam.dev/snapshots/" }
+    maven { url = "https://storehouse.okaeri.eu/repository/maven-public/" }
+    maven { url = "https://repo.xenondevs.xyz/releases" }
+    maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
+    maven { url = "https://repo.inventivetalent.org/repository/public/" }
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
 
-    implementation project(':api')
-    implementation project(':folia')
-    implementation project(':item')
+    implementation project(":api")
+    implementation project(":folia")
+    implementation project(":item")
 
-    implementation project(':playeranimator')
-    implementation project(':nms')
+    implementation project(":playeranimator")
+    implementation project(":nms")
 
     implementation("dev.triumphteam:triumph-cmd-bukkit:${rootProject.properties['triumph_cmd_version']}") {
         exclude group: "com.google.code.gson"
