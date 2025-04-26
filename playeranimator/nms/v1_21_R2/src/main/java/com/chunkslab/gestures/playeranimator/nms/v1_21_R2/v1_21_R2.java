@@ -29,9 +29,12 @@ import com.chunkslab.gestures.playeranimator.nms.v1_21_R2.network.PAChannelHandl
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.network.Connection;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -73,18 +76,21 @@ public class v1_21_R2 implements INMSHandler {
 
     @Override
     public IRangeManager createRangeManager(Entity entity) {
+        ChunkMap.TrackedEntity trackedEntity;
+        ServerLevel level = ((CraftWorld) entity.getWorld()).getHandle();
         try {
+            trackedEntity = level.getChunkSource().chunkMap.entityMap.get(entity.getEntityId());
+        } catch (NoSuchFieldError exception) {
             net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-
-            Field trackedEntityField = net.minecraft.world.entity.Entity.class.getDeclaredField("trackedEntity");
-            trackedEntityField.setAccessible(true);
-            Object trackedEntity = trackedEntityField.get(nmsEntity);
-
-            return new RangeManager(trackedEntity);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            try {
+                Field trackerField = nmsEntity.getClass().getDeclaredField("tracker");
+                trackerField.setAccessible(true);
+                trackedEntity = (ChunkMap.TrackedEntity) trackerField.get(nmsEntity);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
+        return new RangeManager(trackedEntity);
     }
 
     @Override

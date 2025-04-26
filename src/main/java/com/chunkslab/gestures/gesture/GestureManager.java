@@ -109,9 +109,11 @@ public class GestureManager implements IGestureManager {
 
     @Override
     public void playGesture(GesturePlayer player, Gesture gesture) {
+        player.setGesture(gesture);
         if(!ticking.containsKey(player)) {
-            CustomPlayerModel model = new CustomPlayerModel(player, gesture, 0);
+            CustomPlayerModel model = new CustomPlayerModel(player, gesture, 1);
             model.playAnimation();
+            model.spawn();
             ticking.put(player, model);
             return;
         }
@@ -123,6 +125,8 @@ public class GestureManager implements IGestureManager {
     public void stopGesture(GesturePlayer player) {
         CustomPlayerModel model = ticking.remove(player);
         if(model == null) return;
+        model.destroy();
+        player.setGesture(null);
         MountNMS mountNMS = plugin.getGestureNMS().getMountNMS();
         mountNMS.destroy(player.getPlayer());
     }
@@ -131,6 +135,7 @@ public class GestureManager implements IGestureManager {
     public void stopGesture(GesturePlayer player, boolean wardrobe) {
         CustomPlayerModel model = ticking.remove(player);
         if(model == null) return;
+        player.setGesture(null);
         model.instantDestroy();
     }
 }

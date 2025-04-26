@@ -42,6 +42,7 @@ public class ListenerManager implements IListenerManager {
         register(new WardrobeListener(plugin));
         register(new PlayerConnectionListener(plugin));
         register(new GestureListener(plugin));
+        register(new PlayerListener(plugin));
     }
 
     @Override

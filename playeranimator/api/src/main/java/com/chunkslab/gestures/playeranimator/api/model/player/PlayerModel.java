@@ -21,6 +21,8 @@ package com.chunkslab.gestures.playeranimator.api.model.player;
 
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimatorPlugin;
+import com.chunkslab.gestures.playeranimator.api.animation.animation.Animation;
+import com.chunkslab.gestures.playeranimator.api.animation.pack.AnimationPack;
 import com.chunkslab.gestures.playeranimator.api.animation.pack.Bone;
 import com.chunkslab.gestures.playeranimator.api.animation.time.AnimationProperty;
 import com.chunkslab.gestures.playeranimator.api.exceptions.MissingAnimationsException;
@@ -162,6 +164,24 @@ public class PlayerModel {
 		PlayerAnimator.api.getModelManager().registerModel(this);
 	}
 
+	public void nextAnimation(String name) {
+		String[] keys = name.split("\\.", 3);
+		if (keys.length < 3) {
+			throw new IllegalArgumentException();
+		}
+		AnimationPack animationPack = PlayerAnimator.api.getAnimationManager().getAnimationPack(keys[0] + ":" + keys[1]);
+		if (animationPack == null) {
+			PlayerAnimatorPlugin.plugin.getLogger().log(Level.SEVERE, "AnimationPack " + keys[0] + ":" + keys[1] + " not found");
+			throw new MissingAnimationsException();
+		}
+		Animation animation = animationPack.getAnimation(keys[2]);
+		if (animation == null) {
+			throw new UnknownAnimationException();
+		}
+		this.animationProperty = new AnimationProperty(animation);
+		this.update(false);
+	}
+
 	private PlayerBone setBones(Bone bone) {
 		LimbType type = LimbType.get(bone.getName());
 		PlayerBone playerBone;
@@ -185,6 +205,7 @@ public class PlayerModel {
 
 	protected boolean update(boolean updateTime) {
 		locationBuffer = getBase().getLocation();
+		rotateOptions.setFinalYaw(locationBuffer.getYaw());
 		for(PlayerBone bone : children.values())
 			bone.update();
 		for(LimbType type : bones.keySet())

@@ -53,8 +53,8 @@ public class CustomPlayerModel extends PlayerModel {
         this.gesture = gesture;
         this.idle = false;
         this.end = false;
-        destroy = false;
-        this.onlyPlayer = true;
+        this.destroy = false;
+        this.onlyPlayer = gesturePlayer.inWardrobe();
         this.onePlayerSet = Sets.newConcurrentHashSet();
         this.onePlayerSet.add(this.player);
     }
@@ -96,27 +96,27 @@ public class CustomPlayerModel extends PlayerModel {
             return false;
         }
         boolean active = super.update(updateTime);
-        if (!active && !idle && gesture.getAnimationIdle() != null) {
-            playAnimation(gesture.getAnimationIdle());
+        if (!active && !this.idle && this.gesture.getAnimationIdle() != null) {
+            this.playIdleAnimation();
             return true;
         }
         GesturesPlugin.getInstance().getScheduler().runTaskSyncTimer(() -> GesturesPlugin.getInstance().getGestureNMS().getMountNMS().run(player, player.getLocation()), player.getLocation(), 1, 20);
-        if (changeGesture) {
-            if (gesture.getId().equals("default") && gesturePlayer.inWardrobe()) {
-                calculateChangeGesture();
+        if (this.changeGesture) {
+            if (this.gesture.getId().equals("default") && this.gesturePlayer.inWardrobe()) {
+                this.calculateChangeGesture();
                 return true;
             }
-            if (end && this.finishAnimation()) {
-                calculateChangeGesture();
+            if (this.end && this.finishAnimation()) {
+                this.calculateChangeGesture();
             }
-            if (destroy && this.finishAnimation()) {
-                calculateChangeGesture();
+            if (this.destroy && this.finishAnimation()) {
+                this.calculateChangeGesture();
             }
             return true;
         }
         if (this.end) {
             if (this.finishAnimation()) {
-                playAnimation(gesture.getAnimationEnd());
+                this.playEndAnimation();
             }
             return true;
         }
@@ -140,28 +140,50 @@ public class CustomPlayerModel extends PlayerModel {
         else {
             this.playAnimation(this.gesture.getAnimationIdle());
             this.idle = true;
-            if (gesturePlayer.inWardrobe() && this.getAnimationProperty().getAnimation().getLoopMode() == LoopMode.ONCE) {
-                changeGestureAnimation(null);
+            if (this.gesturePlayer.inWardrobe() && this.getAnimationProperty().getAnimation().getLoopMode() == LoopMode.ONCE) {
+                this.changeGestureAnimation(null);
             }
         }
+    }
+
+    public void nextAnimation() {
+        if (this.gesture.getAnimationStart() != null) {
+            this.nextAnimation(this.gesture.getAnimationStart());
+        } else {
+            this.nextAnimation(this.gesture.getAnimationIdle());
+            this.idle = true;
+            if (this.gesturePlayer.inWardrobe() && this.getAnimationProperty().getAnimation().getLoopMode() == LoopMode.ONCE) {
+                this.changeGestureAnimation(null);
+            }
+        }
+    }
+
+    public void playIdleAnimation() {
+        this.nextAnimation(this.gesture.getAnimationIdle());
+        this.idle = true;
+    }
+
+    public void playEndAnimation() {
+        this.nextAnimation(this.gesture.getAnimationEnd());
+        this.end = false;
     }
 
     public void changeGestureAnimation(Gesture gesture) {
         this.changeGesture = true;
         this.nextGesture = gesture;
-        destroy();
+        this.destroy();
     }
 
     private void calculateChangeGesture() {
         if (nextGesture != null) {
-            gesture = nextGesture;
+            this.gesture = this.nextGesture;
         }
-        nextGesture = null;
-        changeGesture = false;
-        idle = false;
-        destroy = false;
-        end = false;
-        playAnimation();
+        this.nextGesture = null;
+        this.changeGesture = false;
+        this.idle = false;
+        this.destroy = false;
+        this.end = false;
+        this.nextAnimation();
     }
 
     public void destroy() {

@@ -105,6 +105,7 @@ public class WardrobeCommand extends BaseCommand {
         cameraNMS.title(player, PlaceholderAPI.setPlaceholders(null, plugin.getPluginConfig().getSettings().getWardrobeScreen()));
         cameraNMS.spawn(player, wardrobe.getPlayerLocation());
         gesturePlayer.setWardrobe(wardrobe);
+        plugin.getGestureManager().playGesture(gesturePlayer, plugin.getGestureManager().getGesture("default"));
     }
 
     @SubCommand("leave")
