@@ -73,6 +73,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -116,7 +117,7 @@ public class GesturesPlugin extends GesturesAPI {
     private final String polymart = "%%__POLYMART__%%";
     private String username = "%%__USERNAME__%%";
     private String user = "%%__USER__%%";
-    private String time = "%%__TIMESTAMP__%%";
+    private final String time = "%%__TIMESTAMP__%%";
     private final String nonce = "%%__NONCE__%%";
 
     // config
@@ -255,10 +256,10 @@ public class GesturesPlugin extends GesturesAPI {
         if (!downloadFromPolymart && !downloadFromBBB) {
             username = "Github User";
             user = "0";
-            time = "0";
         }
 
-        LogUtils.info("GesturesPlugin | Welcome " + username + " (" + user + ") - " + time);
+        Component welcomeMessage = ChatUtils.format("    <bold><aqua>    Welcome to GesturesPlugin    <newline>    <gray>Thank you for choosing us, <gold>" + username + " (" + user + ")<gray>!<newline>    <gray>GesturesPlugin is developed by <gold>Amownyy<gray> and the <gold>ChunksLab Team<gray>.<newline>    <gray>We hope you enjoy using our plugin!<newline>    <gray>If you have any questions or feedback, feel free to reach out to us!<newline><aqua><bold>");
+        ChatUtils.sendMessage(Bukkit.getConsoleSender(), welcomeMessage);
 
         new Metrics(this, 25019);
     }
