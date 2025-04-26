@@ -336,23 +336,6 @@ public enum Dependency {
             return GesturesDependencyProperties.getValue("invui");
         }
     },
-    BSTATS_BASE(
-            "org{}bstats",
-            "bstats-base",
-            "maven",
-            "bstats-base"
-    ),
-    BSTATS_BUKKIT(
-            "org{}bstats",
-            "bstats-bukkit",
-            "maven",
-            "bstats-bukkit"
-    ) {
-        @Override
-        public String getVersion() {
-            return Dependency.BSTATS_BASE.getVersion();
-        }
-    },
     ADVENTURE_API(
             "net{}kyori",
             "adventure-api",

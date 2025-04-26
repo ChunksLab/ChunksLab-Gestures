@@ -101,6 +101,8 @@ dependencies {
     }
     implementation("eu.okaeri:okaeri-configs-yaml-bukkit:${rootProject.properties['okaeri_config_version']}")
     implementation("org.mineskin:java-client:${rootProject.properties['mineskin_version']}")
+    implementation("org.bstats:bstats-bukkit:${rootProject.properties['bstats_version']}")
+    implementation("org.bstats:bstats-base:${rootProject.properties['bstats_version']}")
 
     compileOnly("net.kyori:adventure-api:${rootProject.properties['adventure_bundle_version']}")
     compileOnly("net.kyori:adventure-text-minimessage:${rootProject.properties['adventure_bundle_version']}")
@@ -108,7 +110,6 @@ dependencies {
     compileOnly("net.kyori:adventure-platform-bukkit:${rootProject.properties['adventure_platform_version']}")
 
     compileOnly("xyz.xenondevs.invui:invui:${rootProject.properties['invui_version']}")
-    compileOnly("org.bstats:bstats-bukkit:${rootProject.properties['bstats_version']}")
     compileOnly("me.clip:placeholderapi:${rootProject.properties['placeholder_api_version']}")
 
     compileOnly("com.google.code.gson:gson:${rootProject.properties['gson_version']}")
@@ -185,6 +186,7 @@ shadowJar {
     relocate 'dev.triumphteam.cmd', 'com.chunkslab.gestures.libraries.triumphteam'
     relocate 'eu.okaeri', 'com.chunkslab.gestures.libraries.okaeri'
     relocate 'org.mineskin', 'com.chunkslab.gestures.libraries.mineskin'
+    relocate 'org.bstats', 'com.chunkslab.gestures.libraries.bstats'
     relocate 'com.zaxxer', 'com.chunkslab.gestures.libraries.zaxxer'
     relocate 'org.mariadb', 'com.chunkslab.gestures.libraries.mariadb'
     relocate 'com.mysql', 'com.chunkslab.gestures.libraries.mysql'

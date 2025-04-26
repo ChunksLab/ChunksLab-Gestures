@@ -178,8 +178,6 @@ public class GesturesPlugin extends GesturesAPI {
                         Dependency.INVUI_INVENTORY_ACCESS_R21,
                         Dependency.INVUI_INVENTORY_ACCESS_R22,
                         Dependency.INVUI_INVENTORY_ACCESS_R23,
-                        Dependency.BSTATS_BASE,
-                        Dependency.BSTATS_BUKKIT,
                         Dependency.ADVENTURE_API,
                         Dependency.ADVENTURE_TEXT_MINIMESSAGE,
                         Dependency.ADVENTURE_TEXT_SERIALIZER_LEGACY,
@@ -246,9 +244,6 @@ public class GesturesPlugin extends GesturesAPI {
             } else if (downloadFromBBB) {
                 link = "https://builtbybit.com/resources/PRODUCT_ID/";
             } else {
-                username = "Github User";
-                user = "0";
-                time = "-1";
                 link = "https://github.com/ChunksLab/ChunksLab-Gestures/";
             }
             if (!result) {
@@ -257,6 +252,11 @@ public class GesturesPlugin extends GesturesAPI {
                 LogUtils.warn("Update is available: " + link);
             }
         });
+        if (!downloadFromPolymart && !downloadFromBBB) {
+            username = "Github User";
+            user = "0";
+            time = "0";
+        }
 
         LogUtils.info("GesturesPlugin | Welcome " + username + " (" + user + ") - " + time);
 
