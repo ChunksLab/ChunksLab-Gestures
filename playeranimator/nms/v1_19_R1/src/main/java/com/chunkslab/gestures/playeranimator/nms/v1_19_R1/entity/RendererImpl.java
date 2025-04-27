@@ -242,7 +242,6 @@ public class RendererImpl implements IRenderer {
         else
             armorStand.setRightArmPose(toNMS(finalRotation));
 
-
         ClientboundTeleportEntityPacket teleport = new ClientboundTeleportEntityPacket(cloud);
         ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
         ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData(), false);
