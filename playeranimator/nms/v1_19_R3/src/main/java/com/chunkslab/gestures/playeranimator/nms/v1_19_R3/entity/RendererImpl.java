@@ -20,20 +20,31 @@
 package com.chunkslab.gestures.playeranimator.nms.v1_19_R3.entity;
 
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
+import com.chunkslab.gestures.playeranimator.api.animation.keyframe.effects.ParticleEffect;
+import com.chunkslab.gestures.playeranimator.api.animation.keyframe.effects.SoundEffect;
 import com.chunkslab.gestures.playeranimator.api.model.player.Hand;
 import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
 import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
+import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerEffectsBone;
 import com.chunkslab.gestures.playeranimator.api.nms.IRenderer;
 import com.chunkslab.gestures.playeranimator.api.texture.TextureWrapper;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Rotations;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.craftbukkit.v1_19_R3.CraftParticle;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
@@ -46,6 +57,7 @@ import org.bukkit.util.EulerAngle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class RendererImpl implements IRenderer {
 
@@ -172,8 +184,21 @@ public class RendererImpl implements IRenderer {
     }
 
     private List<Packet<?>> getSpawnPackets() {
-
         final var finalLocation = limb.getPosition().toLocation(limb.getModel().getBase().getWorld());
+        if (limb.getType() == LimbType.EFFECTS) {
+            SoundEffect soundEffect = ((PlayerEffectsBone) limb).getSound();
+            if (soundEffect == null) return List.of();
+            SoundEvent soundEvent = SoundEvent.createFixedRangeEvent(ResourceLocation.tryBuild(soundEffect.getNamespace(), soundEffect.getEffect()), 30.0f);
+            Location location = limb.getModel().getBase().getLocation();
+            return List.of(new ClientboundSoundPacket(Holder.direct(soundEvent), SoundSource.MASTER, location.getX(), location.getY(), location.getZ(), soundEffect.getVolume(), soundEffect.getPitch(), 0));
+        }
+        if (limb.getType() == LimbType.PARTICLE) {
+            ParticleEffect particleEffect = ((PlayerEffectsBone) limb).getParticle();
+            if (particleEffect == null) return List.of();
+            ParticleOptions particleOptions = CraftParticle.toNMS(Particle.valueOf(particleEffect.getEffect().toUpperCase(Locale.ENGLISH)), null);
+            if (particleOptions == null) return List.of();
+            return List.of(new ClientboundLevelParticlesPacket(particleOptions, true, finalLocation.getX(), finalLocation.getY(), finalLocation.getZ(), particleEffect.getXDist(), particleEffect.getYDist(), particleEffect.getZDist(), particleEffect.getMaxSpeed(), particleEffect.getCount()));
+        }
         cloud.setPos(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ());
         armorStand.moveTo(finalLocation.getX(), finalLocation.getY() + cloud.getPassengersRidingOffset() + armorStand.getMyRidingOffset(), finalLocation.getZ(), limb.getModel().getBaseYaw(), 0);
 
@@ -188,6 +213,7 @@ public class RendererImpl implements IRenderer {
     }
 
     private List<Packet<?>> getDespawnPackets() {
+        if (limb.getType() == LimbType.EFFECTS || limb.getType() == LimbType.PARTICLE) return List.of();
         ClientboundRemoveEntitiesPacket remove = new ClientboundRemoveEntitiesPacket(armorStand.getId(), cloud.getId());
         return List.of(remove);
     }
@@ -196,6 +222,20 @@ public class RendererImpl implements IRenderer {
         final var finalLocation = limb.getPosition().toLocation(limb.getModel().getBase().getWorld());
         final var finalRotation = limb.getRotation();
 
+        if (limb.getType() == LimbType.EFFECTS) {
+            SoundEffect soundEffect = ((PlayerEffectsBone) limb).getSound();
+            if (soundEffect == null) return List.of();
+            SoundEvent soundEvent = SoundEvent.createFixedRangeEvent(ResourceLocation.tryBuild(soundEffect.getNamespace(), soundEffect.getEffect()), 30.0f);
+            Location location = limb.getModel().getBase().getLocation();
+            return List.of(new ClientboundSoundPacket(Holder.direct(soundEvent), SoundSource.MASTER, location.getX(), location.getY(), location.getZ(), soundEffect.getVolume(), soundEffect.getPitch(), 0));
+        }
+        if (limb.getType() == LimbType.PARTICLE) {
+            ParticleEffect particleEffect = ((PlayerEffectsBone) limb).getParticle();
+            if (particleEffect == null) return List.of();
+            ParticleOptions particleOptions = CraftParticle.toNMS(Particle.valueOf(particleEffect.getEffect().toUpperCase(Locale.ENGLISH)), null);
+            if (particleOptions == null) return List.of();
+            return List.of(new ClientboundLevelParticlesPacket(particleOptions, true, finalLocation.getX(), finalLocation.getY(), finalLocation.getZ(), particleEffect.getXDist(), particleEffect.getYDist(), particleEffect.getZDist(), particleEffect.getMaxSpeed(), particleEffect.getCount()));
+        }
         cloud.setPos(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ());
         if(limb.getType() == LimbType.LEFT_ITEM)
             armorStand.setLeftArmPose(toNMS(finalRotation));
@@ -204,7 +244,7 @@ public class RendererImpl implements IRenderer {
 
 
         ClientboundTeleportEntityPacket teleport = new ClientboundTeleportEntityPacket(cloud);
-        //ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
+        ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
         ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
         ClientboundSetEquipmentPacket asEquip = limb.isInvisible() && limb.getType().getModelId() != -1 ? new ClientboundSetEquipmentPacket(armorStand.getId(), invisibleEquipments) : new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
         return Arrays.asList(teleport, rotate, meta, asEquip);
