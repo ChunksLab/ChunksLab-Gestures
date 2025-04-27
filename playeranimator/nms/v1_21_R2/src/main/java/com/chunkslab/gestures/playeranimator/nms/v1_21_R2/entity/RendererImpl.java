@@ -203,7 +203,7 @@ public class RendererImpl implements IRenderer {
         cloud.setPos(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ());
         Vec3 ridingPosition = this.armorStand.getPassengerRidingPosition(cloud);
         Vec3 vehicleAttachmentPoint = this.cloud.getVehicleAttachmentPoint(armorStand);
-        armorStand.moveTo(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ(), limb.getModel().getBaseYaw(), 0);
+        armorStand.moveTo(finalLocation.getX(), finalLocation.getY() + (ridingPosition.y - vehicleAttachmentPoint.y), finalLocation.getZ(), limb.getModel().getBaseYaw(), 0);
 
         ClientboundAddEntityPacket asSpawn = new ClientboundAddEntityPacket(armorStand, 0, armorStand.blockPosition());
         ClientboundSetEntityDataPacket asMeta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
@@ -244,23 +244,22 @@ public class RendererImpl implements IRenderer {
             armorStand.setLeftArmPose(toNMS(finalRotation));
         else
             armorStand.setRightArmPose(toNMS(finalRotation));
-
-
+        
         ClientboundTeleportEntityPacket teleport = new ClientboundTeleportEntityPacket(
                 cloud.getId(),
                 new PositionMoveRotation(
-                        new Vec3(armorStand.getX(), armorStand.getY(), armorStand.getZ()),
+                        new Vec3(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ()),
                         Vec3.ZERO,
-                        armorStand.getBukkitYaw(),
-                        armorStand.getXRot()
+                        finalLocation.getYaw(),
+                        finalLocation.getPitch()
                 ),
                 Set.of(),
                 false
                 );
-        //ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
+        ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
         ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
         ClientboundSetEquipmentPacket asEquip = limb.isInvisible() && limb.getType().getModelId() != -1 ? new ClientboundSetEquipmentPacket(armorStand.getId(), invisibleEquipments) : new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
-        return Arrays.asList(asEquip, teleport, meta);
+        return Arrays.asList(teleport, rotate, meta, asEquip);
     }
 
     private Rotations toNMS(EulerAngle angle) {

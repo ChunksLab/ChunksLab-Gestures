@@ -277,9 +277,21 @@ public class PlayerModel {
 	}
 
 	public float getBaseYaw() {
-		if(locationBuffer != null)
-			return locationBuffer.getYaw();
-		return getBase().getLocation().getYaw();
+		if (Float.isNaN(rotateOptions.getCurrentYaw()) && locationBuffer != null)
+			return getDefaultYaw();
+		if (!rotateOptions.isRotate())
+			return rotateOptions.getCurrentYaw();
+		return getBlockYaw();
+	}
+
+	public float getDefaultYaw() {
+		rotateOptions.setCurrentYaw(locationBuffer.getYaw());
+		return rotateOptions.getCurrentYaw();
+	}
+
+	public float getBlockYaw() {
+		rotateOptions.rotateYaw();
+		return rotateOptions.getCurrentYaw();
 	}
 
 }

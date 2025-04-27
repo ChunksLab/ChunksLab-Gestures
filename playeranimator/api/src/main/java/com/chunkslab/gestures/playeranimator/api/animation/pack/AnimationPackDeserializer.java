@@ -138,8 +138,6 @@ public class AnimationPackDeserializer implements JsonDeserializer<AnimationPack
 			};
 			double time = key.get("time").getAsDouble();
 			KeyframeType type = getType(key.get("interpolation").getAsString());
-			if (boneName.equals("player_root"))
-				System.out.println("PLAYER ROOT BULUNDU YARRAM");
 			switch (channel) {
 				case "rotation" -> timeline.addRotationFrame(time, TMath.makeAngle(values[0], values[1], values[2]), type);
 				case "position" -> timeline.addPositionFrame(time, new Vector(values[0], values[1], -values[2]).multiply(0.0625), type);
