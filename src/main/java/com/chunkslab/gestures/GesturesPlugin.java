@@ -1,7 +1,7 @@
 /*
  * This file is part of ChunksLab-Gestures, licensed under the Apache License 2.0.
  *
- * Copyright (c) Amownyy <amowny08@gmail.com>
+ * Copyright (c) amownyy <amowny08@gmail.com>
  * Copyright (c) contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -258,7 +258,7 @@ public class GesturesPlugin extends GesturesAPI {
             user = "0";
         }
 
-        Component welcomeMessage = ChatUtils.format("    <bold><aqua>    Welcome to GesturesPlugin    <newline>    <gray>Thank you for choosing us, <gold>" + username + " (" + user + ")<gray>!<newline>    <gray>GesturesPlugin is developed by <gold>Amownyy<gray> and the <gold>ChunksLab Team<gray>.<newline>    <gray>We hope you enjoy using our plugin!<newline>    <gray>If you have any questions or feedback, feel free to reach out to us!<newline><aqua><bold>");
+        Component welcomeMessage = ChatUtils.format("    <bold><aqua>    Welcome to GesturesPlugin    <newline>    <gray>Thank you for choosing us, <gold>" + username + " (" + user + ")<gray>!<newline>    <gray>GesturesPlugin is developed by <gold>amownyy<gray> and the <gold>ChunksLab Team<gray>.<newline>    <gray>We hope you enjoy using our plugin!<newline>    <gray>If you have any questions or feedback, feel free to reach out to us!<newline><aqua><bold>");
         ChatUtils.sendMessage(Bukkit.getConsoleSender(), welcomeMessage);
 
         new Metrics(this, 25019);
