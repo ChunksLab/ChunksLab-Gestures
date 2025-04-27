@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -45,6 +46,13 @@ public class GesturePlayerImpl implements GesturePlayer {
 
     @Override
     public List<Gesture> getFavoriteGesturesList() {
-        return List.of(favoriteGestures.getOne(), favoriteGestures.getTwo(), favoriteGestures.getThree(), favoriteGestures.getFour(), favoriteGestures.getFive(), favoriteGestures.getSix());
+        List<Gesture> gestures = new ArrayList<>();
+        if (favoriteGestures.getOne() != null) gestures.add(favoriteGestures.getOne());
+        if (favoriteGestures.getTwo() != null) gestures.add(favoriteGestures.getTwo());
+        if (favoriteGestures.getThree() != null) gestures.add(favoriteGestures.getThree());
+        if (favoriteGestures.getFour() != null) gestures.add(favoriteGestures.getFour());
+        if (favoriteGestures.getFive() != null) gestures.add(favoriteGestures.getFive());
+        if (favoriteGestures.getSix() != null) gestures.add(favoriteGestures.getSix());
+        return gestures;
     }
 }

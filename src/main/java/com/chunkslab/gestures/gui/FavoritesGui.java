@@ -21,6 +21,7 @@ package com.chunkslab.gestures.gui;
 
 import com.chunkslab.gestures.GesturesPlugin;
 import com.chunkslab.gestures.api.config.ConfigFile;
+import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.gui.item.UpdatingItem;
 import com.chunkslab.gestures.util.ChatUtils;
@@ -52,25 +53,42 @@ public class FavoritesGui {
 
                 title.append("<font:gesture_favorite_row_").append(i).append(">");
 
-                List<Item> rowGestures = plugin.getGestureManager().getGestures()
+                List<Gesture> favoriteGestures = player.getFavoriteGesturesList()
                         .stream()
                         .skip(index)
                         .limit(amount)
-                        .flatMap(gesture -> {
-                            title.append(gesture.getFont()).append(config.getString("gap-shift"));
-                            List<Item> repeatedItems = new ArrayList<>();
-                            for (int j = 1; j <= 3; j++) {
-                                repeatedItems.add(new UpdatingItem(20,
-                                        () -> new ItemBuilder(ItemUtils.build(config, "items.x")),
-                                        event -> {
-                                            plugin.getGestureManager().playGesture(player, gesture);
-                                            plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
-                                            player.getPlayer().closeInventory();
-                                        }));
-                            }
-                            return repeatedItems.stream();
-                        })
                         .collect(Collectors.toList());
+
+                List<Item> rowGestures = new ArrayList<>();
+
+                for (Gesture gesture : favoriteGestures) {
+                    title.append(gesture.getFont()).append(config.getString("gap-shift"));
+                    for (int j = 0; j < 3; j++) {
+                        ItemBuilder gestureItem = new ItemBuilder(ItemUtils.build(config, "items.x"));
+                        gestureItem.setDisplayName(ChatUtils.formatForGui(ChatUtils.fromLegacy(gesture.getName())));
+                        rowGestures.add(new UpdatingItem(20,
+                                () -> gestureItem,
+                                event -> {
+                                    plugin.getGestureManager().playGesture(player, gesture);
+                                    plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
+                                    player.getPlayer().closeInventory();
+                                }));
+                    }
+                }
+
+                for (Gesture gesture : favoriteGestures) {
+                    for (int j = 0; j < 3; j++) {
+                        ItemBuilder gestureItem = new ItemBuilder(ItemUtils.build(config, "items.x"));
+                        gestureItem.setDisplayName(ChatUtils.formatForGui(ChatUtils.fromLegacy(gesture.getName())));
+                        rowGestures.add(new UpdatingItem(20,
+                                () -> gestureItem,
+                                event -> {
+                                    plugin.getGestureManager().playGesture(player, gesture);
+                                    plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
+                                    player.getPlayer().closeInventory();
+                                }));
+                    }
+                }
 
                 title.append(config.getString("rows." + i + ".offset"));
 
