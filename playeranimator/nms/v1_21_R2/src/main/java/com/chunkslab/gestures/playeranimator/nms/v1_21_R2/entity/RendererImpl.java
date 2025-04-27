@@ -244,7 +244,7 @@ public class RendererImpl implements IRenderer {
             armorStand.setLeftArmPose(toNMS(finalRotation));
         else
             armorStand.setRightArmPose(toNMS(finalRotation));
-        
+
         ClientboundTeleportEntityPacket teleport = new ClientboundTeleportEntityPacket(
                 cloud.getId(),
                 new PositionMoveRotation(
