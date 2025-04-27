@@ -59,6 +59,7 @@ import com.chunkslab.gestures.scheduler.Scheduler;
 import com.chunkslab.gestures.server.ServerManager;
 import com.chunkslab.gestures.task.SkinTask;
 import com.chunkslab.gestures.util.ChatUtils;
+import com.chunkslab.gestures.util.NoticeUtil;
 import com.chunkslab.gestures.util.UpdateUtil;
 import com.chunkslab.gestures.wardrobe.WardrobeManager;
 import com.chunkslab.gestures.web.WebManager;
@@ -73,7 +74,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -258,8 +258,7 @@ public class GesturesPlugin extends GesturesAPI {
             user = "0";
         }
 
-        Component welcomeMessage = ChatUtils.format("    <bold><aqua>    Welcome to GesturesPlugin    <newline>    <gray>Thank you for choosing us, <gold>" + username + " (" + user + ")<gray>!<newline>    <gray>GesturesPlugin is developed by <gold>amownyy<gray> and the <gold>ChunksLab Team<gray>.<newline>    <gray>We hope you enjoy using our plugin!<newline>    <gray>If you have any questions or feedback, feel free to reach out to us!<newline><aqua><bold>");
-        ChatUtils.sendMessage(Bukkit.getConsoleSender(), welcomeMessage);
+        new NoticeUtil(this);
 
         new Metrics(this, 25019);
     }

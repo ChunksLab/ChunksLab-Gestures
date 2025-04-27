@@ -30,6 +30,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.util.jar.JarFile;
+
 public abstract class GesturesAPI extends JavaPlugin {
 
     private static GesturesAPI api;
@@ -46,6 +49,14 @@ public abstract class GesturesAPI extends JavaPlugin {
 
     public static GesturesAPI getInstance() {
         return api;
+    }
+
+    public static JarFile getJarFile() {
+        try {
+            return new JarFile(api.getFile());
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     // abstract

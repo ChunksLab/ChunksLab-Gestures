@@ -24,6 +24,7 @@ import com.chunkslab.gestures.api.scheduler.CancellableTask;
 import com.chunkslab.gestures.api.scheduler.IScheduler;
 import com.chunkslab.gestures.api.scheduler.SyncScheduler;
 import com.chunkslab.gestures.api.util.LogUtils;
+import com.chunkslab.gestures.api.util.VersionUtil;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,12 +46,7 @@ public class Scheduler implements IScheduler {
     private ScheduledThreadPoolExecutor schedule;
 
     public void enable() {
-        boolean foliaScheduler = false;
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            foliaScheduler = true;
-        } catch (ClassNotFoundException ignored) {}
-        this.syncScheduler = foliaScheduler ? new FoliaSchedulerImpl(plugin) : new BukkitSchedulerImpl(plugin);
+        this.syncScheduler = VersionUtil.isFoliaServer() ? new FoliaSchedulerImpl(plugin) : new BukkitSchedulerImpl(plugin);
         this.schedule = new ScheduledThreadPoolExecutor(1);
         this.schedule.setMaximumPoolSize(1);
         this.schedule.setKeepAliveTime(30, TimeUnit.SECONDS);
