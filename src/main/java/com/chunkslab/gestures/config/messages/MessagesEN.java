@@ -53,4 +53,5 @@ public class MessagesEN extends OkaeriConfig {
     private String gestureNotExists = "<prefix> <red>Gesture not exists!";
     private String wardrobeNotExists = "<prefix> <red>Wardrobe not exists!";
     private String notInWardrobe = "<prefix> <red>You're not in the wardrobe!";
+    private String notOnGround = "<prefix> <red>You must be on the ground to do this!";
 }

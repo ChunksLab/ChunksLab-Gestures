@@ -69,6 +69,10 @@ public class FavoritesGui {
                         rowGestures.add(new UpdatingItem(20,
                                 () -> gestureItem,
                                 event -> {
+                                    if (!event.getPlayer().isOnGround()) {
+                                        ChatUtils.sendMessage(event.getPlayer(), ChatUtils.format(plugin.getPluginMessages().getNotOnGround()));
+                                        return;
+                                    }
                                     plugin.getGestureManager().playGesture(player, gesture);
                                     plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
                                     player.getPlayer().closeInventory();
@@ -83,6 +87,10 @@ public class FavoritesGui {
                         rowGestures.add(new UpdatingItem(20,
                                 () -> gestureItem,
                                 event -> {
+                                    if (!event.getPlayer().isOnGround()) {
+                                        ChatUtils.sendMessage(event.getPlayer(), ChatUtils.format(plugin.getPluginMessages().getNotOnGround()));
+                                        return;
+                                    }
                                     plugin.getGestureManager().playGesture(player, gesture);
                                     plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
                                     player.getPlayer().closeInventory();

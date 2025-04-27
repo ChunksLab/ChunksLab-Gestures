@@ -53,6 +53,10 @@ public class GestureCommand extends BaseCommand {
                 ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getGestureNotExists()));
                 return;
             }
+            if (!player.isOnGround()) {
+                ChatUtils.sendMessage(player, ChatUtils.format(plugin.getPluginMessages().getNotOnGround()));
+                return;
+            }
             plugin.getGestureManager().playGesture(gesturePlayer, gesture);
             plugin.getGestureNMS().getMountNMS().spawn(player.getPlayer());
         }
