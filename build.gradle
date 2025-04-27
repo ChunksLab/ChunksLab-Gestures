@@ -198,6 +198,18 @@ shadowJar {
     relocate 'com.mysql', 'com.chunkslab.gestures.libraries.mysql'
     relocate 'redis.clients', 'com.chunkslab.gestures.libraries.jedis'
 
+    manifest {
+        attributes(
+                "Built-By": System.getProperty("user.name"),
+                "Version": project.version,
+                "Build-Timestamp": new java.text.SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSZ").format(new Date()),
+                "Created-By": "Gradle ${gradle.gradleVersion}",
+                "Build-Jdk": "${System.getProperty("java.version")} ${System.getProperty("java.vendor")} ${System.getProperty("java.vm.version")}",
+                "Build-OS": "${System.getProperty("os.name")} ${System.getProperty("os.arch")} ${System.getProperty("os.version")}",
+                "Compiled": (project.findProperty("gesture_compiled")?.toString() ?: "true")
+        )
+    }
+
     from sourceSets.getByName("main").output
     configurations = [project.configurations.getByName("runtimeClasspath")]
 }
