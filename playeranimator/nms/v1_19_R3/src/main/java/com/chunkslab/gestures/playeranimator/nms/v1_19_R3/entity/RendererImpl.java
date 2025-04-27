@@ -207,7 +207,7 @@ public class RendererImpl implements IRenderer {
         //ClientboundMoveEntityPacket.Rot rotate = new ClientboundMoveEntityPacket.Rot(armorStand.getId(), IRenderer.rotByte(limb.getModel().getBaseYaw()), (byte) 0, false);
         ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
         ClientboundSetEquipmentPacket asEquip = limb.isInvisible() && limb.getType().getModelId() != -1 ? new ClientboundSetEquipmentPacket(armorStand.getId(), invisibleEquipments) : new ClientboundSetEquipmentPacket(armorStand.getId(), equipments);
-        return Arrays.asList(asEquip, teleport, meta);
+        return Arrays.asList(teleport, rotate, meta, asEquip);
     }
 
     private Rotations toNMS(EulerAngle angle) {
