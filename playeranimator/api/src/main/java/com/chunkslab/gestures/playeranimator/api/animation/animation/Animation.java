@@ -19,6 +19,7 @@
 
 package com.chunkslab.gestures.playeranimator.api.animation.animation;
 
+import com.chunkslab.gestures.playeranimator.api.animation.keyframe.effects.Effects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.util.EulerAngle;
@@ -54,6 +55,12 @@ public class Animation {
 		return timelines.get(bone).getPositionFrame(time);
 	}
 
+	public EulerAngle getRotation(String bone, double time) {
+		if(!timelines.containsKey(bone))
+			return EulerAngle.ZERO;
+		return timelines.get(bone).getRotationFrame(time);
+	}
+
 	public Vector getScale(String bone, double time) {
 		if (!timelines.containsKey(bone)) {
 			return null;
@@ -61,10 +68,10 @@ public class Animation {
 		return timelines.get(bone).getScaleFrame(time);
 	}
 
-	public EulerAngle getRotation(String bone, double time) {
+	public Effects getEffects(String bone, double time) {
 		if(!timelines.containsKey(bone))
-			return EulerAngle.ZERO;
-		return timelines.get(bone).getRotationFrame(time);
+			return null;
+		return timelines.get(bone).getEffectsFrame(time);
 	}
 
 }

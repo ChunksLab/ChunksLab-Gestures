@@ -61,6 +61,12 @@ public enum Dependency {
             "commons-pool",
             Relocation.of("commonspool2", "org{}apache{}commons{}pool2")
     ),
+    JOML(
+            "org{}joml",
+            "joml",
+            "maven",
+            "joml"
+    ),
     INVUI_CORE(
             "xyz{}xenondevs{}invui",
             "invui-core",

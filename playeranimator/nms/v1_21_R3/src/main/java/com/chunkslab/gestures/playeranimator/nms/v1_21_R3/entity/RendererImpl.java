@@ -20,6 +20,7 @@
 package com.chunkslab.gestures.playeranimator.nms.v1_21_R3.entity;
 
 import com.chunkslab.gestures.playeranimator.api.PlayerAnimator;
+import com.chunkslab.gestures.playeranimator.api.model.player.Hand;
 import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
 import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
 import com.chunkslab.gestures.playeranimator.api.nms.IRenderer;
@@ -39,6 +40,7 @@ import net.minecraft.world.phys.Vec3;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -61,6 +63,9 @@ public class RendererImpl implements IRenderer {
     @Override
     public void setLimb(PlayerBone limb) {
         this.limb = limb;
+        if (limb.getType().equals(LimbType.EFFECTS) || limb.getType().equals(LimbType.PARTICLE)) {
+            return;
+        }
 
         final var nmsWorld = ((CraftWorld) limb.getModel().getBase().getWorld()).getHandle();
         if(armorStand == null)
@@ -136,6 +141,33 @@ public class RendererImpl implements IRenderer {
             sendPackets(player, packets);
     }
 
+    @Override
+    public void changeItem(Hand hand, int slot) {
+        if (!limb.getType().isItem()) return;
+        Entity entity = limb.getModel().getBase();
+        if (!(entity instanceof Player player)) return;
+        equipments.clear();
+        org.bukkit.inventory.ItemStack selectedItem = (slot == -1)
+                ? (hand == Hand.MAIN_HAND ? player.getEquipment().getItemInMainHand() : player.getEquipment().getItemInOffHand())
+                : player.getInventory().getItem(slot);
+
+        EquipmentSlot enumSlot = (hand == Hand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+
+        this.equipments.add(Pair.of(enumSlot, CraftItemStack.asNMSCopy(selectedItem)));
+    }
+
+    @Override
+    public void changeItem(org.bukkit.inventory.ItemStack item) {
+        this.equipments.clear();
+
+        EquipmentSlot slot = switch (this.limb.getType()) {
+            case LEFT_ITEM -> EquipmentSlot.OFFHAND;
+            default -> EquipmentSlot.MAINHAND;
+        };
+
+        this.equipments.add(Pair.of(slot, CraftItemStack.asNMSCopy(item)));
+    }
+
     private void sendPackets(Player player, List<Packet<?>> packets) {
         ServerGamePacketListenerImpl packetListener = ((CraftPlayer) player).getHandle().connection;
         //final var pipeline = ((CraftPlayer) player).getHandle().connection.connection.channel.pipeline();
@@ -150,7 +182,7 @@ public class RendererImpl implements IRenderer {
         cloud.setPos(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ());
         Vec3 ridingPosition = this.armorStand.getPassengerRidingPosition(cloud);
         Vec3 vehicleAttachmentPoint = this.cloud.getVehicleAttachmentPoint(armorStand);
-        armorStand.moveTo(finalLocation.getX(), finalLocation.getY() - 0.2, finalLocation.getZ(), limb.getModel().getBaseYaw(), 0);
+        armorStand.moveTo(finalLocation.getX(), finalLocation.getY(), finalLocation.getZ(), limb.getModel().getBaseYaw(), 0);
 
         ClientboundAddEntityPacket asSpawn = new ClientboundAddEntityPacket(armorStand, 0, armorStand.blockPosition());
         ClientboundSetEntityDataPacket asMeta = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());

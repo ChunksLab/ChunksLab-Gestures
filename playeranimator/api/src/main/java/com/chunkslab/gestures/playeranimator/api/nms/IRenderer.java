@@ -19,8 +19,10 @@
 
 package com.chunkslab.gestures.playeranimator.api.nms;
 
+import com.chunkslab.gestures.playeranimator.api.model.player.Hand;
 import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public interface IRenderer {
 
@@ -30,6 +32,8 @@ public interface IRenderer {
 	void despawn();
 	void despawn(Player player);
 	void update();
+	void changeItem(Hand hand, int slot);
+	void changeItem(ItemStack item);
 
 	static byte rotByte(float rot) {
 		return (byte) (rot * 256 / 360);

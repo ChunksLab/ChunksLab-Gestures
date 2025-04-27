@@ -20,6 +20,7 @@
 package com.chunkslab.gestures.playeranimator.api.animation.time;
 
 import com.chunkslab.gestures.playeranimator.api.animation.animation.Animation;
+import com.chunkslab.gestures.playeranimator.api.animation.keyframe.effects.Effects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.util.EulerAngle;
@@ -78,6 +79,10 @@ public class AnimationProperty {
 
 	public EulerAngle getRotationFrame(String bone) {
 		return animation.getRotation(bone, time);
+	}
+
+	public Effects getEffectsFrame(String bone) {
+		return animation.getEffects(bone, time);
 	}
 
 }

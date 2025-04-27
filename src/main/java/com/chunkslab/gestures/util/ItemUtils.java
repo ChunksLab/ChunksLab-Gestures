@@ -43,7 +43,7 @@ public class ItemUtils {
         if (!material.startsWith("custom:")) {
             itemStack = new ItemStack(Material.valueOf(material.toUpperCase(Locale.ENGLISH)));
         } else {
-            itemStack = GesturesPlugin.getInstance().getItemAPI().getItemHook().getById(material);
+            itemStack = GesturesPlugin.getInstance().getItemAPI().getItemHook().getById(material.replace("custom:", ""));
             if (itemStack == null) {
                 itemStack = new ItemStack(Material.BARRIER);
             }

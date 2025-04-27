@@ -31,6 +31,7 @@ ext {
     asm_commons_version = asm_commons_version.toString()
     jar_relocator_version = jar_relocator_version.toString()
     commons_pool_version = commons_pool_version.toString()
+    joml_version = joml_version.toString()
     invui_version = invui_version.toString();
     bstats_version = bstats_version.toString();
     adventure_bundle_version = adventure_bundle_version.toString();
@@ -147,6 +148,7 @@ processResources {
             'asm_commons_version': project.ext.asm_commons_version,
             'jar_relocator_version': project.ext.jar_relocator_version,
             'commons_pool_version': project.ext.commons_pool_version,
+            'joml_version': project.ext.joml_version,
             'invui_version': project.ext.invui_version,
             'bstats_version': project.ext.bstats_version,
             'adventure_bundle_version': project.ext.adventure_bundle_version,

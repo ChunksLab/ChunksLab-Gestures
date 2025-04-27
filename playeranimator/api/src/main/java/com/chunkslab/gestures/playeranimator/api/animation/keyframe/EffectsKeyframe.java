@@ -17,26 +17,16 @@
  * limitations under the License.
  */
 
-repositories {
-    maven { url = 'https://libraries.minecraft.net/' }
-}
+package com.chunkslab.gestures.playeranimator.api.animation.keyframe;
 
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    compileOnly("com.mojang:authlib:3.3.39")
-    compileOnly("commons-io:commons-io:2.18.0")
-    compileOnly("org.joml:joml:${rootProject.properties['joml_version']}")
-}
+import com.chunkslab.gestures.playeranimator.api.animation.keyframe.effects.Effects;
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+public class EffectsKeyframe extends AbstractKeyframe<Effects> {
+    public EffectsKeyframe(Effects value) {
+        super(value);
     }
-}
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.release.set(17)
+    public EffectsKeyframe(Effects value, KeyframeType type) {
+        super(value, type);
+    }
 }

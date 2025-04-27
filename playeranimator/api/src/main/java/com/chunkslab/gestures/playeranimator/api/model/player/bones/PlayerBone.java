@@ -60,7 +60,7 @@ public class PlayerBone {
 	public void update() {
 		Vector fPosition = model.getAnimationProperty().getPositionFrame(bone.getName());
 		EulerAngle fRotation = model.getAnimationProperty().getRotationFrame(bone.getName());
-		Vector fScale = this.model.getAnimationProperty().getScaleFrame(bone.getName());
+		Vector fScale =model.getAnimationProperty().getScaleFrame(bone.getName());
 
 		Vector pPosition = parent == null ? getModel().getBaseVector() : parent.getPosition();
 		EulerAngle pRotation = parent == null ? EulerAngle.ZERO : parent.getRotation();

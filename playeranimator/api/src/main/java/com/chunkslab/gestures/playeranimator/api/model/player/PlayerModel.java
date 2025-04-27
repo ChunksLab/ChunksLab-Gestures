@@ -28,6 +28,7 @@ import com.chunkslab.gestures.playeranimator.api.animation.time.AnimationPropert
 import com.chunkslab.gestures.playeranimator.api.exceptions.MissingAnimationsException;
 import com.chunkslab.gestures.playeranimator.api.exceptions.UnknownAnimationException;
 import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerBone;
+import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerEffectsBone;
 import com.chunkslab.gestures.playeranimator.api.model.player.bones.PlayerItemBone;
 import com.chunkslab.gestures.playeranimator.api.nms.IRangeManager;
 import com.chunkslab.gestures.playeranimator.api.nms.IRenderer;
@@ -46,7 +47,7 @@ import java.util.logging.Level;
 
 public class PlayerModel {
 
-	private final Map<LimbType, IRenderer> limbs = new HashMap<>();
+	protected final Map<LimbType, IRenderer> limbs = new HashMap<>();
 	private final Map<LimbType, PlayerBone> bones = new HashMap<>();
 	private final Map<String, PlayerBone> children = new HashMap<>();
 
@@ -138,6 +139,45 @@ public class PlayerModel {
 			limbs.get(type).despawn(player);
 	}
 
+	protected void initializeAnimation() {}
+
+	public void changeItem(Hand hand, int slot) {
+		if (hand == Hand.ALL) {
+			IRenderer renderer;
+			if (limbs.containsKey(LimbType.RIGHT_ITEM)) {
+				renderer = limbs.get(LimbType.RIGHT_ITEM);
+				if (renderer == null) {
+					return;
+				}
+				renderer.changeItem(hand, slot);
+			}
+			if (limbs.containsKey(LimbType.LEFT_ITEM)) {
+				renderer = limbs.get(LimbType.RIGHT_ITEM);
+				if (renderer == null) {
+					return;
+				}
+				renderer.changeItem(hand, slot);
+			}
+			return;
+		}
+		if (hand == Hand.MAIN_HAND && limbs.containsKey(LimbType.RIGHT_ITEM)) {
+			IRenderer renderer = limbs.get(LimbType.RIGHT_ITEM);
+			if (renderer == null) {
+				return;
+			}
+			renderer.changeItem(hand, slot);
+			return;
+		}
+		if (!limbs.containsKey(LimbType.LEFT_ITEM)) {
+			return;
+		}
+		IRenderer renderer = limbs.get(LimbType.LEFT_ITEM);
+		if (renderer == null) {
+			return;
+		}
+		renderer.changeItem(hand, slot);
+	}
+
 	public void playAnimation(String name) {
 		String[] keys = name.split("\\.", 3);
 		if(keys.length < 3)
@@ -160,6 +200,7 @@ public class PlayerModel {
 		animationProperty = new AnimationProperty(animation);
 		update(false);
 		spawn();
+		initializeAnimation();
 
 		PlayerAnimator.api.getModelManager().registerModel(this);
 	}
@@ -183,10 +224,10 @@ public class PlayerModel {
 	}
 
 	private PlayerBone setBones(Bone bone) {
-		LimbType type = LimbType.get(bone.getName());
+		LimbType type = LimbType.get(bone.getName().startsWith("particle") ? "PARTICLE" : bone.getName());
 		PlayerBone playerBone;
 		if(type != null) {
-			playerBone = type.isItem() ? new PlayerItemBone(this, bone, type) : new PlayerBone(this, bone, type);
+			playerBone = type.isItem() ? new PlayerItemBone(this, bone, type) : type.equals(LimbType.EFFECTS) || type.equals(LimbType.PARTICLE) ? new PlayerEffectsBone(this, bone, type.equals(LimbType.PARTICLE)) : new PlayerBone(this, bone, type);
 			limbs.get(type).setLimb(playerBone);
 			bones.put(type, playerBone);
 		}else {

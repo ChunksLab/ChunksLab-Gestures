@@ -19,6 +19,8 @@
 
 package com.chunkslab.gestures.playeranimator.api.animation.pack;
 
+import com.chunkslab.gestures.playeranimator.api.animation.keyframe.effects.ParticleEffect;
+import com.chunkslab.gestures.playeranimator.api.animation.keyframe.effects.SoundEffect;
 import com.google.gson.*;
 import com.chunkslab.gestures.playeranimator.api.animation.animation.Animation;
 import com.chunkslab.gestures.playeranimator.api.animation.animation.LoopMode;
@@ -114,14 +116,14 @@ public class AnimationPackDeserializer implements JsonDeserializer<AnimationPack
 					continue;
 				String boneName = bone.get("name").getAsString();
 				Timeline timeline = animation.getOrCreateTimeline(boneName);
-				configureTimeline(timeline, bone.get("keyframes"));
+				configureTimeline(boneName, timeline, bone.get("keyframes"));
 			}
 		}
 
 		return animation;
 	}
 
-	private void configureTimeline(Timeline timeline, JsonElement element) {
+	private void configureTimeline(String boneName, Timeline timeline, JsonElement element) {
 		JsonArray keyframes = element.getAsJsonArray();
 		for(JsonElement ele : keyframes) {
 			JsonObject key = ele.getAsJsonObject();
@@ -136,9 +138,57 @@ public class AnimationPackDeserializer implements JsonDeserializer<AnimationPack
 			};
 			double time = key.get("time").getAsDouble();
 			KeyframeType type = getType(key.get("interpolation").getAsString());
+			if (boneName.equals("player_root"))
+				System.out.println("PLAYER ROOT BULUNDU YARRAM");
 			switch (channel) {
 				case "rotation" -> timeline.addRotationFrame(time, TMath.makeAngle(values[0], values[1], values[2]), type);
 				case "position" -> timeline.addPositionFrame(time, new Vector(values[0], values[1], -values[2]).multiply(0.0625), type);
+				case "scale" -> {
+					String value;
+					if (boneName.startsWith("particle")) {
+						value = data.get("x").getAsString();
+						if (value.isEmpty()) {
+							timeline.addOrGetEffectFrame(time).getValue().setParticle(null);
+							break;
+						}
+						String[] separatorValues = value.split(";");
+						if (separatorValues.length >= 6) {
+							String effect = separatorValues[0];
+							float xDist = Float.parseFloat(separatorValues[1]);
+							float yDist = Float.parseFloat(separatorValues[2]);
+							float zDist = Float.parseFloat(separatorValues[3]);
+							float maxSpeed = Float.parseFloat(separatorValues[4]);
+							int count = Integer.parseInt(separatorValues[5]);
+							timeline.addOrGetEffectFrame(time).getValue().setParticle(new ParticleEffect(effect, xDist, yDist, zDist, maxSpeed, count));
+							break;
+						}
+						timeline.addOrGetEffectFrame(time).getValue().setParticle(new ParticleEffect(separatorValues[0]));
+						break;
+					}
+					if (boneName.equalsIgnoreCase("effects")) {
+						value = data.get("x").getAsString();
+						String instructions = data.get("y").getAsString();
+						if (!instructions.isEmpty()) {
+							timeline.addOrGetEffectFrame(time).getValue().setInstructions(instructions);
+						}
+						if (value.isEmpty()) {
+							timeline.addOrGetEffectFrame(time).getValue().setSound(null);
+							break;
+						}
+						String[] separatorValues = value.split(";");
+						if (separatorValues.length >= 3) {
+							String sound = separatorValues[0];
+							float volume = Float.parseFloat(separatorValues[1]);
+							float pitch = Float.parseFloat(separatorValues[2]);
+							timeline.addOrGetEffectFrame(time).getValue()
+									.setSound(new SoundEffect(sound, volume, pitch));
+							break;
+						}
+						timeline.addOrGetEffectFrame(time).getValue().setSound(new SoundEffect(separatorValues[0]));
+						break;
+					}
+					timeline.addScaleFrame(time, new Vector(values[0], values[1], values[2]), type);
+				}
 			}
 		}
 	}

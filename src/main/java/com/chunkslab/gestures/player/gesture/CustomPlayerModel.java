@@ -25,6 +25,7 @@ import com.chunkslab.gestures.api.event.GestureStopAnimationEvent;
 import com.chunkslab.gestures.api.gesture.Gesture;
 import com.chunkslab.gestures.api.player.GesturePlayer;
 import com.chunkslab.gestures.playeranimator.api.animation.animation.LoopMode;
+import com.chunkslab.gestures.playeranimator.api.model.player.LimbType;
 import com.chunkslab.gestures.playeranimator.api.model.player.PlayerModel;
 import com.google.common.collect.Sets;
 import org.bukkit.entity.Player;
@@ -54,7 +55,8 @@ public class CustomPlayerModel extends PlayerModel {
         this.idle = false;
         this.end = false;
         this.destroy = false;
-        this.onlyPlayer = gesturePlayer.inWardrobe();
+        //this.onlyPlayer = gesturePlayer.inWardrobe();
+        this.onlyPlayer = true;
         this.onePlayerSet = Sets.newConcurrentHashSet();
         this.onePlayerSet.add(this.player);
     }
@@ -88,6 +90,14 @@ public class CustomPlayerModel extends PlayerModel {
             plugin.getServer().getPluginManager().callEvent(event);
         }, gesturePlayer.getPlayer().getLocation());
         super.despawn();
+    }
+
+    @Override
+    protected void initializeAnimation() {
+        if (limbs.containsKey(LimbType.LEFT_ITEM) && gesture.getGestureEquip().getLeftHand() != null)
+            limbs.get(LimbType.LEFT_ITEM).changeItem(gesture.getGestureEquip().getLeftHand());
+        if (limbs.containsKey(LimbType.RIGHT_ITEM) && gesture.getGestureEquip().getRightHand() != null)
+            limbs.get(LimbType.RIGHT_ITEM).changeItem(gesture.getGestureEquip().getRightHand());
     }
 
     @Override

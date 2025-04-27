@@ -17,26 +17,10 @@
  * limitations under the License.
  */
 
-repositories {
-    maven { url = 'https://libraries.minecraft.net/' }
-}
+package com.chunkslab.gestures.playeranimator.api.model.player;
 
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    compileOnly("com.mojang:authlib:3.3.39")
-    compileOnly("commons-io:commons-io:2.18.0")
-    compileOnly("org.joml:joml:${rootProject.properties['joml_version']}")
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.release.set(17)
+public enum Hand {
+    MAIN_HAND,
+    OFF_HAND,
+    ALL;
 }

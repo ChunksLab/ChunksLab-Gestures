@@ -86,11 +86,11 @@ public class GestureManager implements IGestureManager {
             }
             if (section.contains("equipment")) {
                 if (section.contains("equipment.rightHand"))
-                    rightHand = ItemUtils.build(plugin.getGesturesFile(), section.getString("equipment.rightHand"));
+                    rightHand = ItemUtils.build(plugin.getGesturesFile(), section.getName() + ".equipment.rightHand");
                 if (section.contains("equipment.leftHand"))
-                    leftHand = ItemUtils.build(plugin.getGesturesFile(), section.getString("equipment.leftHand"));
+                    leftHand = ItemUtils.build(plugin.getGesturesFile(), section.getName() + ".equipment.leftHand");
                 if (section.contains("equipment.head"))
-                    head = ItemUtils.build(plugin.getGesturesFile(), section.getString("equipment.head"));
+                    head = ItemUtils.build(plugin.getGesturesFile(), section.getName() + ".equipment.head");
             }
             GestureEquip gestureEquip = new GestureEquip(rightHand, leftHand, head);
             gestureMap.put(id, new Gesture(id, name, permission, font, animationStart, animationIdle, animationEnd, movement, moveSpeed, gestureEquip));

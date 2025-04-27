@@ -41,9 +41,11 @@ public enum LimbType {
 	LEFT_FORELEG(11, 11, false),
 	RIGHT_ITEM(-1, -1, true),
 	LEFT_ITEM(-1, -1, true),
+	EFFECTS(-1, -1, false),
+	PARTICLE(-1, -1, false),
 	INVISIBLE_HEAD(12, 12, false);
 
-	public static final Vector base = new Vector(0.313, -1.85204000149011612, 0);
+	public static final Vector base = new Vector(0.313, -1.8520400014901162, 0.0);
 
 	@Getter private final int modelId;
 	@Getter private final int slimId;
