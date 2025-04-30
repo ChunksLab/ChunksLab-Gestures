@@ -50,6 +50,7 @@ import com.chunkslab.gestures.item.api.ItemAPI;
 import com.chunkslab.gestures.listener.ListenerManager;
 import com.chunkslab.gestures.nms.GestureNMSImpl;
 import com.chunkslab.gestures.nms.api.GestureNMS;
+import com.chunkslab.gestures.papi.PapiHook;
 import com.chunkslab.gestures.player.GesturePlayerSkin;
 import com.chunkslab.gestures.player.PlayerManager;
 import com.chunkslab.gestures.playeranimator.PlayerAnimatorImpl;
@@ -257,6 +258,8 @@ public class GesturesPlugin extends GesturesAPI {
             username = "Github User";
             user = "0";
         }
+
+        new PapiHook(this);
 
         new NoticeUtil(this);
 
