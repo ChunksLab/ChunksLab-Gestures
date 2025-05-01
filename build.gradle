@@ -25,7 +25,7 @@ plugins {
 
 ext {
     baseVersion = '1.0.0'
-    channel = 'DEVELOPMENT'
+    channel = 'RELEASE'
 
     asm_version = asm_version.toString()
     asm_commons_version = asm_commons_version.toString()
