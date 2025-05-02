@@ -45,6 +45,7 @@ import com.chunkslab.gestures.dependency.DependencyManagerImpl;
 import com.chunkslab.gestures.dependency.classpath.ClassPathAppender;
 import com.chunkslab.gestures.dependency.classpath.ReflectionClassPathAppender;
 import com.chunkslab.gestures.gesture.GestureManager;
+import com.chunkslab.gestures.hook.HookManager;
 import com.chunkslab.gestures.item.ItemHookImpl;
 import com.chunkslab.gestures.item.api.ItemAPI;
 import com.chunkslab.gestures.listener.ListenerManager;
@@ -142,6 +143,7 @@ public class GesturesPlugin extends GesturesAPI {
     @Setter private IWebManager webManager;
     @Setter private SkinManager skinManager = new SkinManager();
     @Setter private GesturePlayerSkin gesturePlayerSkin = new GesturePlayerSkin(this);
+    @Setter private HookManager hookManager = new HookManager(this);
 
     @Override
     public void onLoad() {
@@ -224,6 +226,7 @@ public class GesturesPlugin extends GesturesAPI {
         favoritesMenuConfig.create();
         gesturesMenuConfig.create();
 
+        hookManager.enable();
         listenerManager.enable();
         scheduler.enable();
         gestureManager.enable();

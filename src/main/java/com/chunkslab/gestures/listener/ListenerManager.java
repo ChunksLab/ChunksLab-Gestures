@@ -43,6 +43,8 @@ public class ListenerManager implements IListenerManager {
         register(new PlayerConnectionListener(plugin));
         register(new GestureListener(plugin));
         register(new PlayerListener(plugin));
+        if (plugin.getHookManager().getGlowManager() != null)
+            register(new GlowListener(plugin));
     }
 
     @Override

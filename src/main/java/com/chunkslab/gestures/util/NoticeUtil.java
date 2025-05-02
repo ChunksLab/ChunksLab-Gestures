@@ -49,6 +49,7 @@ public class NoticeUtil {
         Component playerAnimator = ChatUtils.format("<prefix> <#55ffa4>PlayerAnimator will be use <version>.", Placeholder.parsed("version", VersionUtil.getNMSVersion(MinecraftVersion.getCurrentVersion()).name()));
         Component placeHolderHook = ChatUtils.format("<prefix> <#55ffa4>Plugin \"PlaceholderAPI\" detected, enabling hooks.");
         Component itemHook = ChatUtils.format("<prefix> <#55ffa4>Plugin \"<plugin>\" detected, enabling hooks.", Placeholder.parsed("plugin", plugin.getItemAPI().getItemHook().getClass().getName().substring(plugin.getItemAPI().getItemHook().getClass().getName().lastIndexOf(".") + 1).replace("Hook", "")));
+        Component glowHook = ChatUtils.format("<prefix> <#55ffa4>Plugin \"<plugin>\" detected, enabling hooks.", Placeholder.parsed("plugin", plugin.getHookManager().getGlowManager().getName()));
         Component license = ChatUtils.format("<prefix> <#529ced>Thank you for choosing us, <white><username> (<user>)<#529ced>! We hope you enjoy using our plugin.", Placeholder.parsed("username", plugin.getUsername()), Placeholder.parsed("user", plugin.getUser()));
         Component loadMessage = ChatUtils.format("<prefix> <#55ffa4>Successfully loaded on <os>", Placeholder.parsed("os", OS.getOs().getPlatformName()));
         for (Component message : new Component[]{serverType, versionDetected, nmsVersion, playerAnimator, placeHolderHook, itemHook, license, loadMessage}) {

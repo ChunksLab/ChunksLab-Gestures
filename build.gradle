@@ -105,6 +105,10 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:${rootProject.properties['bstats_version']}")
     implementation("org.bstats:bstats-base:${rootProject.properties['bstats_version']}")
 
+    // hooks
+    compileOnly("com.github.SlyOtters:EGlow-API:v1.0")
+    compileOnly("com.github.imhhitt:FancyGlow:2.10.2")
+
     compileOnly("net.kyori:adventure-api:${rootProject.properties['adventure_bundle_version']}")
     compileOnly("net.kyori:adventure-text-minimessage:${rootProject.properties['adventure_bundle_version']}")
     compileOnly("net.kyori:adventure-text-serializer-legacy:${rootProject.properties['adventure_bundle_version']}")
