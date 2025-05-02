@@ -27,6 +27,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
@@ -49,6 +53,38 @@ public class PlayerListener implements Listener {
         Vehicle vehicle = event.getVehicle();
         if (!(vehicle instanceof Horse)) return;
         Player player = (Player) event.getExited();
+        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
+        if (!gesturePlayer.inGesture()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
+        if (!gesturePlayer.inGesture()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent event) {
+        Player player = event.getPlayer();
+        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
+        if (!gesturePlayer.inGesture()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEffect(EntityPotionEffectEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
+        if (!gesturePlayer.inGesture()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
         GesturePlayer gesturePlayer = plugin.getPlayerManager().getPlayer(player);
         if (!gesturePlayer.inGesture()) return;
         event.setCancelled(true);
