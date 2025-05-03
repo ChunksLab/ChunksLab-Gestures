@@ -45,6 +45,8 @@ public class ListenerManager implements IListenerManager {
         register(new PlayerListener(plugin));
         if (plugin.getHookManager().getGlowManager() != null)
             register(new GlowListener(plugin));
+        if (plugin.getHookManager().getWorldGuardManager() != null)
+            register(new WorldGuardListener(plugin));
     }
 
     @Override

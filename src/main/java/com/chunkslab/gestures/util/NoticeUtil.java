@@ -29,44 +29,94 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 
 public class NoticeUtil {
-    
+
     private final GesturesPlugin plugin;
 
     public NoticeUtil(GesturesPlugin plugin) {
         this.plugin = plugin;
-        if (VersionUtil.isCompiled())
-            compileNotice();
+        handleVersionCheck();
+        printStartupMessages();
+    }
+
+    private void handleVersionCheck() {
+        if (VersionUtil.isCompiled()) {
+            printCompileNotice();
+        }
+
         if (VersionUtil.isLeaked()) {
-            leakNotice();
-            return;
-        }
-        VersionUtil.isSupportedVersion(VersionUtil.getNMSVersion(MinecraftVersion.getCurrentVersion()));
-        Component serverType = VersionUtil.isPaperServer() ?
-                ChatUtils.format("<prefix> <#55ffa4>Paper server detected, enabling paper support.") :
-                ChatUtils.format("<prefix> <#55ffa4>Folia server detected, enabling folia support.");
-        Component versionDetected = ChatUtils.format("<prefix> <#55ffa4>Version <version> has been detected.", Placeholder.parsed("version", VersionUtil.getNMSVersion(MinecraftVersion.getCurrentVersion()).name()));
-        Component nmsVersion = ChatUtils.format("<prefix> <#55ffa4>NMS will be use <version>.", Placeholder.parsed("version", VersionUtil.getNMSVersion(MinecraftVersion.getCurrentVersion()).name()));
-        Component playerAnimator = ChatUtils.format("<prefix> <#55ffa4>PlayerAnimator will be use <version>.", Placeholder.parsed("version", VersionUtil.getNMSVersion(MinecraftVersion.getCurrentVersion()).name()));
-        Component placeHolderHook = ChatUtils.format("<prefix> <#55ffa4>Plugin \"PlaceholderAPI\" detected, enabling hooks.");
-        Component itemHook = ChatUtils.format("<prefix> <#55ffa4>Plugin \"<plugin>\" detected, enabling hooks.", Placeholder.parsed("plugin", plugin.getItemAPI().getItemHook().getClass().getName().substring(plugin.getItemAPI().getItemHook().getClass().getName().lastIndexOf(".") + 1).replace("Hook", "")));
-        Component glowHook = ChatUtils.format("<prefix> <#55ffa4>Plugin \"<plugin>\" detected, enabling hooks.", Placeholder.parsed("plugin", plugin.getHookManager().getGlowManager().getName()));
-        Component license = ChatUtils.format("<prefix> <#529ced>Thank you for choosing us, <white><username> (<user>)<#529ced>! We hope you enjoy using our plugin.", Placeholder.parsed("username", plugin.getUsername()), Placeholder.parsed("user", plugin.getUser()));
-        Component loadMessage = ChatUtils.format("<prefix> <#55ffa4>Successfully loaded on <os>", Placeholder.parsed("os", OS.getOs().getPlatformName()));
-        for (Component message : new Component[]{serverType, versionDetected, nmsVersion, playerAnimator, placeHolderHook, itemHook, license, loadMessage}) {
-            ChatUtils.sendMessage(Bukkit.getConsoleSender(), message);
+            printLeakNotice();
+            Bukkit.getPluginManager().disablePlugin(plugin);
         }
     }
 
-    public void compileNotice() {
+    private void printCompileNotice() {
         LogUtils.severe("This is a compiled version of ChunksLab-Gestures.");
-        LogUtils.warn("Compiled versions come without Default assets and support is not provided.");
-        LogUtils.warn("Consider purchasing ChunksLab-Gestures on BuiltByBit, Polymart or SpigotMC for access to the full version.");
+        LogUtils.warn("Compiled versions come without default assets and support is not provided.");
+        LogUtils.warn("Please purchase from BuiltByBit, Polymart, or SpigotMC to access the full version.");
     }
 
-    public void leakNotice() {
-        LogUtils.severe("This is a leaked version of ChunksLab-Gestures");
-        LogUtils.severe("Piracy is not supported, shutting down plugin.");
-        LogUtils.severe("Consider purchasing ChunksLab-Gestures on BuiltByBit, Polymart or SpigotMC if you want a working version.");
-        Bukkit.getPluginManager().disablePlugin(plugin);
+    private void printLeakNotice() {
+        LogUtils.severe("This is a leaked version of ChunksLab-Gestures.");
+        LogUtils.severe("Piracy is not supported. Disabling plugin.");
+        LogUtils.severe("Purchase the plugin legally via BuiltByBit, Polymart, or SpigotMC.");
+    }
+
+    private void printStartupMessages() {
+        if (VersionUtil.isLeaked()) return;
+
+        String nmsVersionName = VersionUtil.getNMSVersion(MinecraftVersion.getCurrentVersion()).name();
+        String hookPluginName = getSimpleName(plugin.getItemAPI().getItemHook().getClass().getName());
+        String glowPlugin = safeName(plugin.getHookManager().getGlowManager());
+        String worldGuardPlugin = safeName(plugin.getHookManager().getWorldGuardManager());
+
+        Component[] messages = {
+                format("Paper server detected, enabling paper support.", VersionUtil.isPaperServer()),
+                format("Folia server detected, enabling folia support.", !VersionUtil.isPaperServer()),
+                format("Version <version> has been detected.", "version", nmsVersionName),
+                format("NMS will be use <version>.", "version", nmsVersionName),
+                format("PlayerAnimator will be use <version>.", "version", nmsVersionName),
+                format("Plugin \"PlaceholderAPI\" detected, enabling hooks."),
+                format("Plugin \"<plugin>\" detected, enabling hooks.", "plugin", hookPluginName),
+                format("Plugin \"<plugin>\" detected, enabling hooks.", "plugin", glowPlugin),
+                format("Plugin \"<plugin>\" detected, enabling hooks.", "plugin", worldGuardPlugin),
+                format("Thank you for choosing us, <white><username> (<user>)<#529ced>! We hope you enjoy using our plugin.",
+                        "username", plugin.getUsername(), "user", plugin.getUser()),
+                format("Successfully loaded on <os>", "os", OS.getOs().getPlatformName())
+        };
+
+        for (Component msg : messages) {
+            if (msg != null) ChatUtils.sendMessage(Bukkit.getConsoleSender(), msg);
+        }
+    }
+
+    // overloads for various message types
+    private Component format(String message, boolean condition) {
+        return condition ? ChatUtils.format("<prefix> <#55ffa4>" + message) : null;
+    }
+
+    private Component format(String message) {
+        return ChatUtils.format("<prefix> <#55ffa4>" + message);
+    }
+
+    private Component format(String message, String key, String value) {
+        if (value == null) return null;
+        return ChatUtils.format("<prefix> <#55ffa4>" + message, Placeholder.parsed(key, value));
+    }
+
+    private Component format(String message, String key1, String val1, String key2, String val2) {
+        if (val1 == null || val2 == null) return null;
+        return ChatUtils.format("<prefix> <#529ced>" + message,
+                Placeholder.parsed(key1, val1),
+                Placeholder.parsed(key2, val2));
+    }
+
+    private String safeName(Object obj) {
+        return obj != null ? obj.getClass().getSimpleName() : null;
+    }
+
+    private String getSimpleName(String className) {
+        if (className == null) return "Unknown";
+        String simple = className.substring(className.lastIndexOf('.') + 1);
+        return simple.replace("Hook", "");
     }
 }

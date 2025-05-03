@@ -54,4 +54,5 @@ public class MessagesEN extends OkaeriConfig {
     private String wardrobeNotExists = "<prefix> <red>Wardrobe not exists!";
     private String notInWardrobe = "<prefix> <red>You're not in the wardrobe!";
     private String notOnGround = "<prefix> <red>You must be on the ground to do this!";
+    private String worldGuardRegion = "<prefix> <red>You can't do this in this region!";
 }

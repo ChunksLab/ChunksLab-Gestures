@@ -20,9 +20,12 @@
 package com.chunkslab.gestures.hook;
 
 import com.chunkslab.gestures.GesturesPlugin;
+import com.chunkslab.gestures.api.hook.Hook;
 import com.chunkslab.gestures.hook.impl.glow.EGlow;
 import com.chunkslab.gestures.hook.impl.glow.FancyGlow;
+import com.chunkslab.gestures.hook.impl.worldguard.WorldGuard;
 import com.chunkslab.gestures.hook.manager.GlowManager;
+import com.chunkslab.gestures.hook.manager.WorldGuardManager;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,16 +38,21 @@ import java.util.Map;
 public class HookManager {
 
     private final Map<String, Class<? extends GlowManager>> glowHooks = Maps.newConcurrentMap();
+    private final Map<String, Class<? extends WorldGuardManager>> worldGuardHooks = Maps.newConcurrentMap();
 
     private final GesturesPlugin plugin;
 
     @Getter private GlowManager glowManager;
+    @Getter private WorldGuardManager worldGuardManager;
 
     public void enable() {
         glowHooks.put("EGlow", EGlow.class);
         glowHooks.put("FancyGlow", FancyGlow.class);
 
+        worldGuardHooks.put("WorldGuard", WorldGuard.class);
+
         initGlowManager();
+        initWorldGuardManager();
     }
 
     @SneakyThrows
@@ -53,6 +61,17 @@ public class HookManager {
             Plugin p = plugin.getServer().getPluginManager().getPlugin(entry.getKey());
             if (p != null && p.isEnabled()) {
                 glowManager = entry.getValue().getDeclaredConstructor(GesturesPlugin.class).newInstance(plugin);
+                break;
+            }
+        }
+    }
+
+    @SneakyThrows
+    public void initWorldGuardManager() {
+        for (Map.Entry<String, Class<? extends WorldGuardManager>> entry : worldGuardHooks.entrySet()) {
+            Plugin p = plugin.getServer().getPluginManager().getPlugin(entry.getKey());
+            if (p != null && p.isEnabled()) {
+                worldGuardManager = entry.getValue().getDeclaredConstructor(GesturesPlugin.class).newInstance(plugin);
                 break;
             }
         }

@@ -85,6 +85,7 @@ repositories {
     maven { url = "https://repo.xenondevs.xyz/releases" }
     maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
     maven { url = "https://repo.inventivetalent.org/repository/public/" }
+    maven { url = "https://maven.enginehub.org/repo/" }
 }
 
 dependencies {
@@ -108,6 +109,7 @@ dependencies {
     // hooks
     compileOnly("com.github.SlyOtters:EGlow-API:v1.0")
     compileOnly("com.github.imhhitt:FancyGlow:2.10.2")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.3-SNAPSHOT")
 
     compileOnly("net.kyori:adventure-api:${rootProject.properties['adventure_bundle_version']}")
     compileOnly("net.kyori:adventure-text-minimessage:${rootProject.properties['adventure_bundle_version']}")
