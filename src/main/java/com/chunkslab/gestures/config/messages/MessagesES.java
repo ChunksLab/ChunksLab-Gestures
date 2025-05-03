@@ -19,7 +19,6 @@
 
 package com.chunkslab.gestures.config.messages;
 
-import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.annotation.NameModifier;
 import eu.okaeri.configs.annotation.NameStrategy;
@@ -37,34 +36,34 @@ import lombok.Setter;
 @Header("################################################################")
 @Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
 @Getter @Setter
-public class MessagesEN extends OkaeriConfig {
+public class MessagesES extends MessagesEN {
 
     private String prefix = "<#D0EFB1>Gestures <dark_gray>•";
 
-    private String skinUploaded = "<prefix> <green>Skin successfully uploaded!";
+    private String skinUploaded = "<prefix> <green>¡La skin se ha subido correctamente!";
 
-    private String skinNotSet = "<prefix> <red>Skin not applied!";
+    private String skinNotSet = "<prefix> <red>¡No se aplicó la skin!";
 
-    private String skinUploading = "<prefix> <yellow>Skin started uploading!";
+    private String skinUploading = "<prefix> <yellow>¡La skin está comenzando a subirse!";
 
-    private String invalidArgument = "<prefix> <red>Invalid argument.";
+    private String invalidArgument = "<prefix> <red>Argumento inválido.";
 
-    private String tooManyArguments = "<prefix> <red>Too many arguments.";
+    private String tooManyArguments = "<prefix> <red>Demasiados argumentos.";
 
-    private String notEnoughArguments = "<prefix> <red>Not enough arguments.";
+    private String notEnoughArguments = "<prefix> <red>No hay suficientes argumentos.";
 
-    private String unknownCommand = "<prefix> <red>Unknown command.";
+    private String unknownCommand = "<prefix> <red>Comando desconocido.";
 
-    private String notEnoughPermission = "<prefix> <red>You don't have enough permission to do this.";
+    private String notEnoughPermission = "<prefix> <red>No tienes permiso suficiente para hacer esto.";
 
-    private String gestureNotExists = "<prefix> <red>Gesture not exists!";
+    private String gestureNotExists = "<prefix> <red>¡El gesto no existe!";
 
-    private String wardrobeNotExists = "<prefix> <red>Wardrobe not exists!";
+    private String wardrobeNotExists = "<prefix> <red>¡El armario no existe!";
 
-    private String notInWardrobe = "<prefix> <red>You're not in the wardrobe!";
+    private String notInWardrobe = "<prefix> <red>¡No estás en el armario!";
 
-    private String notOnGround = "<prefix> <red>You must be on the ground to do this!";
+    private String notOnGround = "<prefix> <red>¡Debes estar en el suelo para hacer esto!";
 
-    private String worldGuardRegion = "<prefix> <red>You can't do this in this region!";
+    private String worldGuardRegion = "<prefix> <red>¡No puedes hacer esto en esta región!";
 
 }

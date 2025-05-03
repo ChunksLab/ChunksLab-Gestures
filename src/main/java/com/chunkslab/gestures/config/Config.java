@@ -37,7 +37,7 @@ import lombok.Setter;
 @Getter @Setter
 public class Config extends OkaeriConfig {
 
-    @Comment("Currently supports: EN, DE, TR")
+    @Comment("Currently supports: EN, DE, ES, FR, TR, ZHCN")
     private Language language = Language.EN;
 
     @Comment("Plugin settings")
@@ -53,7 +53,10 @@ public class Config extends OkaeriConfig {
     public static enum Language {
         EN("messages_en.yml"),
         DE("messages_de.yml"),
+        ES("messages_es.yml"),
+        FR("messages_fr.yml"),
         TR("messages_tr.yml"),
+        ZHCN("messages_zhcn.yml");
         ;
 
         private final String fileName;

@@ -19,7 +19,6 @@
 
 package com.chunkslab.gestures.config.messages;
 
-import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.annotation.NameModifier;
 import eu.okaeri.configs.annotation.NameStrategy;
@@ -37,34 +36,34 @@ import lombok.Setter;
 @Header("################################################################")
 @Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
 @Getter @Setter
-public class MessagesEN extends OkaeriConfig {
+public class MessagesDE extends MessagesEN {
 
     private String prefix = "<#D0EFB1>Gestures <dark_gray>•";
 
-    private String skinUploaded = "<prefix> <green>Skin successfully uploaded!";
+    private String skinUploaded = "<prefix> <green>Skin wurde erfolgreich hochgeladen!";
 
-    private String skinNotSet = "<prefix> <red>Skin not applied!";
+    private String skinNotSet = "<prefix> <red>Skin wurde nicht angewendet!";
 
-    private String skinUploading = "<prefix> <yellow>Skin started uploading!";
+    private String skinUploading = "<prefix> <yellow>Skin wird hochgeladen!";
 
-    private String invalidArgument = "<prefix> <red>Invalid argument.";
+    private String invalidArgument = "<prefix> <red>Ungültiges Argument.";
 
-    private String tooManyArguments = "<prefix> <red>Too many arguments.";
+    private String tooManyArguments = "<prefix> <red>Zu viele Argumente.";
 
-    private String notEnoughArguments = "<prefix> <red>Not enough arguments.";
+    private String notEnoughArguments = "<prefix> <red>Zu wenige Argumente.";
 
-    private String unknownCommand = "<prefix> <red>Unknown command.";
+    private String unknownCommand = "<prefix> <red>Unbekannter Befehl.";
 
-    private String notEnoughPermission = "<prefix> <red>You don't have enough permission to do this.";
+    private String notEnoughPermission = "<prefix> <red>Du hast nicht genügend Berechtigungen, um das zu tun.";
 
-    private String gestureNotExists = "<prefix> <red>Gesture not exists!";
+    private String gestureNotExists = "<prefix> <red>Geste existiert nicht!";
 
-    private String wardrobeNotExists = "<prefix> <red>Wardrobe not exists!";
+    private String wardrobeNotExists = "<prefix> <red>Kleiderschrank existiert nicht!";
 
-    private String notInWardrobe = "<prefix> <red>You're not in the wardrobe!";
+    private String notInWardrobe = "<prefix> <red>Du bist nicht im Kleiderschrank!";
 
-    private String notOnGround = "<prefix> <red>You must be on the ground to do this!";
+    private String notOnGround = "<prefix> <red>Du musst auf dem Boden stehen, um das zu tun!";
 
-    private String worldGuardRegion = "<prefix> <red>You can't do this in this region!";
+    private String worldGuardRegion = "<prefix> <red>Du kannst das in dieser Region nicht tun!";
 
 }

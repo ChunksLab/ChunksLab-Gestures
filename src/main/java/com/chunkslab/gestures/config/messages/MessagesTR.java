@@ -19,7 +19,6 @@
 
 package com.chunkslab.gestures.config.messages;
 
-import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.annotation.NameModifier;
 import eu.okaeri.configs.annotation.NameStrategy;
@@ -37,34 +36,34 @@ import lombok.Setter;
 @Header("################################################################")
 @Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
 @Getter @Setter
-public class MessagesEN extends OkaeriConfig {
+public class MessagesTR extends MessagesEN {
 
     private String prefix = "<#D0EFB1>Gestures <dark_gray>•";
 
-    private String skinUploaded = "<prefix> <green>Skin successfully uploaded!";
+    private String skinUploaded = "<prefix> <green>Skin başarıyla yüklendi!";
 
-    private String skinNotSet = "<prefix> <red>Skin not applied!";
+    private String skinNotSet = "<prefix> <red>Skin uygulanamadı!";
 
-    private String skinUploading = "<prefix> <yellow>Skin started uploading!";
+    private String skinUploading = "<prefix> <yellow>Skin yüklenmeye başladı!";
 
-    private String invalidArgument = "<prefix> <red>Invalid argument.";
+    private String invalidArgument = "<prefix> <red>Geçersiz argüman.";
 
-    private String tooManyArguments = "<prefix> <red>Too many arguments.";
+    private String tooManyArguments = "<prefix> <red>Fazla sayıda argüman girdiniz.";
 
-    private String notEnoughArguments = "<prefix> <red>Not enough arguments.";
+    private String notEnoughArguments = "<prefix> <red>Yetersiz argüman girdiniz.";
 
-    private String unknownCommand = "<prefix> <red>Unknown command.";
+    private String unknownCommand = "<prefix> <red>Bilinmeyen komut.";
 
-    private String notEnoughPermission = "<prefix> <red>You don't have enough permission to do this.";
+    private String notEnoughPermission = "<prefix> <red>Bunu yapmak için yetkiniz yok.";
 
-    private String gestureNotExists = "<prefix> <red>Gesture not exists!";
+    private String gestureNotExists = "<prefix> <red>Böyle bir animasyon bulunmuyor!";
 
-    private String wardrobeNotExists = "<prefix> <red>Wardrobe not exists!";
+    private String wardrobeNotExists = "<prefix> <red>Böyle bir gardırop bulunmuyor!";
 
-    private String notInWardrobe = "<prefix> <red>You're not in the wardrobe!";
+    private String notInWardrobe = "<prefix> <red>Gardıropta değilsiniz!";
 
-    private String notOnGround = "<prefix> <red>You must be on the ground to do this!";
+    private String notOnGround = "<prefix> <red>Bunu yapmak için yerde olmalısınız!";
 
-    private String worldGuardRegion = "<prefix> <red>You can't do this in this region!";
+    private String worldGuardRegion = "<prefix> <red>Bu bölgede bunu yapamazsınız!";
 
 }
