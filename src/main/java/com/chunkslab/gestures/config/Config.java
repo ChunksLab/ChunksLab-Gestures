@@ -56,7 +56,7 @@ public class Config extends OkaeriConfig {
         ES("messages_es.yml"),
         FR("messages_fr.yml"),
         TR("messages_tr.yml"),
-        ZHCN("messages_zhcn.yml");
+        ZHCN("messages_zhcn.yml"),
         ;
 
         private final String fileName;
