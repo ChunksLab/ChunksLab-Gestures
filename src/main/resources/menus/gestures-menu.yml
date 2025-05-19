@@ -39,8 +39,9 @@ red-color: "<red>"
 
 items:
   'x':
-    material: "PAPER"
+    material: "FEATHER"
     name: "<aqua>ᴄʜᴜɴᴋsʟᴀʙ"
+    custom-model-data: 1000
   'c':
     material: "FEATHER"
     name: "<#DC2625>Quit"

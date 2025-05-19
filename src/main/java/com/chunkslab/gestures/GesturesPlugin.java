@@ -39,11 +39,6 @@ import com.chunkslab.gestures.command.WardrobeCommand;
 import com.chunkslab.gestures.config.Config;
 import com.chunkslab.gestures.config.messages.MessagesEN;
 import com.chunkslab.gestures.database.DatabaseFactory;
-import com.chunkslab.gestures.dependency.Dependency;
-import com.chunkslab.gestures.dependency.DependencyManager;
-import com.chunkslab.gestures.dependency.DependencyManagerImpl;
-import com.chunkslab.gestures.dependency.classpath.ClassPathAppender;
-import com.chunkslab.gestures.dependency.classpath.ReflectionClassPathAppender;
 import com.chunkslab.gestures.gesture.GestureManager;
 import com.chunkslab.gestures.hook.HookManager;
 import com.chunkslab.gestures.item.ItemHookImpl;
@@ -110,10 +105,6 @@ public class GesturesPlugin extends GesturesAPI {
     // tasks
     private final SkinTask skinTask = new SkinTask(this);
 
-    // dependencies
-    private ClassPathAppender classPathAppender;
-    private DependencyManager dependencyManager;
-
     // license
     private final String buildByBit = "%%__BUILTBYBIT__%%";
     private final String polymart = "%%__POLYMART__%%";
@@ -150,54 +141,6 @@ public class GesturesPlugin extends GesturesAPI {
         instance = this;
         GesturesAPI.setInstance(this);
         GesturesAPI.setDebugMode(true);
-
-        this.classPathAppender = new ReflectionClassPathAppender(this);
-        this.dependencyManager = new DependencyManagerImpl(this);
-
-        this.dependencyManager.loadDependencies(
-                List.of(
-                        Dependency.COMMONS_POOL_2,
-                        Dependency.INVUI_CORE,
-                        Dependency.INVUI_INVENTORY_ACCESS,
-                        Dependency.INVUI_INVENTORY_ACCESS_R1,
-                        Dependency.INVUI_INVENTORY_ACCESS_R2,
-                        Dependency.INVUI_INVENTORY_ACCESS_R3,
-                        Dependency.INVUI_INVENTORY_ACCESS_R4,
-                        Dependency.INVUI_INVENTORY_ACCESS_R5,
-                        Dependency.INVUI_INVENTORY_ACCESS_R6,
-                        Dependency.INVUI_INVENTORY_ACCESS_R7,
-                        Dependency.INVUI_INVENTORY_ACCESS_R8,
-                        Dependency.INVUI_INVENTORY_ACCESS_R9,
-                        Dependency.INVUI_INVENTORY_ACCESS_R10,
-                        Dependency.INVUI_INVENTORY_ACCESS_R11,
-                        Dependency.INVUI_INVENTORY_ACCESS_R12,
-                        Dependency.INVUI_INVENTORY_ACCESS_R13,
-                        Dependency.INVUI_INVENTORY_ACCESS_R14,
-                        Dependency.INVUI_INVENTORY_ACCESS_R15,
-                        Dependency.INVUI_INVENTORY_ACCESS_R16,
-                        Dependency.INVUI_INVENTORY_ACCESS_R17,
-                        Dependency.INVUI_INVENTORY_ACCESS_R18,
-                        Dependency.INVUI_INVENTORY_ACCESS_R19,
-                        Dependency.INVUI_INVENTORY_ACCESS_R20,
-                        Dependency.INVUI_INVENTORY_ACCESS_R21,
-                        Dependency.INVUI_INVENTORY_ACCESS_R22,
-                        Dependency.INVUI_INVENTORY_ACCESS_R23,
-                        Dependency.ADVENTURE_API,
-                        Dependency.ADVENTURE_TEXT_MINIMESSAGE,
-                        Dependency.ADVENTURE_TEXT_SERIALIZER_LEGACY,
-                        Dependency.ADVENTURE_PLATFORM_BUKKIT,
-                        Dependency.GSON,
-                        Dependency.SQLITE_DRIVER,
-                        Dependency.H2_DRIVER,
-                        Dependency.MONGODB_DRIVER_CORE,
-                        Dependency.MONGODB_DRIVER_SYNC,
-                        Dependency.MONGODB_DRIVER_BSON,
-                        Dependency.HIKARI_CP,
-                        Dependency.MARIADB_DRIVER,
-                        Dependency.MYSQL_DRIVER,
-                        Dependency.JEDIS
-                )
-        );
 
         this.moduleManager.loadModules();
     }
